@@ -1,30 +1,20 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>Form Danh Mục Hoa</title>
-<!-- Bootstrap CSS -->
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body>
+<form id="categoryForm" method="post" action="${pageContext.request.contextPath}/admin/categories/add">
+    <input type="hidden" id="id" name="id" />
 
-<form id="categoryForm" action="" method="post">
-    <input type="hidden" id="id" name="id">
     <div class="mb-3">
-        <label for="tenDanhMuc" class="form-label">Tên Danh Mục</label>
-        <input type="text" class="form-control" id="tenDanhMuc" name="tenDanhMuc" required>
+        <label for="tenDanhMuc" class="form-label fw-bold">Tên Danh Mục</label>
+        <input type="text" id="tenDanhMuc" name="tenDanhMuc" class="form-control" placeholder="Nhập tên danh mục" required>
     </div>
+
     <div class="mb-3">
-        <label for="moTa" class="form-label">Mô Tả</label>
-        <textarea class="form-control" id="moTa" name="moTa" rows="3"></textarea>
+        <label for="moTa" class="form-label fw-bold">Mô Tả</label>
+        <textarea id="moTa" name="moTa" class="form-control" rows="3" placeholder="Nhập mô tả danh mục"></textarea>
     </div>
-    <button type="submit" class="btn btn-success w-100">Lưu</button>
+
+    <div class="text-end">
+        <button type="submit" class="btn btn-success px-4">Lưu</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+    </div>
 </form>
-
-<!-- Bootstrap JS -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-
-</body>
-</html>

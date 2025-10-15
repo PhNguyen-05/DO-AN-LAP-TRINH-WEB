@@ -1,23 +1,17 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>Quản Lý Danh Mục Hoa</title>
-<!-- Bootstrap CSS -->
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body>
 
 <div class="container py-4">
-    <h2 class="fw-bold mb-4" style="color: #ff69b4;">Quản Lý Danh Mục Hoa</h2>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="page-title">🌸 Quản Lý Danh Mục Hoa 🌸</h2>
+        <button class="btn btn-pink" data-bs-toggle="modal" data-bs-target="#categoryModal" onclick="resetForm()">
+            <i class="bi bi-plus-lg me-2"></i> Thêm Danh Mục
+        </button>
+    </div>
 
-    <!-- Table List -->
-    <div class="card shadow-lg rounded-4 mb-4">
+    <div class="card shadow-sm">
         <div class="card-body">
-            <table class="table table-hover">
+            <table class="table table-hover align-middle">
                 <thead>
                     <tr>
                         <th>ID</th>
@@ -33,40 +27,49 @@
                             <td>${category.id}</td>
                             <td>${category.tenDanhMuc}</td>
                             <td>${category.moTa}</td>
-                            <td>${category.ngayTao}</td>
+                            <td><fmt:formatDate value="${category.ngayTao}" pattern="dd/MM/yyyy" /></td>
                             <td>
-                                <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#categoryModal" onclick="editCategory(${category.id}, '${category.tenDanhMuc}', '${category.moTa}')">Sửa</button>
-                                <a href="${pageContext.request.contextPath}/admin/categories/delete/${category.id}" class="btn btn-sm btn-outline-danger" onclick="return confirm('Bạn chắc chắn muốn xóa?')">Xóa</a>
+                                <button class="btn btn-outline-primary btn-sm"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#categoryModal"
+                                        onclick="editCategory(${category.id}, '${category.tenDanhMuc}', '${category.moTa}')">
+                                    <i class="bi bi-pencil"></i>
+                                </button>
+                                <a href="${pageContext.request.contextPath}/admin/categories/delete/${category.id}"
+                                   class="btn btn-outline-danger btn-sm"
+                                   onclick="return confirm('Bạn có chắc muốn xóa danh mục này?')">
+                                   <i class="bi bi-trash"></i>
+                                </a>
                             </td>
                         </tr>
                     </c:forEach>
+                    <c:if test="${empty categories}">
+                        <tr>
+                            <td colspan="5" class="text-center text-muted py-3">Chưa có danh mục nào.</td>
+                        </tr>
+                    </c:if>
                 </tbody>
             </table>
         </div>
     </div>
-
-    <!-- Button Add -->
-    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#categoryModal" onclick="resetForm()">Thêm Danh Mục Mới</button>
 </div>
 
 <!-- Modal Form -->
-<div class="modal fade" id="categoryModal" tabindex="-1">
+<div class="modal fade" id="categoryModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Form Danh Mục</h5>
+        <div class="modal-content rounded-4">
+            <div class="modal-header bg-light">
+                <h5 class="modal-title fw-bold text-primary">Danh Mục Hoa</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
-                <%@ include file="/category-form.jsp" %> <!-- Adjust path if category-form.jsp is in same folder or adjust accordingly -->
+                <%@ include file="category-form.jsp" %>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-
 <script>
     function resetForm() {
         document.getElementById('categoryForm').action = '${pageContext.request.contextPath}/admin/categories/add';
@@ -83,5 +86,3 @@
     }
 </script>
 
-</body>
-</html>

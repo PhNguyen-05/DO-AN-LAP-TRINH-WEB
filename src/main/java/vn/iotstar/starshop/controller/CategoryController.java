@@ -16,21 +16,25 @@ public class CategoryController {
     @Autowired
     private DanhMucHoaService danhMucHoaService;
 
+    // ✅ Hiển thị danh sách danh mục
     @GetMapping
     public String listCategories(Model model) {
         model.addAttribute("categories", danhMucHoaService.findAll());
-        model.addAttribute("category", new DanhMucHoa()); // For add form
-        return "admin/categories"; // /WEB-INF/views/admin/categories.jsp
+        model.addAttribute("category", new DanhMucHoa());
+        return "admin/category/categories"; // => /WEB-INF/views/admin/category/categories.jsp
     }
 
+    // ✅ Thêm danh mục mới
     @PostMapping("/add")
     public String addCategory(@ModelAttribute("category") DanhMucHoa danhMucHoa) {
         danhMucHoaService.save(danhMucHoa);
         return "redirect:/admin/categories";
     }
 
+    // ✅ Sửa danh mục
     @PostMapping("/edit/{id}")
-    public String editCategory(@PathVariable Integer id, @ModelAttribute("category") DanhMucHoa updatedDanhMucHoa) {
+    public String editCategory(@PathVariable("id") Integer id,
+                               @ModelAttribute("category") DanhMucHoa updatedDanhMucHoa) {
         Optional<DanhMucHoa> existing = danhMucHoaService.findById(id);
         if (existing.isPresent()) {
             DanhMucHoa danhMucHoa = existing.get();
@@ -41,8 +45,9 @@ public class CategoryController {
         return "redirect:/admin/categories";
     }
 
+    // ✅ Xóa danh mục
     @GetMapping("/delete/{id}")
-    public String deleteCategory(@PathVariable Integer id) {
+    public String deleteCategory(@PathVariable("id") Integer id) {
         danhMucHoaService.deleteById(id);
         return "redirect:/admin/categories";
     }
