@@ -3,31 +3,35 @@ package vn.iotstar.starshop.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 @Entity
-@Table(name = "ChiTietDonHang")
+@Table(name = "order_details")
 @Data
 public class ChiTietDonHang {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    // Liên kết với bảng orders
     @ManyToOne
-    @JoinColumn(name = "id_don_hang", nullable = false)
+    @JoinColumn(name = "order_id", nullable = false)
     private DonHang donHang;
 
+    // Liên kết với bảng products
     @ManyToOne
-    @JoinColumn(name = "id_hoa", nullable = false)
+    @JoinColumn(name = "product_id", nullable = false)
     private Hoa hoa;
 
-    @Column(name = "so_luong", nullable = false)
+    @Column(name = "quantity", nullable = false)
     private Integer soLuong;
 
-    @Column(name = "don_gia", nullable = false)
-    private Double donGia;
+    @Column(name = "unit_price", precision = 18, scale = 2, nullable = false)
+    private BigDecimal donGia;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "ngay_tao")
+    @Column(name = "created_at")
     private Date ngayTao = new Date();
 }

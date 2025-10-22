@@ -2,39 +2,39 @@ package vn.iotstar.starshop.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
-
 import java.util.Date;
 
 @Entity
-@Table(name = "VanChuyen")
+@Table(name = "shipments")
 @Data
 public class VanChuyen {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @ManyToOne
-    @JoinColumn(name = "id_don_hang", nullable = false)
+    @JoinColumn(name = "order_id", nullable = false)
     private DonHang donHang;
 
-    @Column(name = "ma_van_don")
+    @Column(name = "tracking_number")
     private String maVanDon;
 
-    @Column(name = "don_vi_giao")
+    @Column(name = "carrier")
     private String donViGiao;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "ngay_gui")
+    @Column(name = "shipped_at")
     private Date ngayGui;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "ngay_giao")
+    @Column(name = "delivered_at")
     private Date ngayGiao;
 
-    @Column(name = "trang_thai")
-    private String trangThai = "Đang giao";
+    @Column(name = "status")
+    private String trangThai = "Shipping";
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "ngay_tao")
+    @Column(name = "created_at")
     private Date ngayTao = new Date();
 }

@@ -3,29 +3,28 @@ package vn.iotstar.starshop.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
-@Table(name = "KhachHang")
+@Table(name = "customers")
 @Data
 public class KhachHang {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "ho_ten", nullable = false)
+    @Column(name = "full_name", nullable = false)
     private String hoTen;
 
-    @Column(name = "email")
-    private String email;
-
-    @Column(name = "so_dien_thoai")
+    @Column(name = "phone")
     private String soDienThoai;
 
-    @Column(name = "dia_chi")
+    @Column(name = "default_address")
     private String diaChi;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "ngay_tao")
-    private Date ngayTao = new Date();
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
 }
