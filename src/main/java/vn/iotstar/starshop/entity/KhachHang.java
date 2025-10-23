@@ -14,6 +14,9 @@ public class KhachHang {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    
+    @Column(name = "user_id", nullable = false, unique = true)
+    private Integer userId;
 
     @Column(name = "full_name", nullable = false)
     private String hoTen;
