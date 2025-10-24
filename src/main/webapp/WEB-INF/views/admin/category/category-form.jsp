@@ -1,16 +1,17 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+
 <form id="categoryForm" method="post" action="${pageContext.request.contextPath}/admin/categories/add">
     <input type="hidden" id="id" name="id" />
 
     <div class="mb-3">
-        <label for="tenDanhMuc" class="form-label fw-bold">Tên Danh Mục</label>
-        <input type="text" id="tenDanhMuc" name="tenDanhMuc" class="form-control" placeholder="Nhập tên danh mục" required>
+        <label for="name" class="form-label fw-bold">Tên Danh Mục <span class="text-danger">*</span></label>
+        <input type="text" id="name" name="name" class="form-control" placeholder="Nhập tên danh mục" required>
     </div>
 
     <div class="mb-3">
-        <label for="moTa" class="form-label fw-bold">Mô Tả</label>
-        <textarea id="moTa" name="moTa" class="form-control" rows="3" placeholder="Nhập mô tả danh mục"></textarea>
+        <label for="description" class="form-label fw-bold">Mô Tả</label>
+        <textarea id="description" name="description" class="form-control" rows="3" placeholder="Nhập mô tả danh mục"></textarea>
     </div>
 
     <div class="text-end">

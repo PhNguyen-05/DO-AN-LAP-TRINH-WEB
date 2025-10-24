@@ -1,46 +1,59 @@
 package vn.iotstar.starshop.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import vn.iotstar.starshop.repository.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Controller
 @RequestMapping("/admin/dashboard")
 public class AdminDashboardController {
 
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private ProductRepository productRepository;
+
+    @Autowired
+    private OrderRepository orderRepository;
+
+    @Autowired
+    private CustomerRepository customerRepository;
+
     @GetMapping
     public String dashboard(Model model) {
-        // Bỏ kiểm tra session để hiển thị dashboard mà không cần login
 
-        // Data giả định cho dashboard (chưa có DB)
-        long totalUsers = 1250;
-        long totalShops = 150;
-        long totalProducts = 2500;
-        long totalOrders = 800;
+        // ===  Thống kê tổng quan ===
+        long totalUsers = userRepository.count();
+        long totalCustomers = customerRepository.count();
+        long totalProducts = productRepository.count();
+        long totalOrders = orderRepository.count();
 
-        List<Object> recentOrders = new ArrayList<>();
-        recentOrders.add(new Object() { public int id = 1; public String customer = "Nguyễn Văn A"; public double total = 500000; public String status = "Hoàn Thành"; });
-        recentOrders.add(new Object() { public int id = 2; public String customer = "Trần Thị B"; public double total = 300000; public String status = "Đang Giao"; });
-
-        List<Object> newUsers = new ArrayList<>();
-        newUsers.add(new Object() { public String email = "user1@example.com"; });
-        newUsers.add(new Object() { public String email = "user2@example.com"; });
-
-        // Set attributes
         model.addAttribute("totalUsers", totalUsers);
-        model.addAttribute("totalShops", totalShops);
+        model.addAttribute("totalCustomers", totalCustomers);
         model.addAttribute("totalProducts", totalProducts);
         model.addAttribute("totalOrders", totalOrders);
+
+        // === Đơn hàng gần đây ===
+        List<Object[]> recentOrders = orderRepository.findRecentOrders();
         model.addAttribute("recentOrders", recentOrders);
+
+        // === Người dùng mới nhất ===
+        List<Object[]> newUsers = userRepository.findLatestUsers();
         model.addAttribute("newUsers", newUsers);
 
-        // Data cho charts (giả định)
-        model.addAttribute("revenueData", new double[]{12000000, 19000000, 3000000, 5000000, 2000000, 3000000});
-        model.addAttribute("topProductsData", new int[]{65, 59, 80, 81});
+        // ===  Dữ liệu cho biểu đồ (doanh thu 6 tháng gần nhất) ===
+        List<Object[]> revenueData = orderRepository.getRevenueLast6Months();
+        model.addAttribute("revenueData", revenueData);
+
+        // ===  Top sản phẩm bán chạy ===
+        List<Object[]> topProducts = orderRepository.getTopSellingProducts();
+        model.addAttribute("topProducts", topProducts);
 
         return "admin/dashboard"; // /WEB-INF/views/admin/dashboard.jsp
     }
