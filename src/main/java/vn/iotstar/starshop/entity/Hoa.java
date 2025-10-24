@@ -1,35 +1,40 @@
-package vn.iotstar.starshop.entity;
-
-import jakarta.persistence.*;
-import lombok.Data;
-
-import java.util.Date;
-
-@Entity
-@Table(name = "Hoa")
-@Data
-public class Hoa {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-
-    @Column(name = "ten_hoa", nullable = false)
-    private String tenHoa;
-
-    @Column(name = "mo_ta")
-    private String moTa;
-
-    @Column(name = "gia", nullable = false)
-    private Double gia;
-
-    @Column(name = "so_luong_ton")
-    private Integer soLuongTon;
-
-    @ManyToOne
-    @JoinColumn(name = "id_danh_muc")
-    private DanhMucHoa danhMuc;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "ngay_tao")
-    private Date ngayTao = new Date();
-}
+//package vn.iotstar.starshop.entity;
+//
+//import jakarta.persistence.*;
+//import lombok.Data;
+//import java.math.BigDecimal;
+//import java.time.LocalDateTime;
+//import java.util.Date;
+//
+//
+//@Entity
+//@Table(name = "products")
+//@Data
+//public class Hoa {
+//
+//	    @Id
+//	    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//	    private Integer id;
+//
+//	    private String sku;
+//
+//	    private String name;
+//
+//	    @Column(columnDefinition = "NVARCHAR(MAX)")
+//	    private String description;
+//
+//	    @Column(nullable = false, precision = 10, scale = 2)
+//	    private BigDecimal price;
+//
+//	    private Integer stock;
+//
+//	    @Column(name = "image_url")
+//	    private String imageUrl;
+//
+//	    @Column(name = "created_at")
+//	    private LocalDateTime createdAt;
+//
+//	    @ManyToOne
+//	    @JoinColumn(name = "category_id")
+//	    private DanhMucHoa category;
+//}

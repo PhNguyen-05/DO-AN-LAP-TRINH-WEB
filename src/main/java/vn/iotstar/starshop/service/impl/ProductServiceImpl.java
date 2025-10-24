@@ -42,8 +42,7 @@ public class ProductServiceImpl implements ProductService {
     public Page<Product> findAllProducts(Pageable pageable) {
         return productRepository.findAllProducts(pageable);
     }
-    
-    
+
     
     @Override
     public Page<Product> findAllWithCategory(Pageable pageable) {

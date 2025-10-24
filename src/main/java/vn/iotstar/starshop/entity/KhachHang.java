@@ -1,31 +1,33 @@
-package vn.iotstar.starshop.entity;
-
-import jakarta.persistence.*;
-import lombok.Data;
-
-import java.util.Date;
-
-@Entity
-@Table(name = "KhachHang")
-@Data
-public class KhachHang {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-
-    @Column(name = "ho_ten", nullable = false)
-    private String hoTen;
-
-    @Column(name = "email")
-    private String email;
-
-    @Column(name = "so_dien_thoai")
-    private String soDienThoai;
-
-    @Column(name = "dia_chi")
-    private String diaChi;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "ngay_tao")
-    private Date ngayTao = new Date();
-}
+//package vn.iotstar.starshop.entity;
+//
+//import jakarta.persistence.*;
+//import lombok.Data;
+//
+//import java.time.LocalDateTime;
+//import java.util.Date;
+//
+//@Entity
+//@Table(name = "customers")
+//@Data
+//public class KhachHang {
+//
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    private Integer id;
+//    
+//    @Column(name = "user_id", nullable = false, unique = true)
+//    private Integer userId;
+//
+//    @Column(name = "full_name", nullable = false)
+//    private String hoTen;
+//
+//    @Column(name = "phone")
+//    private String soDienThoai;
+//
+//    @Column(name = "default_address")
+//    private String diaChi;
+//
+//    @Temporal(TemporalType.TIMESTAMP)
+//    @Column(name = "created_at")
+//    private LocalDateTime createdAt;
+//}

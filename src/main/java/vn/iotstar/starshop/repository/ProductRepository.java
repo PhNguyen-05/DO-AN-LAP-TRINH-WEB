@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -30,11 +31,12 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
     // Lấy top hoa mới trong danh mục 'Hoa', hỗ trợ Pageable
     @Query("SELECT p FROM Product p WHERE p.category.name = 'Hoa' ORDER BY p.createdAt DESC")
     List<Product> findTopNewFlowers(Pageable pageable);
-    
+
     @Query("SELECT p FROM Product p JOIN FETCH p.category")
     Page<Product> findAllWithCategory(Pageable pageable);
 
     Page<Product> findAll(Specification<Product> spec, Pageable pageable);
     
     List<Product> findByCategoryId(Integer categoryId);
+
 }

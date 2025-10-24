@@ -32,5 +32,7 @@ public class OrderDetail {
     private BigDecimal unit_price;
 
     @Column(name = "created_at")
+
     private LocalDateTime createdAt = LocalDateTime.now();
+
 }

@@ -19,6 +19,7 @@ public class Order {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_id")
+
     private Customer customer_id;
 
     @Column(name = "order_date")

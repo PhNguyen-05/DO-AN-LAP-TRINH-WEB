@@ -13,7 +13,6 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
     @Query("SELECT d FROM Order d ORDER BY d.created_at DESC")
     List<Order> findRecentOrder(int limit);
     
-    
     @Query(value = """
 	        SELECT TOP 5 o.id, c.full_name, o.total_amount, o.status, o.order_date
 	        FROM orders o

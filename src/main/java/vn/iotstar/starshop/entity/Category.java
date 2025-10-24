@@ -5,6 +5,7 @@ import lombok.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+
 @Entity
 @Table(name = "categories")
 @Data
@@ -24,6 +25,7 @@ public class Category {
     private String description;
 
     @Column(name = "created_at")
+
     private LocalDateTime createdAt = LocalDateTime.now();
 
     // ✅ Getter định dạng ngày tạo cho hiển thị JSP
@@ -34,4 +36,5 @@ public class Category {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
         return createdAt.format(formatter);
     }
+
 }

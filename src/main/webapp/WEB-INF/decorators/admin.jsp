@@ -191,6 +191,7 @@
         <a href="${pageContext.request.contextPath}/admin/promotions"><i class="bi bi-percent me-2"></i> <span>Quản Lý Khuyến Mãi</span></a>
         <a href="${pageContext.request.contextPath}/admin/shippers"><i class="bi bi-truck me-2"></i> <span>Quản Lý Vận Chuyển</span></a>
         <a href="${pageContext.request.contextPath}/auth/logout"><i class="bi bi-box-arrow-right me-2"></i> <span>Đăng Xuất</span></a>
+
     </div>
 
     <!-- Main content -->

@@ -32,6 +32,7 @@ public class UserProfileController {
         }
 
         Customer kh = customersService.findByUserId(currentUser.getId());
+
         if (kh == null) {
             return "redirect:/user/profile/edit";
         }
@@ -56,6 +57,7 @@ public class UserProfileController {
         }
 
         Customer kh = customersService.findByUserId(currentUser.getId());
+
         model.addAttribute("customer", kh);
 
         return "user/profile-edit"; // /WEB-INF/views/user/profile-edit.jsp
@@ -72,6 +74,7 @@ public class UserProfileController {
         if (currentUser == null) {
             return "redirect:/auth/login";
         }
+
 
         Customer kh = customersService.findByUserId(currentUser.getId());
         if (kh == null) {
