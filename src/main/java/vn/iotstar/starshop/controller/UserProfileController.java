@@ -9,16 +9,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import vn.iotstar.starshop.entity.KhachHang;
+
+import vn.iotstar.starshop.entity.Customers;
 import vn.iotstar.starshop.entity.User;
-import vn.iotstar.starshop.service.KhachHangService;
+import vn.iotstar.starshop.service.CustomersService;
+
 
 @Controller
 @RequestMapping("/user/profile")
 public class UserProfileController {
 
     @Autowired
-    private KhachHangService khachHangService;
+    private CustomersService customersService;
 
     // ====== Xem profile ======
     // ====== Xem profile ======
@@ -29,7 +31,7 @@ public class UserProfileController {
             return "redirect:/auth/login";
         }
 
-        KhachHang kh = khachHangService.findByUserId(currentUser.getId());
+        Customers kh = customersService.findByUserId(currentUser.getId());
         if (kh == null) {
             return "redirect:/user/profile/edit";
         }
@@ -53,7 +55,7 @@ public class UserProfileController {
             return "redirect:/auth/login";
         }
 
-        KhachHang kh = khachHangService.findByUserId(currentUser.getId());
+        Customers kh = customersService.findByUserId(currentUser.getId());
         model.addAttribute("customer", kh);
 
         return "user/profile-edit"; // /WEB-INF/views/user/profile-edit.jsp
@@ -71,18 +73,18 @@ public class UserProfileController {
             return "redirect:/auth/login";
         }
 
-        KhachHang kh = khachHangService.findByUserId(currentUser.getId());
+        Customers kh = customersService.findByUserId(currentUser.getId());
         if (kh == null) {
             // Nếu chưa có record KhachHang, tạo mới
-            kh = new KhachHang();
+            kh = new Customers();
             kh.setUserId(currentUser.getId()); // Bạn cần thêm field userId trong entity
         }
 
-        kh.setHoTen(fullName);
-        kh.setSoDienThoai(phone);
-        kh.setDiaChi(defaultAddress);
+        kh.setFullName(fullName);
+        kh.setPhone(phone);
+        kh.setDefaultAddress(defaultAddress);
 
-        khachHangService.save(kh);
+        customersService.save(kh);
 
         return "redirect:/user/profile";
     }

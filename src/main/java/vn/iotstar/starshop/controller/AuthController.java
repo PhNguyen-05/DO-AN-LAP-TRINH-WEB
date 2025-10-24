@@ -8,10 +8,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
+import io.jsonwebtoken.JwtException;
 import vn.iotstar.starshop.entity.User;
 import vn.iotstar.starshop.service.UserService;
+import vn.iotstar.starshop.util.EmailUtil;
 import vn.iotstar.starshop.util.JwtUtil;
 
+import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,6 +30,9 @@ public class AuthController {
 
     @Autowired
     private JwtUtil jwtUtil;
+    
+    @Autowired
+    private EmailUtil emailUtil; // ✅ tiện ích gửi mail (bạn sẽ có file này riêng)
 
     // ========== LOGIN ==========
     @GetMapping("/login")
@@ -113,6 +122,100 @@ public class AuthController {
         } catch (Exception e) {
             model.addAttribute("message", "❌ Lỗi không xác định: " + e.getMessage());
             return "register"; // ✅
+        }
+    }
+    
+ // =================== QUÊN MẬT KHẨU ===================
+    @GetMapping("/forgot-password")
+    public String showForgotPasswordPage() {
+        return "forgot-password";
+    }
+
+    @PostMapping("/forgot-password")
+    public String handleForgotPassword(@RequestParam("email") String email,
+                                       HttpServletRequest request,
+                                       Model model) {
+
+        User user = userService.findByEmail(email);
+        if (user == null) {
+            model.addAttribute("message", "❌ Email không tồn tại trong hệ thống.");
+            return "forgot-password";
+        }
+
+     // Sinh JWT reset token có hạn 5 phút
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("purpose", "reset-password");
+        claims.put("generatedAt", Instant.now().toString());
+        long expireMillis = 5 * 60 * 1000L;
+        String token = jwtUtil.generateToken(email, claims, expireMillis);
+        
+        // ✅ Tạo link reset
+        String baseUrl = request.getRequestURL().toString()
+                .replace(request.getRequestURI(), request.getContextPath());
+        String resetLink = baseUrl + "/auth/reset-password?token=" + token;
+
+        // ✅ Gửi email (nếu bạn có EmailUtil)
+        emailUtil.sendPasswordResetEmail(email, resetLink);
+
+        model.addAttribute("success",
+                "✅ Một liên kết đặt lại mật khẩu đã được gửi đến email của bạn. Liên kết có hiệu lực trong 5 phút.");
+        model.addAttribute("expireSeconds", expireMillis / 1000);
+        return "forgot-password";
+    }
+
+    // =================== HIỂN THỊ TRANG ĐẶT LẠI MẬT KHẨU ===================
+    @GetMapping("/reset-password")
+    public String showResetPasswordPage(@RequestParam("token") String token, Model model) {
+        try {
+            Jws<Claims> parsed = jwtUtil.validateToken(token);
+            Claims claims = parsed.getBody();
+
+            if (!"reset-password".equals(claims.get("purpose"))) {
+                throw new JwtException("Mục đích token không hợp lệ.");
+            }
+
+            model.addAttribute("token", token);
+            model.addAttribute("email", claims.getSubject());
+            return "reset-password";
+
+        } catch (JwtException e) {
+            model.addAttribute("message", "❌ Liên kết không hợp lệ hoặc đã hết hạn.");
+            return "forgot-password";
+        }
+    }
+
+    // =================== XỬ LÝ LƯU MẬT KHẨU MỚI ===================
+    @PostMapping("/reset-password")
+    public String handleResetPassword(@RequestParam("token") String token,
+                                      @RequestParam("newPassword") String newPassword,
+                                      HttpSession session,
+                                      Model model) {
+        try {
+            Jws<Claims> parsed = jwtUtil.validateToken(token);
+            Claims claims = parsed.getBody();
+
+            if (!"reset-password".equals(claims.get("purpose"))) {
+                throw new JwtException("Mục đích token không hợp lệ.");
+            }
+
+            String email = claims.getSubject();
+            User user = userService.findByEmail(email);
+
+            if (user == null) {
+                model.addAttribute("message", "❌ Không tìm thấy tài khoản.");
+                return "reset-password";
+            }
+
+            // ✅ Cập nhật mật khẩu (nếu có PasswordEncoder thì encode)
+            user.setPasswordHash(newPassword);
+            userService.save(user);
+
+            model.addAttribute("success", "🎉 Mật khẩu của bạn đã được thay đổi thành công.");
+            return "redirect:/auth/login";
+
+        } catch (JwtException e) {
+            model.addAttribute("message", "❌ Liên kết không hợp lệ hoặc đã hết hạn.");
+            return "reset-password";
         }
     }
 }

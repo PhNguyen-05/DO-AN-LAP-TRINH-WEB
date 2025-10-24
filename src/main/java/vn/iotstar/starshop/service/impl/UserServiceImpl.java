@@ -18,12 +18,24 @@ public class UserServiceImpl implements UserService {
     // ✅ Đăng nhập (so sánh mật khẩu thường)
     @Override
     public User authenticate(String emailOrPhone, String rawPassword) {
-        Optional<User> opt = userRepository.findByEmail(emailOrPhone);
+    	Optional<User> opt;
+
+        // 🔍 Nếu chuỗi nhập có ký tự '@' → là email
+        if (emailOrPhone.contains("@")) {
+            opt = userRepository.findByEmail(emailOrPhone);
+        } 
+        else {
+            // 🔍 Ngược lại, giả định là số điện thoại
+            opt = userRepository.findByPhone(emailOrPhone);
+        }
+
+        // Không tìm thấy tài khoản
         if (opt.isEmpty()) return null;
 
         User u = opt.get();
-        if (!"Active".equalsIgnoreCase(u.getStatus())) return null;
 
+        // ⚠ Nếu tài khoản bị khóa
+        if (!"Active".equalsIgnoreCase(u.getStatus())) return null;
         // ⚠ So sánh mật khẩu thường (không mã hoá)
         if (!rawPassword.equals(u.getPasswordHash())) return null;
 
@@ -64,5 +76,28 @@ public class UserServiceImpl implements UserService {
 
         // Lưu DB
         return userRepository.save(user);
+    }
+    
+    // ✅ Lưu hoặc cập nhật (dùng trong reset mật khẩu)
+    @Override
+    public User save(User user) {
+        if (user == null) throw new IllegalArgumentException("User is null");
+
+        // ⚠ Giữ nguyên mật khẩu người nhập, không encode
+        if (user.getPasswordHash() == null || user.getPasswordHash().isBlank()) {
+            throw new IllegalArgumentException("Mật khẩu không được để trống!");
+        }
+
+        if (user.getCreatedAt() == null) {
+            user.setCreatedAt(LocalDateTime.now());
+        }
+
+        return userRepository.save(user);
+    }
+
+    // ✅ Alias cho save() (để dễ mở rộng)
+    @Override
+    public User update(User user) {
+        return save(user);
     }
 }

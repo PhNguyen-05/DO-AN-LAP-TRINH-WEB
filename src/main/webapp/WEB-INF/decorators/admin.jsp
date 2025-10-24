@@ -102,7 +102,7 @@
         <a href="${pageContext.request.contextPath}/admin/categories"><i class="bi bi-tags me-2"></i> Danh mục</a>
         <a href="${pageContext.request.contextPath}/admin/promotions"><i class="bi bi-percent me-2"></i> Khuyến mãi</a>
         <a href="${pageContext.request.contextPath}/admin/shippers"><i class="bi bi-truck me-2"></i> Vận chuyển</a>
-        <a href="${pageContext.request.contextPath}/logout"><i class="bi bi-box-arrow-right me-2"></i> Đăng xuất</a>
+        <a href="${pageContext.request.contextPath}/auth/logout"><i class="bi bi-box-arrow-right me-2"></i> Đăng xuất</a>
     </div>
 
     <!-- Main content -->

@@ -28,7 +28,7 @@
 							href="${pageContext.request.contextPath}/shop">Tất cả sản
 								phẩm</a></li>
 						<li><a class="dropdown-item"
-							href="${pageContext.request.contextPath}/category/categories">Danh
+							href="${pageContext.request.contextPath}/shop/category">Danh
 								mục</a></li>
 						<li><a class="dropdown-item"
 							href="${pageContext.request.contextPath}/shop/promotions">Khuyến

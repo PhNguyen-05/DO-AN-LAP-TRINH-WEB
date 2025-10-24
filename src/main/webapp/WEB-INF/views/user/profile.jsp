@@ -41,7 +41,7 @@
 
                 <!-- Tên và email -->
                 <h4 class="fw-bold text-pink mb-2">
-                    <c:out value="${not empty customer.hoTen ? customer.hoTen : 'Chưa cập nhật'}"/>
+                    <c:out value="${not empty customer.fullName ? customer.fullName : 'Chưa cập nhật'}"/>
                 </h4>
                 <c:if test="${not empty sessionScope.currentUser.email}">
                     <p class="text-muted mb-4">${sessionScope.currentUser.email}</p>
@@ -51,11 +51,11 @@
                 <div class="row text-start">
                     <div class="col-md-6 mb-3">
                         <strong>Số điện thoại:</strong> 
-                        <c:out value="${not empty customer.soDienThoai ? customer.soDienThoai : 'Chưa cập nhật'}"/>
+                        <c:out value="${not empty customer.phone ? customer.phone : 'Chưa cập nhật'}"/>
                     </div>
                     <div class="col-md-6 mb-3">
                         <strong>Địa chỉ mặc định:</strong> 
-                        <c:out value="${not empty customer.diaChi ? customer.diaChi : 'Chưa cập nhật'}"/>
+                        <c:out value="${not empty customer.defaultAddress ? customer.defaultAddress : 'Chưa cập nhật'}"/>
                     </div>
                    <div class="col-md-6 mb-3">
                     <strong>Ngày tạo tài khoản:</strong>

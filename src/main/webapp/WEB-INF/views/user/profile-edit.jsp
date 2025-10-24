@@ -65,7 +65,7 @@ body {
 					<div class="mb-3">
 						<label for="fullName" class="form-label fw-semibold">Họ và
 							tên</label> <input type="text" class="form-control" id="fullName"
-							name="fullName" value="<c:out value='${customer.hoTen}'/>"
+							name="fullName" value="<c:out value='${customer.fullName}'/>"
 							required>
 					</div>
 
@@ -73,14 +73,14 @@ body {
 					<div class="mb-3">
 						<label for="phone" class="form-label fw-semibold">Số điện
 							thoại</label> <input type="text" class="form-control" id="phone"
-							name="phone" value="<c:out value='${customer.soDienThoai}'/>">
+							name="phone" value="<c:out value='${customer.phone}'/>">
 					</div>
 
 					<!-- Địa chỉ -->
 					<div class="mb-3">
 						<label for="defaultAddress" class="form-label fw-semibold">Địa
 							chỉ mặc định</label>
-						<textarea class="form-control" id="defaultAddress" name="defaultAddress" rows="3"><c:out value='${customer.diaChi}'/></textarea>
+						<textarea class="form-control" id="defaultAddress" name="defaultAddress" rows="3"><c:out value='${customer.defaultAddress}'/></textarea>
 					</div>
 
 					<!-- Nút hành động -->

@@ -110,15 +110,6 @@
                 <i class="bi bi-person-plus me-1"></i>Đăng ký ngay
             </a>
         </div>
-
-        <!-- Đăng nhập bằng mạng xã hội -->
-        <div class="mt-4 border-top pt-3">
-            <p class="small text-muted mb-2">Hoặc đăng nhập bằng:</p>
-            <div class="d-flex justify-content-center gap-3">
-                <a href="#" class="btn btn-outline-danger btn-sm"><i class="bi bi-google"></i> Google</a>
-                <a href="#" class="btn btn-outline-primary btn-sm"><i class="bi bi-facebook"></i> Facebook</a>
-            </div>
-        </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>

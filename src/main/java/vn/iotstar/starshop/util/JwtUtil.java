@@ -20,26 +20,33 @@ import java.util.Map;
 public class JwtUtil {
 
     private final SecretKey key;
-    private final long validityMs;
+    private final long defaultValidityMs;
     private final MacAlgorithm algorithm = Jwts.SIG.HS256; // ✅ thuật toán mới
 
     public JwtUtil(
             @Value("${app.jwt.secret}") String secret,
             @Value("${app.jwt.expiration-ms}") long validityMs) {
         this.key = Keys.hmacShaKeyFor(secret.getBytes());
-        this.validityMs = validityMs;
+        this.defaultValidityMs = validityMs;
+    }
+
+    /**
+     * ✅ Sinh JWT token mặc định (thời gian hết hạn = app.jwt.expiration-ms)
+     */
+    public String generateToken(String subject, Map<String, Object> claims) {
+        return generateToken(subject, claims, defaultValidityMs);
     }
 
     /**
      * Sinh JWT token kèm claims.
      */
-    public String generateToken(String subject, Map<String, Object> claims) {
+    public String generateToken(String subject, Map<String, Object> claims, long customValidityMs) {
         long now = System.currentTimeMillis();
         return Jwts.builder()
                 .claims(claims)
                 .subject(subject)
                 .issuedAt(new Date(now))
-                .expiration(new Date(now + validityMs))
+                .expiration(new Date(now + customValidityMs))
                 .signWith(key, algorithm) // ✅ API mới yêu cầu SecretKey + MacAlgorithm
                 .compact();
     }
@@ -52,5 +59,18 @@ public class JwtUtil {
                 .verifyWith(key) // ✅ cần SecretKey
                 .build()
                 .parseSignedClaims(token);
+    }
+    
+    /**
+     * ✅ Kiểm tra token hết hạn (không ném exception)
+     */
+    public boolean isTokenExpired(String token) {
+        try {
+            Jws<Claims> parsed = validateToken(token);
+            Date expiration = parsed.getBody().getExpiration();
+            return expiration.before(new Date());
+        } catch (JwtException e) {
+            return true;
+        }
     }
 }
