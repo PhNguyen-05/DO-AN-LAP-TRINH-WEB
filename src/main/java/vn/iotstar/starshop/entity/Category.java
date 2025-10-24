@@ -3,6 +3,8 @@ package vn.iotstar.starshop.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 
 @Entity
 @Table(name = "categories")
@@ -23,5 +25,16 @@ public class Category {
     private String description;
 
     @Column(name = "created_at")
-    private LocalDateTime created_at = LocalDateTime.now();
+
+    private LocalDateTime createdAt = LocalDateTime.now();
+
+    // ✅ Getter định dạng ngày tạo cho hiển thị JSP
+    public String getFormattedCreatedAt() {
+        if (createdAt == null) {
+            return "Không xác định";
+        }
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+        return createdAt.format(formatter);
+    }
+
 }

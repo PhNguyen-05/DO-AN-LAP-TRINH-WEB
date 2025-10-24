@@ -10,9 +10,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import vn.iotstar.starshop.entity.Customers;
+import vn.iotstar.starshop.entity.Customer;
 import vn.iotstar.starshop.entity.User;
-import vn.iotstar.starshop.service.CustomersService;
+import vn.iotstar.starshop.service.CustomerService;
 
 
 @Controller
@@ -20,7 +20,7 @@ import vn.iotstar.starshop.service.CustomersService;
 public class UserProfileController {
 
     @Autowired
-    private CustomersService customersService;
+    private CustomerService customersService;
 
     // ====== Xem profile ======
     // ====== Xem profile ======
@@ -31,7 +31,8 @@ public class UserProfileController {
             return "redirect:/auth/login";
         }
 
-        Customers kh = customersService.findByUserId(currentUser.getId());
+        Customer kh = customersService.findByUserId(currentUser.getId());
+
         if (kh == null) {
             return "redirect:/user/profile/edit";
         }
@@ -55,7 +56,8 @@ public class UserProfileController {
             return "redirect:/auth/login";
         }
 
-        Customers kh = customersService.findByUserId(currentUser.getId());
+        Customer kh = customersService.findByUserId(currentUser.getId());
+
         model.addAttribute("customer", kh);
 
         return "user/profile-edit"; // /WEB-INF/views/user/profile-edit.jsp
@@ -73,10 +75,11 @@ public class UserProfileController {
             return "redirect:/auth/login";
         }
 
-        Customers kh = customersService.findByUserId(currentUser.getId());
+
+        Customer kh = customersService.findByUserId(currentUser.getId());
         if (kh == null) {
             // Nếu chưa có record KhachHang, tạo mới
-            kh = new Customers();
+            kh = new Customer();
             kh.setUserId(currentUser.getId()); // Bạn cần thêm field userId trong entity
         }
 

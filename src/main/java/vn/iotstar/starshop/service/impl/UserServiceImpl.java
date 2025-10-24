@@ -7,6 +7,8 @@ import vn.iotstar.starshop.repository.UserRepository;
 import vn.iotstar.starshop.service.UserService;
 
 import java.time.LocalDateTime;
+import java.util.List;
+
 import java.util.Optional;
 
 @Service
@@ -99,5 +101,20 @@ public class UserServiceImpl implements UserService {
     @Override
     public User update(User user) {
         return save(user);
+    }
+    
+    
+    @Override
+    public long countUsers() {
+        return userRepository.count();
+    }
+
+    @Override
+    public List<Object[]> findLatestUsers() {
+        return userRepository.findLatestUsers();
+    }
+    @Override
+    public List<User> findAll() {
+        return userRepository.findAll();
     }
 }

@@ -1,5 +1,7 @@
 package vn.iotstar.starshop.service;
 
+import java.util.List;
+
 import vn.iotstar.starshop.entity.User;
 
 public interface UserService {
@@ -9,4 +11,10 @@ public interface UserService {
     
     User save(User user);
     User update(User user);
+
+    long countUsers();
+
+    List<Object[]> findLatestUsers();
+  
+    List<User> findAll();
 }
