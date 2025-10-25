@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import vn.iotstar.starshop.entity.Product;
+import vn.iotstar.starshop.entity.Review;
 
 public interface ProductService {
 	Page<Product> searchByKeyword(String keyword, Pageable pageable);
@@ -29,4 +30,6 @@ public interface ProductService {
 	Page<Product> findByNameContainingAndCategoryId(String name, Integer categoryId, Pageable pageable);
 	
 	List<Product> findByCategoryId(Integer categoryId);
+	
+	List<Review> getReviewsByProductId(Integer productId);
 }

@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
 import vn.iotstar.starshop.entity.Product;
+import vn.iotstar.starshop.entity.Review;
+import vn.iotstar.starshop.repository.ReviewRepository;
 import vn.iotstar.starshop.repository.ProductRepository;
 import vn.iotstar.starshop.service.ProductService;
 
@@ -19,6 +21,7 @@ import vn.iotstar.starshop.service.ProductService;
 public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;  
+    private final ReviewRepository reviewRepository;
 
     @Override
     public Page<Product> searchByKeyword(String keyword, Pageable pageable) {
@@ -28,9 +31,10 @@ public class ProductServiceImpl implements ProductService {
         return productRepository.searchByKeyword(keyword.trim(), pageable);
     }
 
+ // ✅ Lấy sản phẩm mới nhất, không giới hạn danh mục
     @Override
     public List<Product> findTopNewProducts(int limit) {
-        return productRepository.findTopNewFlowers(PageRequest.of(0, limit));
+        return productRepository.findTopNew(PageRequest.of(0, limit));
     }
     
     @Override
@@ -87,5 +91,10 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public List<Product> findByCategoryId(Integer categoryId) {
         return productRepository.findByCategoryId(categoryId);
+    }
+    
+    @Override
+    public List<Review> getReviewsByProductId(Integer productId) {
+        return reviewRepository.findByProductId(productId);
     }
 }
