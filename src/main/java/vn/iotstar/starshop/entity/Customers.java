@@ -3,8 +3,6 @@ package vn.iotstar.starshop.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.ArrayList;
 
 @Entity
 @Table(name = "customers")
@@ -12,7 +10,7 @@ import java.util.ArrayList;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Customer {
+public class Customers {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,15 +30,4 @@ public class Customer {
 
     @Column(name = "created_at")
     private LocalDateTime createdAt = LocalDateTime.now();
-    
-    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
-    @Builder.Default
-    @ToString.Exclude // Loại trừ danh sách address khỏi toString()
-    private List<Address> addressList = new ArrayList<>();
-    
- // ====== Quan hệ với User ======
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", insertable = false, updatable = false)
-    @ToString.Exclude
-    private User user;
 }

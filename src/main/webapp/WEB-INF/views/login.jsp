@@ -55,24 +55,37 @@
     </style>
 </head>
 
-
 <body class="d-flex align-items-center justify-content-center">
+
     <div class="login-card text-center">
         <h2 class="login-header mb-3">🌸 StarShop</h2>
         <div class="welcome-text mb-4">
-    <p class="fw-light mb-1" style="font-size: 1.05rem; color: #6c757d;">
-        🌷 <span style="color:#ff69b4; font-weight:600;">Chào mừng bạn quay lại!</span>
-    </p>
-    <p class="text-muted" style="font-size: 0.95rem;">
-        Hãy đăng nhập để tiếp tục mua sắm cùng <span style="color:#ff69b4;">StarShop</span> 💖
-    </p>
-</div>
+            <p class="fw-light mb-1" style="font-size: 1.05rem; color: #6c757d;">
+                🌷 <span style="color:#ff69b4; font-weight:600;">Chào mừng bạn quay lại!</span>
+            </p>
+            <p class="text-muted" style="font-size: 0.95rem;">
+                Hãy đăng nhập để tiếp tục mua sắm cùng <span style="color:#ff69b4;">StarShop</span> 💖
+            </p>
+        </div>
+
         <!-- Hiển thị thông báo -->
-        <c:if test="${not empty message}">
-            <div class="alert alert-danger py-2">${message}</div>
+        <c:if test="${param.error != null}">
+            <div class="alert alert-danger py-2 mb-3">❌ Sai thông tin đăng nhập!</div>
+        </c:if>
+        <c:if test="${param.logout != null}">
+            <div class="alert alert-success py-2 mb-3">✅ Đăng xuất thành công!</div>
+        </c:if>
+        <c:if test="${param.registered != null}">
+            <div class="alert alert-success py-2 mb-3">🎉 Đăng ký thành công! Hãy đăng nhập.</div>
         </c:if>
 
+        <!-- Form đăng nhập -->
         <form action="${pageContext.request.contextPath}/auth/login" method="post">
+            <!-- Nếu bật CSRF trong production thì thêm token -->
+            <c:if test="${not empty _csrf}">
+                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+            </c:if>
+
             <div class="form-floating mb-3">
                 <input type="text" class="form-control" id="identifier" name="identifier"
                        placeholder="Email hoặc số điện thoại" required>
@@ -88,7 +101,7 @@
             <!-- Ghi nhớ mật khẩu + Quên mật khẩu -->
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="rememberMe" name="rememberMe">
+                    <input class="form-check-input" type="checkbox" id="rememberMe" name="remember-me">
                     <label class="form-check-label small text-muted" for="rememberMe">
                         Ghi nhớ đăng nhập
                     </label>
