@@ -755,12 +755,18 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+
+import org.springframework.security.core.context.SecurityContextHolder;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import vn.iotstar.starshop.entity.*;
+
+import vn.iotstar.starshop.security.CustomUserDetails;
+
 import vn.iotstar.starshop.service.*;
 
 import java.io.File;
@@ -800,10 +806,10 @@ public class VendorController {
     // 🌸 Shop home
     @GetMapping("/home")
     public String vendorHome(Model model, HttpSession session) {
-        User currentUser = (User) session.getAttribute("currentUser");
-        if (currentUser == null) {
-            return "redirect:/auth/login";
-        }
+
+    	CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User currentUser = userDetails.getUser();
+
 
         String email = currentUser.getEmail();
         Vendor vendor = vendorService.findByEmail(email);

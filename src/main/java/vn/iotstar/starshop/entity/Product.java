@@ -62,4 +62,10 @@ public class Product {
     
     @OneToMany(mappedBy = "product")
     private List<OrderDetail> orderDetails;
+
+    
+ // ⭐ Trường transient để đánh dấu sản phẩm có được yêu thích hay không
+    @Transient
+    private boolean isFavorite;
+
 }

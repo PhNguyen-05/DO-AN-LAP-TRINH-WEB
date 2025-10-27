@@ -124,6 +124,21 @@
                             <i class="bi bi-cart"></i> Thêm vào giỏ hàng
                         </button>
                     </form>
+                    
+                    <!-- Nút Yêu thích -->
+                    <form action="${pageContext.request.contextPath}/user/wishlist/toggle" method="post" class="mt-2">
+                        <input type="hidden" name="productId" value="${product.id}">
+                        <button type="submit" class="btn btn-outline-pink d-flex align-items-center">
+                            <c:choose>
+                                <c:when test="${product.isFavorite}">
+                                    <i class="bi bi-heart-fill text-danger me-2"></i> Bỏ yêu thích
+                                </c:when>
+                                <c:otherwise>
+                                    <i class="bi bi-heart me-2"></i> Yêu thích
+                                </c:otherwise>
+                            </c:choose>
+                        </button>
+                    </form>
 
                     <p class="mt-2"><strong>Mô tả:</strong> ${product.description}</p>
                     <button class="btn btn-outline-pink mt-3" data-bs-toggle="modal" data-bs-target="#reviewModal">

@@ -1,13 +1,16 @@
 package vn.iotstar.starshop.controller;
 
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import lombok.RequiredArgsConstructor;
 import vn.iotstar.starshop.service.ProductService;
+import vn.iotstar.starshop.service.WishlistService;
 import vn.iotstar.starshop.entity.Product;
 import vn.iotstar.starshop.entity.Review;
+import vn.iotstar.starshop.entity.User;
 import vn.iotstar.starshop.entity.Category;
 
 import java.util.HashMap;
@@ -20,6 +23,7 @@ import java.util.Map;
 public class ProductController {
 
     private final ProductService productService;
+    private final WishlistService wishlistService;
 
 //    @GetMapping("/{id}")
 //    public String viewProductDetail(@PathVariable("id") Integer id, Model model) {
@@ -44,9 +48,19 @@ public class ProductController {
 //    }
     
     @GetMapping("/{id}")
-    public String viewProductDetail(@PathVariable("id") Integer id, Model model) {
+    public String viewProductDetail(
+    		@PathVariable("id") Integer id, 
+    		Model model,
+    		@AuthenticationPrincipal User user // lấy thông tin người dùng hiện tại
+    		) {
         Product product = productService.findById(id)
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy sản phẩm ID: " + id));
+        
+     // ⭐ Bổ sung trạng thái yêu thích
+        if (user != null) {
+            boolean favorite = wishlistService.isFavorite(user, product);
+            product.setFavorite(favorite);
+        }
 
         model.addAttribute("product", product);
 
