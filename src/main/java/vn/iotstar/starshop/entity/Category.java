@@ -37,4 +37,9 @@ public class Category {
         return createdAt.format(formatter);
     }
 
+
+    @ManyToOne
+    @JoinColumn(name = "vendor_id", nullable = false)
+    private Vendor vendor;
+
 }

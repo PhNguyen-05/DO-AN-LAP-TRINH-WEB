@@ -1,16 +1,19 @@
 package vn.iotstar.starshop.repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import vn.iotstar.starshop.entity.Order;
+import vn.iotstar.starshop.entity.Vendor;
 
 
 public interface OrderRepository extends JpaRepository<Order, Integer> {
 
-    @Query("SELECT d FROM Order d ORDER BY d.created_at DESC")
+	@Query("SELECT d FROM Order d ORDER BY d.createdAt DESC")
     List<Order> findRecentOrder(int limit);
     
     @Query(value = """
@@ -38,4 +41,21 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
 	        ORDER BY total_sold DESC
 	        """, nativeQuery = true)
 	    List<Object[]> getTopSellingProducts();
+  
+	    
+	    
+   
+	    
+	    @Query("SELECT COUNT(o) FROM Order o WHERE o.vendor = ?1 AND o.createdAt BETWEEN ?2 AND ?3")
+	    long countByVendorAndCreatedAtBetween(Vendor vendor, LocalDateTime start, LocalDateTime end);
+
+
+	    @Query("SELECT o FROM Order o WHERE o.vendor = ?1 ORDER BY o.createdAt DESC")
+	    List<Order> getRecentOrdersByVendor(Vendor vendor, Pageable pageable);
+
+
+	    List<Order> findByVendor(Vendor vendor);
+	    
+	    List<Order> findTop5ByVendorOrderByCreatedAtDesc(Vendor vendor);
+
 }

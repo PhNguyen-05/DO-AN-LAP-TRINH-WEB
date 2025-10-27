@@ -1,6 +1,10 @@
 package vn.iotstar.starshop.service;
 
+import java.util.List;
+
+
 import org.springframework.security.core.userdetails.UserDetailsService;
+
 import vn.iotstar.starshop.entity.User;
 import java.util.List;
 
@@ -16,3 +20,4 @@ public interface UserService extends UserDetailsService {
     List<Object[]> findLatestUsers();
     List<User> findAll();
 }
+
