@@ -279,84 +279,133 @@ $(document).ready(function () {
     });
 
 
-//  Xem chi tiết khuyến mãi (đã thêm console.log để debug)
-// --- THAY THẾ CODE CŨ BẰNG CODE NÀY ---
+ // --- THAY THẾ CODE CŨ BẰNG CODE NÀY ---
 
-//  Xem chi tiết khuyến mãi (Thêm log kiểm tra innerHTML)
+//  Xem chi tiết khuyến mãi (Dùng innerHTML + setTimeout check)
 $(document).on('click', '.view-btn', function () {
-    console.log("--- Nút Xem được bấm ---"); // LOG 1
+    console.log("[DEBUG] --- Nút Xem được bấm ---"); // LOG 1
 
-    // 1. Lấy dữ liệu CÓ SẴN từ nút bấm
+    // 1. Lấy dữ liệu CÓ SẴN
     const id = $(this).data('id');
     const name = $(this).data('name');
-    // ... (lấy các data khác) ...
+    const discount = $(this).data('discount');
+    const start = $(this).data('start');
+    const end = $(this).data('end');
     const active = $(this).data('active');
 
     // 2. Lấy đối tượng Modal
-    const viewModal = document.getElementById('viewPromotionModal');
-    const modal = bootstrap.Modal.getInstance(viewModal) || new bootstrap.Modal(viewModal);
+    const viewModalElement = document.getElementById('viewPromotionModal');
+    if (!viewModalElement) {
+        console.error("[DEBUG] KHÔNG TÌM THẤY MODAL '#viewPromotionModal'");
+        return;
+    }
+    const modal = bootstrap.Modal.getInstance(viewModalElement) || new bootstrap.Modal(viewModalElement);
 
-    // 3. Gán dữ liệu CÓ SẴN
-    $('#viewId').text(id);
-    $('#viewName').text(name);
-    // ... (gán các span khác) ...
-    $('#viewStatus').html(/* ... code xử lý status ... */);
+    // 3. Gán dữ liệu CÓ SẴN (Kiểm tra lại xem các ID này có đúng không)
+    $('#viewId').text(id || 'N/A');
+    $('#viewName').text(name || 'N/A');
+    $('#viewDiscount').text((discount !== undefined ? (discount < 1 ? discount + '%' : discount + ' VND') : 'N/A'));
+    // Gán ngày tháng và status (Đảm bảo code này đúng)
+    try {
+        $('#viewStart').text(start ? start.split('T')[0] : 'N/A');
+        $('#viewEnd').text(end ? end.split('T')[0] : 'N/A');
+
+        const now = new Date();
+        const startDate = start ? new Date(start) : null;
+        const endDate = end ? new Date(end) : null;
+        let statusHTML = '<span class="badge bg-secondary">Không xác định</span>'; // Default
+
+        if (startDate && now < startDate) {
+            statusHTML = '<span class="badge bg-secondary">⏳ Chưa bắt đầu</span>';
+        } else if (endDate && (now > endDate || !active)) {
+            statusHTML = '<span class="badge bg-danger">❌ Đã kết thúc</span>';
+        } else if (startDate && endDate) { // Chỉ hiển thị active nếu có ngày hợp lệ
+            statusHTML = '<span class="badge bg-success">✅ Đang hoạt động</span>';
+        }
+         $('#viewStatus').html(statusHTML);
+         console.log("[DEBUG] Đã gán dữ liệu cơ bản vào modal."); // LOG X
+    } catch(e) {
+        console.error("[DEBUG] Lỗi khi gán ngày tháng/status:", e); // LOG Y (LỖI)
+    }
+
 
     // 4. Reset danh sách và hiển thị "Đang tải..."
-    const productListElement = document.getElementById('viewProducts'); // Lấy element gốc
+    const productListElement = document.getElementById('viewProducts');
     if (!productListElement) {
-        console.error("KHÔNG TÌM THẤY THẺ UL VỚI ID 'viewProducts'!"); // LOG ERROR
-        return; // Dừng lại nếu không tìm thấy UL
+        console.error("[DEBUG] KHÔNG TÌM THẤY THẺ UL '#viewProducts'"); // LOG ERROR
+        return;
     }
-    const productList = $(productListElement); // jQuery object
-    console.log("Đã chọn được thẻ UL:", productList.length > 0); // LOG 2
-    productList.empty();
-    productList.append('<li class="list-group-item text-muted fst-italic">Đang tải danh sách sản phẩm...</li>');
+    console.log("[DEBUG] Đã tìm thấy UL #viewProducts."); // LOG 2
+    productListElement.innerHTML = '<li class="list-group-item text-muted fst-italic">Đang tải danh sách sản phẩm...</li>';
 
     // 5. LẮNG NGHE sự kiện KHI MODAL ĐÃ HIỆN XONG
-    $(viewModal).off('shown.bs.modal').on('shown.bs.modal', function () {
-        console.log("--- Modal ĐÃ HIỆN XONG, bắt đầu Fetch ---"); // LOG A
+    $(viewModalElement).off('shown.bs.modal').on('shown.bs.modal', function () {
+        console.log("[DEBUG] --- Modal ĐÃ HIỆN XONG, bắt đầu Fetch ---"); // LOG A
 
-        fetch('${pageContext.request.contextPath}/vendor/promotions/details/' + id)
-            .then(response => {
-                console.log("Fetch response status:", response.status); // LOG 3
-                if (!response.ok) throw new Error('Network response error: ' + response.statusText);
-                return response.json();
-            })
-            .then(data => {
-                console.log("Dữ liệu JSON:", data); // LOG 4
-                const products = data ? data.productNames : null;
-                console.log("productNames:", products); // LOG 5
+        fetch(`${pageContext.request.contextPath}/vendor/promotions/details/` + id)
+        .then(response => {
+          if (!response.ok) throw new Error('Fetch error: ' + response.status);
+          return response.json();
+        })
+        .then(data => {
+          console.log('[DEBUG] JSON data:', data);
+          const products = data && data.productNames ? data.productNames : [];
 
-                productList.empty(); // Xóa "Đang tải..."
-                console.log("HTML của UL sau khi empty:", productListElement.innerHTML); // LOG B: Kiểm tra UL trống
+          const uls = Array.from(document.querySelectorAll('#viewProducts'));
+          if (uls.length === 0) {
+            console.error('[DEBUG] Không tìm thấy element #viewProducts để đổ dữ liệu');
+            return;
+          }
 
-                if (products && Array.isArray(products) && products.length > 0) {
-                    console.log("Bắt đầu append LI..."); // LOG 6
-                    products.forEach((p, index) => {
-                        const liHtml = `<li class="list-group-item">${p}</li>`;
-                        productList.append(liHtml);
-                        // KIỂM TRA NGAY LẬP TỨC
-                        console.log(`  Đã append '${p}'. HTML của UL hiện tại:`, productListElement.innerHTML); // LOG C
-                    });
-                    console.log("--- HOÀN TẤT APPEND ---"); // LOG D
-                    console.log("HTML cuối cùng của UL:", productListElement.innerHTML); // LOG E
-                } else {
-                    console.log("Không có sản phẩm hoặc lỗi dữ liệu."); // LOG 9
-                    productList.append('<li class="list-group-item text-muted fst-italic">Không có sản phẩm áp dụng.</li>');
-                }
-            })
-            .catch(error => {
-                console.error('Lỗi fetch/JSON:', error); // LOG 10
-                productList.empty();
-                productList.append(`<li class="list-group-item text-danger">Lỗi: ${error.message}</li>`);
+          console.log('[DEBUG] #viewProducts count =', uls.length, uls);
+
+          uls.forEach(($ul, idx) => {
+            while ($ul.firstChild) $ul.removeChild($ul.firstChild);
+
+            if (!products || products.length === 0) {
+              const li = document.createElement('li');
+              li.className = 'list-group-item text-muted fst-italic';
+              li.textContent = 'Không có sản phẩm áp dụng.';
+              $ul.appendChild(li);
+              return;
+            }
+
+            products.forEach((p) => {
+              const li = document.createElement('li');
+              li.className = 'list-group-item';
+              li.textContent = p;
+              $ul.appendChild(li);
+              console.log('[DEBUG] Appended LI with text:', p);
             });
-    });
 
-    // 7. HIỂN THỊ MODAL
-    console.log("Chuẩn bị show modal..."); // LOG 11
+            console.log('[DEBUG] UL #'+idx+' innerText:', $ul.innerText);
+            console.log('[DEBUG] UL #'+idx+' innerHTML:', $ul.innerHTML);
+          });
+        })
+        .catch(err => {
+          console.error('[DEBUG] fetch error', err);
+          const $ul = document.querySelector('#viewProducts');
+          if ($ul) {
+            $ul.innerHTML = `<li class="list-group-item text-danger">Lỗi tải sản phẩm: ${err.message}</li>`;
+          }
+        });
+    });
+ 
+
+    // 6. HIỂN THỊ MODAL
+    console.log("[DEBUG] Chuẩn bị show modal..."); // LOG 11
     modal.show();
+
+    // 7. KIỂM TRA DOM SAU MỘT KHOẢNG THỜI GIAN NGẮN
+    // Chờ 1 giây sau khi modal được yêu cầu hiển thị, sau đó kiểm tra lại innerHTML
+    setTimeout(() => {
+        console.log("[DEBUG] --- KIỂM TRA LẠI SAU 1 GIÂY ---"); // LOG Z1
+        const currentUlHtml = document.getElementById('viewProducts')?.innerHTML;
+        console.log("[DEBUG] innerHTML của UL sau 1 giây:", currentUlHtml); // LOG Z2
+    }, 1000); // Chờ 1000ms = 1 giây
+
 });
+
 // --- KẾT THÚC CODE THAY THẾ ---
 });
 </script>

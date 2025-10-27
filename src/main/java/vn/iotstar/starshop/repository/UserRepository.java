@@ -27,4 +27,6 @@ public interface UserRepository extends JpaRepository<User, Integer> {
         """, nativeQuery = true)
     List<Object[]> findLatestUsers();
 
+    boolean existsByEmail(String email);
+
 }

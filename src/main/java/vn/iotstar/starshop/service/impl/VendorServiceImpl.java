@@ -34,4 +34,9 @@ public class VendorServiceImpl implements VendorService {
     public List<Vendor> findAll() {
         return vendorRepository.findAll();
     }
+    
+    @Override
+    public void deleteById(Integer id) {
+        vendorRepository.deleteById(id);
+    }
 }

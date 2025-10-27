@@ -12,4 +12,6 @@ public interface VendorService {
     
     Optional<Vendor> findById(Integer id);
     List<Vendor> findAll();
+
+	void deleteById(Integer id);
 }
