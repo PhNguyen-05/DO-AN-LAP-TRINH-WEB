@@ -231,6 +231,8 @@
 package vn.iotstar.starshop.controller;
 
 import java.time.Instant;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -239,14 +241,26 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import vn.iotstar.starshop.entity.User;
 import vn.iotstar.starshop.service.UserService;
 import vn.iotstar.starshop.util.EmailUtil;
 
+import jakarta.servlet.http.Cookie;
+import vn.iotstar.starshop.util.JwtUtil;
+import jakarta.servlet.http.HttpServletResponse;
+
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
+import io.jsonwebtoken.JwtException;
+
 @Controller
 @RequestMapping("/auth")
 public class AuthController {
+
+	@Autowired
+	private JwtUtil jwtUtil;
 
     @Autowired
     private UserService userService;
@@ -473,6 +487,7 @@ public class AuthController {
         }
     }
 }
+
 
 
 

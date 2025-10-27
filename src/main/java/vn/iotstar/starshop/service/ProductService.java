@@ -70,15 +70,15 @@ public interface ProductService {
     
     // long countProducts();
 
-	Page<Product> findAllWithCategory(Pageable pageable);
-
-	// Optional<Product> findById(Integer id);
-
-	Product save(Product product);
-
-	// void deleteById(Integer id);
-	
-	Page<Product> findByNameContainingAndCategoryId(String name, Integer categoryId, Pageable pageable);
+//	Page<Product> findAllWithCategory(Pageable pageable);
+//
+//	// Optional<Product> findById(Integer id);
+//
+//	Product save(Product product);
+//
+//	// void deleteById(Integer id);
+//	
+//	Page<Product> findByNameContainingAndCategoryId(String name, Integer categoryId, Pageable pageable);
 	
 	// List<Product> findByCategoryId(Integer categoryId);
 	

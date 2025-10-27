@@ -267,26 +267,15 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-
-import vn.iotstar.starshop.entity.Customer;
-import vn.iotstar.starshop.entity.User;
-import vn.iotstar.starshop.service.CustomerService;
-
-
 import vn.iotstar.starshop.entity.Address;
 import vn.iotstar.starshop.entity.Customer;
 import vn.iotstar.starshop.entity.User;
 import vn.iotstar.starshop.security.CustomUserDetails;
 import vn.iotstar.starshop.service.CustomerService;
 
-
 @Controller
 @RequestMapping("/user/profile")
 public class UserProfileController {
-
-
-    @Autowired
-    private CustomerService customersService;
 
     private final CustomerService customerService;
 
@@ -294,21 +283,13 @@ public class UserProfileController {
         this.customerService = customerService;
     }
 
-
     // ====== Xem profile ======
     @GetMapping
     public String viewProfile(@AuthenticationPrincipal CustomUserDetails customUser, Model model) {
         if (customUser == null) return "redirect:/auth/login";
 
-        Customer kh = customersService.findByUserId(currentUser.getId());
-
-        if (kh == null) {
-            return "redirect:/user/profile/edit";
-        }
-
         User currentUser = customUser.getUser();
         Customer customer = customerService.findByUserId(currentUser.getId());
-
 
         if (customer == null) return "redirect:/user/profile/edit";
 
@@ -337,14 +318,8 @@ public class UserProfileController {
             customer.setUserId(currentUser.getId());
         }
 
-
-        Customer kh = customersService.findByUserId(currentUser.getId());
-
-        model.addAttribute("customer", kh);
-
         model.addAttribute("customer", customer);
         model.addAttribute("user", currentUser);
-
 
         return "user/profile-edit"; // profile-edit.jsp
     }
@@ -364,7 +339,6 @@ public class UserProfileController {
             customer = new Customer();
             customer.setUserId(currentUser.getId());
         }
-
 
         customer.setFullName(fullName);
         customer.setPhone(phone);
@@ -394,7 +368,6 @@ public class UserProfileController {
         }
         if (address == null) {
             address = new Address();
-
         }
 
         model.addAttribute("address", address);

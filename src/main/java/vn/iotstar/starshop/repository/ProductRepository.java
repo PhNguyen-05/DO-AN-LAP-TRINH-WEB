@@ -77,14 +77,14 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
     Page<Product> findByCategoryId(Integer categoryId, Pageable pageable);
 
  // ✅ Lấy top sản phẩm mới nhất (không giới hạn danh mục)
-    @Query("SELECT p FROM Product p ORDER BY p.createdAt DESC")
-    List<Product> findTopNew(Pageable pageable);
-
-    @Query("SELECT p FROM Product p JOIN FETCH p.category")
-    Page<Product> findAllWithCategory(Pageable pageable);
-
-    Page<Product> findAll(Specification<Product> spec, Pageable pageable);
-    
+//    @Query("SELECT p FROM Product p ORDER BY p.createdAt DESC")
+//    List<Product> findTopNew(Pageable pageable);
+//
+//    @Query("SELECT p FROM Product p JOIN FETCH p.category")
+//    Page<Product> findAllWithCategory(Pageable pageable);
+//
+//    Page<Product> findAll(Specification<Product> spec, Pageable pageable);
+//    
     // List<Product> findByCategoryId(Integer categoryId);
 
     
