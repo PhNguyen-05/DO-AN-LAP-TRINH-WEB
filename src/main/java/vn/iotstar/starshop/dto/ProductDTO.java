@@ -5,24 +5,24 @@ public class ProductDTO {
     private String name;
     private double price;
     private String imageUrl;
-    private ShopDTO shop;
-    private int discountPercent; // phần trăm giảm giá
-    private int soldQuantity;    // số lượng đã bán
+    private VendorDTO shop; // Sửa: Rename ShopDTO thành VendorDTO cho đồng bộ
+    private int discountPercent;
+    private int soldQuantity;
+    
 
-    // Constructor mặc định
-    public ProductDTO() {}
-
-    // Constructor đầy đủ dùng trong HomeController
-    public ProductDTO(int id, String name, double price, String imageUrl, ShopDTO shop, int discount, int sold) {
+    public ProductDTO() { // 👈 thêm constructor trống này
+    }
+    
+    public ProductDTO(int id, String name, double price, String imageUrl, VendorDTO shop, int discount, int sold) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
         this.shop = shop;
-        this.discountPercent = discountPercent;
-        this.soldQuantity = soldQuantity;
+        this.discountPercent = discount; // Sửa typo: discountPercent -> discount
+        this.soldQuantity = sold;
     }
-
+    
     // Getter và Setter
     public int getId() {
         return id;
@@ -56,11 +56,11 @@ public class ProductDTO {
         this.imageUrl = imageUrl;
     }
 
-    public ShopDTO getShop() {
+    public VendorDTO getShop() {
         return shop;
     }
 
-    public void setShop(ShopDTO shop) {
+    public void setShop(VendorDTO shop) {
         this.shop = shop;
     }
 

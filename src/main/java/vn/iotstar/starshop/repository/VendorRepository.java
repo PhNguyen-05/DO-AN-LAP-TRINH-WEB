@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import vn.iotstar.starshop.entity.Vendor;
 
 @Repository
-public interface VendorRepository extends JpaRepository<Vendor, Long> {
+public interface VendorRepository extends JpaRepository<Vendor, Integer> {
     Vendor findByUserEmail(String email);  // Sử dụng email vì schema dùng email làm unique identifier
 }

@@ -15,4 +15,5 @@ public interface CategoryService {
     
     List<Category> findByVendor(Vendor vendor);
     List<Category> findByIdsAndVendor(List<Integer> ids, Vendor vendor);
+    List<Category> findAllWithProducts();
 }

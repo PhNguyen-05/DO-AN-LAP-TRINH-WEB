@@ -6,12 +6,15 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 @Entity
 @Table(name = "products")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@ToString(exclude = {"category", "vendor", "orderDetails", "promotions"})
 public class Product {
 
     @Id
@@ -45,16 +48,9 @@ public class Product {
     @Column(name = "average_rating", precision = 2, scale = 1)
     private BigDecimal averageRating = BigDecimal.ZERO;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(
-        name = "category_id",
-        foreignKey = @ForeignKey(name = "FK_PRODUCT_CATEGORY", 
-                                 value = ConstraintMode.CONSTRAINT),
-        nullable = true
-    )
-    
+    @ManyToOne
+    @JsonIgnoreProperties("products") // tránh gọi products trong category
     private Category category;
-    
     
     @ManyToOne
     @JoinColumn(name = "vendor_id")
@@ -62,9 +58,18 @@ public class Product {
     
     @OneToMany(mappedBy = "product")
     private List<OrderDetail> orderDetails;
+
     
  // ⭐ Trường transient để đánh dấu sản phẩm có được yêu thích hay không
     @Transient
     private boolean isFavorite;
 
+    @ManyToMany(mappedBy = "products")
+    private List<Promotion> promotions;
+    
+    @Transient
+    public Boolean getIsFavorite() {
+        // Tạm trả false — tránh lỗi. Sau này thay bằng logic thực tế.
+        return Boolean.FALSE;
+    }
 }

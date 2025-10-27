@@ -47,9 +47,12 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 
@@ -59,6 +62,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@ToString(exclude = {"products", "categories", "vendor"})
 public class Promotion {
 
     @Id
@@ -79,10 +83,10 @@ public class Promotion {
     private DiscountType discountType;
 
     @Column(name = "start_date", nullable = false)
-    private LocalDateTime startDate;
+    private LocalDate startDate;
 
     @Column(name = "end_date", nullable = false)
-    private LocalDateTime endDate;
+    private LocalDate endDate;
 
     @Column(name = "is_active")
     private Boolean active = true;
@@ -112,7 +116,7 @@ public class Promotion {
 
     // Phương thức tính giá giảm
     public BigDecimal calculateDiscount(BigDecimal originalPrice) {
-        if (!active || startDate.isAfter(LocalDateTime.now()) || endDate.isBefore(LocalDateTime.now())) {
+        if (!active || startDate.isAfter(LocalDate.now()) || endDate.isBefore(LocalDate.now())) {
             return BigDecimal.ZERO;
         }
         if (discountType == DiscountType.PERCENTAGE) {
@@ -123,11 +127,45 @@ public class Promotion {
         return BigDecimal.ZERO;
     }
     
-    public Date getStartDateAsDate() {
-        return java.sql.Timestamp.valueOf(this.startDate);
-    }
-    public Date getEndtDateAsDate() {
-        return java.sql.Timestamp.valueOf(this.endDate);
+ // Thêm getter formatted cho JSP
+    public String getStartDateFormatted() {
+        if (startDate == null) return "Không xác định";
+        return startDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
     }
 
+    public String getEndDateFormatted() {
+        if (endDate == null) return "Không xác định";
+        return endDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+    }
+    
+    @Transient
+    public Long getStatusCode() {
+        LocalDate today = LocalDate.now();
+        if (endDate != null && endDate.isBefore(today)) {
+            return 0L; // đã hết hạn
+        }
+        if (startDate != null && startDate.isAfter(today)) {
+            return 2L; // sắp diễn ra
+        }
+        return 1L; // đang diễn ra
+    }
+
+    @Transient
+    public String getStatusLabel() {
+        Long code = getStatusCode();
+        if (code == null) return "Không xác định";
+        return switch (code.intValue()) {
+            case 0 -> "Đã hết hạn";
+            case 2 -> "Sắp diễn ra";
+            default -> "Đang hoạt động";
+        };
+    }
+
+    @Transient
+    public String getCreatedAtFormatted() {
+        if (this.createdAt == null) return "Không xác định";
+        // Ví dụ định dạng: 27/10/2025 18:15
+        DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+        return this.createdAt.format(fmt);
+    }
 }
