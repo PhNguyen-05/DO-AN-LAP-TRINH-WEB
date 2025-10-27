@@ -6,7 +6,8 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "cart_items", uniqueConstraints = @UniqueConstraint(columnNames = {"cart_id", "product_id"}))
+@Table(name = "cart_items",
+       uniqueConstraints = @UniqueConstraint(columnNames = {"cart_id", "product_id"}))
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -17,18 +18,38 @@ public class CartItem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "cart_id", nullable = false)
-    private Integer cart_id;
+    // ✅ Liên kết đến giỏ hàng
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(
+        name = "cart_id",
+        nullable = false,
+        foreignKey = @ForeignKey(name = "FK_CARTITEM_CART")
+    )
+    @ToString.Exclude
+    private Cart cart;
 
-    @Column(name = "product_id", nullable = false)
-    private Integer product_id;
+    // ✅ Liên kết đến sản phẩm
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(
+        name = "product_id",
+        nullable = false,
+        foreignKey = @ForeignKey(name = "FK_CARTITEM_PRODUCT")
+    )
+    @ToString.Exclude
+    private Product product;
 
-    @Column(name = "quantity", nullable = false)
+    @Column(nullable = false)
     private Integer quantity;
 
     @Column(name = "unit_price", precision = 18, scale = 2, nullable = false)
-    private BigDecimal unit_price;
+    private BigDecimal unitPrice;
 
     @Column(name = "created_at")
-    private LocalDateTime created_at = LocalDateTime.now();
+    private LocalDateTime createdAt = LocalDateTime.now();
+
+    // ✅ Tính tổng tiền của dòng này (không lưu DB)
+    @Transient
+    public BigDecimal getTotalPrice() {
+        return unitPrice.multiply(BigDecimal.valueOf(quantity));
+    }
 }

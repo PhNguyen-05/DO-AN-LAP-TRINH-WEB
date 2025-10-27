@@ -115,7 +115,7 @@
                     <h2>${product.name}</h2>
                     <p class="product-price"><fmt:formatNumber value="${product.price}" type="number"/> ₫</p>
 
-                    <form action="${pageContext.request.contextPath}/cart/add" method="post" class="d-flex align-items-center mb-3">
+                    <form action="${pageContext.request.contextPath}/user/cart/add" method="post" class="d-flex align-items-center mb-3">
                         <input type="hidden" name="productId" value="${product.id}">
                         <input type="number" name="quantity" value="1" min="1" 
                                class="form-control w-25 me-2 text-center rounded-pill">

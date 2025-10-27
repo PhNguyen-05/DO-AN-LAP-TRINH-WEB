@@ -85,7 +85,7 @@
                 <!-- Giỏ hàng -->
                 <li class="nav-item ms-3">
                     <a class="btn rounded-pill position-relative shadow-sm"
-                       href="${pageContext.request.contextPath}/cart"
+                       href="${pageContext.request.contextPath}/user/cart"
                        style="background-color: #ffd6e8; color: #ff1493;">
                         <i class="bi bi-cart3"></i>
                         <c:if test="${not empty sessionScope.cartSize}">
