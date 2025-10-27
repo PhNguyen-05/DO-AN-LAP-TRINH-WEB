@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="jakarta.tags.core"%>
-
+<%@ taglib prefix="fmt" uri="jakarta.tags.fmt"%>
 <!-- DataTables CSS -->
 <link rel="stylesheet"
 	href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css">
@@ -53,11 +53,12 @@
 										<c:when test="${promotion.discountType == 'PERCENTAGE'}">${promotion.discountValue}%</c:when>
 										<c:otherwise>${promotion.discountValue} VND</c:otherwise>
 									</c:choose></td>
-								<td>${promotion.startDate.toLocalDate()}</td>
-								<td>${promotion.endDate.toLocalDate()}</td>
-
+								<td><fmt:formatDate value="${promotion.startDateAsDate}"
+										pattern="yyyy-MM-dd" /></td>
+								<td><fmt:formatDate value="${promotion.endDateAsDate}"
+										pattern="yyyy-MM-dd" /></td>
 								<td><c:set var="now"
-										value="<%=java.time.LocalDateTime.now()%>" /> <c:choose>
+										value="<%=java.time.LocalDate.now()%>" /> <c:choose>
 										<c:when test="${promotion.startDate gt now}">
 											<span class="badge bg-secondary px-3 py-2">⏳ Chưa bắt
 												đầu</span>
@@ -277,50 +278,86 @@ $(document).ready(function () {
         });
     });
 
- // 👁️ Xem chi tiết khuyến mãi
-    $(document).on('click', '.view-btn', function () {
-        const id = $(this).data('id');
-        const name = $(this).data('name');
-        const discount = $(this).data('discount');
-        const start = $(this).data('start');
-        const end = $(this).data('end');
-        const active = $(this).data('active');
-        const products = $(this).data('products') || []; // mảng sản phẩm
 
-        // Gán thông tin vào modal
-        $('#viewId').text(id);
-        $('#viewName').text(name);
-        $('#viewDiscount').text(discount + (discount < 1 ? '%' : ' VND'));
-        $('#viewStart').text(start.split('T')[0]);
-        $('#viewEnd').text(end.split('T')[0]);
-        const now = new Date();
-        const startDate = new Date(start);
-        const endDate = new Date(end);
-        let statusHTML = '';
+//  Xem chi tiết khuyến mãi (đã thêm console.log để debug)
+// --- THAY THẾ CODE CŨ BẰNG CODE NÀY ---
 
-        if (now < startDate) {
-            statusHTML = '<span class="badge bg-secondary">⏳ Chưa bắt đầu</span>';
-        } else if (now > endDate || !active) {
-            statusHTML = '<span class="badge bg-danger">❌ Đã kết thúc</span>';
-        } else {
-            statusHTML = '<span class="badge bg-success">✅ Đang hoạt động</span>';
-        }
-        $('#viewStatus').html(statusHTML);
+//  Xem chi tiết khuyến mãi (Thêm log kiểm tra innerHTML)
+$(document).on('click', '.view-btn', function () {
+    console.log("--- Nút Xem được bấm ---"); // LOG 1
 
+    // 1. Lấy dữ liệu CÓ SẴN từ nút bấm
+    const id = $(this).data('id');
+    const name = $(this).data('name');
+    // ... (lấy các data khác) ...
+    const active = $(this).data('active');
 
-        // Danh sách sản phẩm
-        const productList = $('#viewProducts');
-        productList.empty();
-        if (products.length > 0) {
-            products.forEach(p => {
-                productList.append(`<li class="list-group-item">${p}</li>`);
+    // 2. Lấy đối tượng Modal
+    const viewModal = document.getElementById('viewPromotionModal');
+    const modal = bootstrap.Modal.getInstance(viewModal) || new bootstrap.Modal(viewModal);
+
+    // 3. Gán dữ liệu CÓ SẴN
+    $('#viewId').text(id);
+    $('#viewName').text(name);
+    // ... (gán các span khác) ...
+    $('#viewStatus').html(/* ... code xử lý status ... */);
+
+    // 4. Reset danh sách và hiển thị "Đang tải..."
+    const productListElement = document.getElementById('viewProducts'); // Lấy element gốc
+    if (!productListElement) {
+        console.error("KHÔNG TÌM THẤY THẺ UL VỚI ID 'viewProducts'!"); // LOG ERROR
+        return; // Dừng lại nếu không tìm thấy UL
+    }
+    const productList = $(productListElement); // jQuery object
+    console.log("Đã chọn được thẻ UL:", productList.length > 0); // LOG 2
+    productList.empty();
+    productList.append('<li class="list-group-item text-muted fst-italic">Đang tải danh sách sản phẩm...</li>');
+
+    // 5. LẮNG NGHE sự kiện KHI MODAL ĐÃ HIỆN XONG
+    $(viewModal).off('shown.bs.modal').on('shown.bs.modal', function () {
+        console.log("--- Modal ĐÃ HIỆN XONG, bắt đầu Fetch ---"); // LOG A
+
+        fetch('${pageContext.request.contextPath}/vendor/promotions/details/' + id)
+            .then(response => {
+                console.log("Fetch response status:", response.status); // LOG 3
+                if (!response.ok) throw new Error('Network response error: ' + response.statusText);
+                return response.json();
+            })
+            .then(data => {
+                console.log("Dữ liệu JSON:", data); // LOG 4
+                const products = data ? data.productNames : null;
+                console.log("productNames:", products); // LOG 5
+
+                productList.empty(); // Xóa "Đang tải..."
+                console.log("HTML của UL sau khi empty:", productListElement.innerHTML); // LOG B: Kiểm tra UL trống
+
+                if (products && Array.isArray(products) && products.length > 0) {
+                    console.log("Bắt đầu append LI..."); // LOG 6
+                    products.forEach((p, index) => {
+                        const liHtml = `<li class="list-group-item">${p}</li>`;
+                        productList.append(liHtml);
+                        // KIỂM TRA NGAY LẬP TỨC
+                        console.log(`  Đã append '${p}'. HTML của UL hiện tại:`, productListElement.innerHTML); // LOG C
+                    });
+                    console.log("--- HOÀN TẤT APPEND ---"); // LOG D
+                    console.log("HTML cuối cùng của UL:", productListElement.innerHTML); // LOG E
+                } else {
+                    console.log("Không có sản phẩm hoặc lỗi dữ liệu."); // LOG 9
+                    productList.append('<li class="list-group-item text-muted fst-italic">Không có sản phẩm áp dụng.</li>');
+                }
+            })
+            .catch(error => {
+                console.error('Lỗi fetch/JSON:', error); // LOG 10
+                productList.empty();
+                productList.append(`<li class="list-group-item text-danger">Lỗi: ${error.message}</li>`);
             });
-        } else {
-            productList.append('<li class="list-group-item text-muted fst-italic">Không có sản phẩm áp dụng.</li>');
-        }
-
-        $('#viewPromotionModal').modal('show');
     });
+
+    // 7. HIỂN THỊ MODAL
+    console.log("Chuẩn bị show modal..."); // LOG 11
+    modal.show();
+});
+// --- KẾT THÚC CODE THAY THẾ ---
 });
 </script>
 
@@ -344,5 +381,14 @@ $(document).ready(function () {
 .btn-pink:hover {
 	background-color: #ff85c1;
 	color: white;
+}
+
+#viewProducts .list-group-item {
+  color: #212529 !important;       /* màu chữ mặc định đen */
+  font-size: 1rem !important;
+  background-color: transparent !important;
+  display: list-item !important;
+  visibility: visible !important;
+  opacity: 1 !important;
 }
 </style>

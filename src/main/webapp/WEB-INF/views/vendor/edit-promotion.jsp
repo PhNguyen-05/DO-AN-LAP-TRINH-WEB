@@ -157,40 +157,85 @@
 	$('#editDiscountType, #editDiscountValue').on('change',
 			updateDiscountPreview);
 
-	$('#editPromotionForm')
-			.on(
-					'submit',
-					function(e) {
-						e.preventDefault();
+    // ===============================================
+	// --- BẮT ĐẦU SỬA LỖI SUBMIT ---
+    // ===============================================
+	$('#editPromotionForm').on('submit', function(e) {
+		e.preventDefault(); // Ngăn submit form truyền thống
 
-						if ($('#editStartDate').val() >= $('#editEndDate')
-								.val()) {
-							alert('❌ Ngày bắt đầu phải trước ngày kết thúc.');
-							return;
-						}
+		// 1. Kiểm tra validation
+		if ($('#editStartDate').val() >= $('#editEndDate').val()) {
+			alert('❌ Ngày bắt đầu phải trước ngày kết thúc.');
+			return;
+		}
+		if (parseFloat($('#editDiscountValue').val()) <= 0) {
+			alert('❌ Giá trị giảm phải lớn hơn 0.');
+			return;
+		}
 
-						if (parseFloat($('#editDiscountValue').val()) <= 0) {
-							alert('❌ Giá trị giảm phải lớn hơn 0.');
-							return;
-						}
+        // 2. Dùng FormData thay vì .serialize()
+        // FormData sẽ xử lý đúng cả checkbox "active" và danh sách "productIds"
+        const formData = new FormData(this);
+        
+        // 3. Xử lý checkbox 'active' thủ công (RẤT QUAN TRỌNG)
+        // Nếu checkbox "active" không được tick, FormData sẽ không gửi gì
+        // Server (Spring) sẽ nhận là NULL.
+        // Chúng ta phải thêm logic để nếu nó không được tick, ta gửi "false"
+        if (!formData.has('active')) {
+            formData.append('active', 'false');
+        }
+        
+        // (Trong file controller, @RequestParam Boolean active sẽ nhận 'false' là false
+        // và 'on' (mặc định của form) là true, nhưng 'null' sẽ gây lỗi nếu ta
+        // không xử lý 'active != null && active'.
+        // Bằng cách này, ta luôn gửi 'on' hoặc 'false')
 
-						$
-								.ajax({
-									url : $(this).attr('action'),
-									type : 'POST',
-									data : $(this).serialize(),
-									success : function(response) {
-										if (response === "Success") {
-											alert('✅ Cập nhật thành công!');
-											window.location.href = '${pageContext.request.contextPath}/vendor/promotions';
-										} else {
-											alert('⚠️ Lỗi: ' + response);
-										}
-									},
-									error : function(xhr) {
-										alert('⚠️ Lỗi cập nhật khuyến mãi: '
-												+ xhr.responseText);
-									}
-								});
-					});
+		// 4. Gửi bằng fetch (an toàn hơn $.ajax với FormData)
+		fetch($(this).attr('action'), {
+			method: 'POST',
+			body: formData
+		})
+		.then(response => {
+			if (response.ok) {
+ 				// Nếu server trả về "Success"
+ 				return response.text(); // Lấy text "Success"
+			} else {
+				// Nếu server trả về lỗi (400, 500)
+				return response.text().then(text => { throw new Error(text) });
+			}
+		})
+		.then(text => {
+			if (text === "Success") {
+				alert('✅ Cập nhật thành công!');
+				window.location.href = '${pageContext.request.contextPath}/vendor/promotions';
+			} else {
+ 				// Trường hợp server trả về 200 OK nhưng text không phải "Success"
+				alert('⚠️ Lỗi: ' + text);
+			}
+		})
+		.catch(error => {
+			// Bắt lỗi từ throw new Error(text) hoặc lỗi mạng
+			console.error('Lỗi khi submit form:', error);
+			alert('⚠️ Lỗi cập nhật khuyến mãi: ' + error.message);
+		});
+	});
+    // ===============================================
+	// --- KẾT THÚC SỬA LỖI SUBMIT ---
+    // ===============================================
+
+    // Bổ sung: Script liên kết checkbox (nếu bạn chưa có)
+    $(document).ready(function() {
+        $('.category-checkbox').on('change', function() {
+            const categoryId = $(this).val();
+            const isChecked = $(this).is(':checked');
+            $(`.product-checkbox[data-category-id='${categoryId}']`).prop('checked', isChecked);
+        });
+
+        $('.product-checkbox').on('change', function() {
+            const categoryId = $(this).data('category-id');
+            const $products = $(`.product-checkbox[data-category-id='${categoryId}']`);
+            const allChecked = $products.length === $products.filter(':checked').length;
+            $(`.category-checkbox[value='${categoryId}']`).prop('checked', allChecked);
+        });
+    });
 </script>

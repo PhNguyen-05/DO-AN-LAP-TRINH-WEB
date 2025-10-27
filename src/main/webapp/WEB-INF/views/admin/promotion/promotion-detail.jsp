@@ -1,4 +1,3 @@
-<%-- promotion-detail.jsp (đồng bộ: sử dụng formatted dates, status từ entity) --%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="jakarta.tags.core"%>
@@ -103,13 +102,18 @@ to {
 							giảm:</strong> <span class="badge badge-status">${promotion.discountType == 'PERCENTAGE' ? 'Phần Trăm' : 'Cố Định'}</span>
 					</p>
 					<p class="info-item">
-						<i class="bi bi-calendar-event me-2 text-pink"></i><strong>Ngày
-							bắt đầu:</strong> ${promotion.startDateFormatted}
+						<i class="bi bi-calendar-event me-2 text-pink"></i> <strong>Ngày
+							bắt đầu:</strong>
+						<fmt:formatDate value="${promotion.startDateAsDate}"
+							pattern="dd/MM/yyyy" />
 					</p>
 					<p class="info-item">
-						<i class="bi bi-calendar-event me-2 text-pink"></i><strong>Ngày
-							kết thúc:</strong> ${promotion.endDateFormatted}
+						<i class="bi bi-calendar-event me-2 text-pink"></i> <strong>Ngày
+							kết thúc:</strong>
+						<fmt:formatDate value="${promotion.endDateAsDate}"
+							pattern="dd/MM/yyyy" />
 					</p>
+
 
 					<p class="info-item">
 						<i class="bi bi-check-circle me-2 text-pink"></i><strong>Active:</strong>
