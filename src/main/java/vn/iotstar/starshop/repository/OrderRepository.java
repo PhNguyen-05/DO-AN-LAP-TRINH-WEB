@@ -41,8 +41,7 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
 	        ORDER BY total_sold DESC
 	        """, nativeQuery = true)
 	    List<Object[]> getTopSellingProducts();
-	    
-	    
+  
 	    
 	    
    
@@ -58,4 +57,5 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
 	    List<Order> findByVendor(Vendor vendor);
 	    
 	    List<Order> findTop5ByVendorOrderByCreatedAtDesc(Vendor vendor);
+
 }

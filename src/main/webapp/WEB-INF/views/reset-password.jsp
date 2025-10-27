@@ -52,7 +52,6 @@
         <h2 class="reset-header mb-3">🔑 Đặt lại mật khẩu</h2>
         <p class="text-muted mb-4">Nhập mật khẩu mới cho tài khoản của bạn.</p>
 
-        <!-- Thông báo -->
         <c:if test="${not empty message}">
             <div class="alert alert-danger py-2">${message}</div>
         </c:if>
@@ -61,7 +60,7 @@
         </c:if>
 
         <form action="${pageContext.request.contextPath}/auth/reset-password" method="post">
-            <input type="hidden" name="token" value="${token}"/>
+            <input type="hidden" name="email" value="${email}" />
 
             <div class="form-floating mb-3">
                 <input type="password" class="form-control" id="newPassword" name="newPassword"

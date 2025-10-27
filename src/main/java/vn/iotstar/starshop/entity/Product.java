@@ -38,6 +38,12 @@ public class Product {
 
     @Column(name = "created_at")
     private LocalDateTime createdAt = LocalDateTime.now();
+    
+    @Column(name = "sold_quantity", nullable = false)
+    private Integer soldQuantity = 0;
+
+    @Column(name = "average_rating", precision = 2, scale = 1)
+    private BigDecimal averageRating = BigDecimal.ZERO;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(

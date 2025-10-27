@@ -69,8 +69,10 @@ public class Order {
 
     // Khách hàng đặt hàng
     @ManyToOne(fetch = FetchType.LAZY)
+
     @JoinColumn(name = "customer_id", foreignKey = @ForeignKey(name = "FK_orders_customer"))
     private Customer customer;
+
 
     // Ngày đặt hàng
     @Column(name = "order_date", columnDefinition = "DATETIME2")

@@ -137,6 +137,7 @@ tr:hover {
 							<th class="text-center">Tên Sản Phẩm</th>
 							<th>Mô Tả</th>
 							<th class="text-center">Giá Bán</th>
+
 							<th class="text-center">Tồn Kho</th>
 							<th class="text-center">Hành Động</th>
 						</tr>
@@ -164,6 +165,7 @@ tr:hover {
 								<td class="text-center"><fmt:formatNumber
 										value="${product.price}" type="currency" currencySymbol="₫" />
 								</td>
+
 								<td class="text-center ${product.stock < 10 ? 'low-stock' : ''}">${product.stock}</td>
 								<td class="text-center"><a
 									href="${pageContext.request.contextPath}/admin/products/detail/${product.id}"
