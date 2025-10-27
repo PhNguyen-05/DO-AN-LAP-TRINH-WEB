@@ -1,6 +1,7 @@
 package vn.iotstar.starshop.service.impl;
 
 import vn.iotstar.starshop.entity.Category;
+import vn.iotstar.starshop.entity.Vendor;
 import vn.iotstar.starshop.repository.CategoryRepository;
 import vn.iotstar.starshop.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,5 +33,16 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public void deleteById(Integer id) {
         categoryRepository.deleteById(id);
+    }
+    
+    
+    @Override
+    public List<Category> findByVendor(Vendor vendor) {
+        return categoryRepository.findByVendor(vendor);
+    }
+
+    @Override
+    public List<Category> findByIdsAndVendor(List<Integer> ids, Vendor vendor) {
+        return categoryRepository.findByIdsAndVendor(ids, vendor);
     }
 }

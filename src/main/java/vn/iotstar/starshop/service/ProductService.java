@@ -6,8 +6,10 @@ import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import vn.iotstar.starshop.entity.Category;
 import vn.iotstar.starshop.entity.Product;
 import vn.iotstar.starshop.entity.Review;
+import vn.iotstar.starshop.entity.Vendor;
 
 public interface ProductService {
 	Page<Product> searchByKeyword(String keyword, Pageable pageable);
@@ -32,4 +34,24 @@ public interface ProductService {
 	List<Product> findByCategoryId(Integer categoryId);
 	
 	List<Review> getReviewsByProductId(Integer productId);
+	
+	
+	long countByVendor(Vendor vendor);
+
+    List<Product> findByVendor(Vendor vendor);
+
+    List<Object[]> getTopSellingByVendor(Vendor vendor, int limit);
+    
+    void delete(Integer id);
+    boolean existsBySkuAndVendor(String sku, Vendor vendor);
+    
+    Page<Product> findByVendor(Vendor vendor, Pageable pageable);
+    
+    Page<Product> findByVendorAndCategory(Vendor vendor, Category category, Pageable pageable);
+    
+    Page<Product> findByVendorAndNameContaining(Vendor vendor, String name, Pageable pageable);
+    
+    Page<Product> findByVendorAndNameContainingAndCategory(Vendor vendor, String name, Category category, Pageable pageable);
+    
+    List<Product> findByIdsAndVendor(List<Integer> ids, Vendor vendor);
 }

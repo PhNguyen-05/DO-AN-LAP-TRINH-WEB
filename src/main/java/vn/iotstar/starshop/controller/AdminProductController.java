@@ -157,8 +157,7 @@ public class AdminProductController {
         }
     }
     
-    
-    
+   
     @GetMapping("/byCategory/{categoryId}")
     @ResponseBody
     public ResponseEntity<List<Product>> getProductsByCategory(@PathVariable("categoryId") Integer categoryId) {

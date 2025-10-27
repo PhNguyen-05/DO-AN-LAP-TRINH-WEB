@@ -134,9 +134,9 @@ tr:hover {
 						<tr>
 							<th class="text-center">ID</th>
 							<th class="text-center">Ảnh</th>
-							<th>Tên Sản Phẩm</th>
+							<th class="text-center">Tên Sản Phẩm</th>
 							<th>Mô Tả</th>
-							<th>Danh Mục</th>
+							<th class="text-center">Giá Bán</th>
 							<th class="text-center">Tồn Kho</th>
 							<th class="text-center">Hành Động</th>
 						</tr>
@@ -161,7 +161,9 @@ tr:hover {
 								<td>${product.name}</td>
 								<td class="text-muted"
 									style="max-width: 200px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${product.description}</td>
-								<td>${product.category.name}</td>
+								<td class="text-center"><fmt:formatNumber
+										value="${product.price}" type="currency" currencySymbol="₫" />
+								</td>
 								<td class="text-center ${product.stock < 10 ? 'low-stock' : ''}">${product.stock}</td>
 								<td class="text-center"><a
 									href="${pageContext.request.contextPath}/admin/products/detail/${product.id}"

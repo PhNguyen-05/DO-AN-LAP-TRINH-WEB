@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "products")
@@ -47,4 +48,12 @@ public class Product {
     )
     
     private Category category;
+    
+    
+    @ManyToOne
+    @JoinColumn(name = "vendor_id")
+    private Vendor vendor;
+    
+    @OneToMany(mappedBy = "product")
+    private List<OrderDetail> orderDetails;
 }

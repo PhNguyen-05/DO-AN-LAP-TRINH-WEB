@@ -79,8 +79,8 @@ public class AuthController {
         switch (user.getRole()) {
             case "Admin":
                 return "redirect:/admin/dashboard";
-            case "Employee":
-                return "redirect:/admin/products";
+            case "Vendor":
+                return "redirect:/vendor/home";
             default:
                 return "redirect:/home";
         }

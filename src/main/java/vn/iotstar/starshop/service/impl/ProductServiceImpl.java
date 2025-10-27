@@ -10,8 +10,10 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
+import vn.iotstar.starshop.entity.Category;
 import vn.iotstar.starshop.entity.Product;
 import vn.iotstar.starshop.entity.Review;
+import vn.iotstar.starshop.entity.Vendor;
 import vn.iotstar.starshop.repository.ReviewRepository;
 import vn.iotstar.starshop.repository.ProductRepository;
 import vn.iotstar.starshop.service.ProductService;
@@ -97,4 +99,84 @@ public class ProductServiceImpl implements ProductService {
     public List<Review> getReviewsByProductId(Integer productId) {
         return reviewRepository.findByProductId(productId);
     }
+    
+    
+    
+    
+    @Override
+    public long countByVendor(Vendor vendor) {
+        return productRepository.countByVendor(vendor);
+    }
+
+    @Override
+    public List<Product> findByVendor(Vendor vendor) {
+        return productRepository.findByVendor(vendor);
+    }
+
+    @Override
+    public List<Object[]> getTopSellingByVendor(Vendor vendor, int limit) {
+        return productRepository.getTopSellingByVendor(vendor, limit);
+    }
+    
+
+    @Override
+    public void delete(Integer id) {
+        productRepository.deleteById(id);
+    }
+
+    @Override
+    public boolean existsBySkuAndVendor(String sku, Vendor vendor) {
+        return productRepository.existsBySkuAndVendor(sku, vendor);
+    }
+    
+    @Override
+    public Page<Product> findByVendor(Vendor vendor, Pageable pageable) {
+        Specification<Product> spec = (root, query, cb) -> cb.equal(root.get("vendor"), vendor);
+        return productRepository.findAll(spec, pageable);
+    }
+
+    @Override
+    public Page<Product> findByVendorAndCategory(Vendor vendor, Category category, Pageable pageable) {
+        Specification<Product> spec = Specification.where(null);
+        if (vendor != null) {
+            spec = spec.and((root, query, cb) -> cb.equal(root.get("vendor"), vendor));
+        }
+        if (category != null) {
+            spec = spec.and((root, query, cb) -> cb.equal(root.get("category"), category));
+        }
+        return productRepository.findAll(spec, pageable);
+    }
+
+    @Override
+    public Page<Product> findByVendorAndNameContaining(Vendor vendor, String name, Pageable pageable) {
+        Specification<Product> spec = Specification.where(null);
+        if (vendor != null) {
+            spec = spec.and((root, query, cb) -> cb.equal(root.get("vendor"), vendor));
+        }
+        if (name != null && !name.isEmpty()) {
+            spec = spec.and((root, query, cb) -> cb.like(cb.lower(root.get("name")), "%" + name.toLowerCase() + "%"));
+        }
+        return productRepository.findAll(spec, pageable);
+    }
+
+    @Override
+    public Page<Product> findByVendorAndNameContainingAndCategory(Vendor vendor, String name, Category category, Pageable pageable) {
+        Specification<Product> spec = Specification.where(null);
+        if (vendor != null) {
+            spec = spec.and((root, query, cb) -> cb.equal(root.get("vendor"), vendor));
+        }
+        if (name != null && !name.isEmpty()) {
+            spec = spec.and((root, query, cb) -> cb.like(cb.lower(root.get("name")), "%" + name.toLowerCase() + "%"));
+        }
+        if (category != null) {
+            spec = spec.and((root, query, cb) -> cb.equal(root.get("category"), category));
+        }
+        return productRepository.findAll(spec, pageable);
+    }
+    
+    @Override
+    public List<Product> findByIdsAndVendor(List<Integer> ids, Vendor vendor) {
+        return productRepository.findByIdsAndVendor(ids, vendor);
+    }
+    
 }
