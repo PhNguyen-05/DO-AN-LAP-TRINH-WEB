@@ -67,24 +67,7 @@ public interface ProductService {
 
     
     
-    
-    // long countProducts();
-
-//	Page<Product> findAllWithCategory(Pageable pageable);
-//
-//	// Optional<Product> findById(Integer id);
-//
-//	Product save(Product product);
-//
-//	// void deleteById(Integer id);
-//	
-//	Page<Product> findByNameContainingAndCategoryId(String name, Integer categoryId, Pageable pageable);
-	
-	// List<Product> findByCategoryId(Integer categoryId);
-	
-	// List<Review> getReviewsByProductId(Integer productId);
-	
-	
+   
 	long countByVendor(Vendor vendor);
 
     List<Product> findByVendor(Vendor vendor);
@@ -138,4 +121,5 @@ public interface ProductService {
     List<Product> getTopRatedProducts();        // 20 sp đánh giá cao
     List<Product> getMostFavoritedProducts();   // 20 sp yêu thích nhiều
 
+    List<Product> findAll();
 }

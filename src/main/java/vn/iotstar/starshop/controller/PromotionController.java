@@ -186,6 +186,7 @@ import vn.iotstar.starshop.entity.*;
 import vn.iotstar.starshop.service.*;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -292,8 +293,8 @@ public class PromotionController {
             if (discountType == null) {
                 return new ResponseEntity<>("Discount type is required", HttpStatus.BAD_REQUEST);
             }
-            LocalDateTime start = LocalDateTime.parse(startDate);
-            LocalDateTime end = LocalDateTime.parse(endDate);
+            LocalDate start = LocalDate.parse(startDate);
+            LocalDate end = LocalDate.parse(endDate);
             if (start.isAfter(end)) {
                 return new ResponseEntity<>("Start date must be before end date", HttpStatus.BAD_REQUEST);
             }
@@ -389,8 +390,8 @@ public class PromotionController {
             if (discountType != null) {
                 existingPromotion.setDiscountType(discountType);
             }
-            LocalDateTime start = LocalDateTime.parse(startDate);
-            LocalDateTime end = LocalDateTime.parse(endDate);
+            LocalDate start = LocalDate.parse(startDate);
+            LocalDate end = LocalDate.parse(endDate);
             if (start != null && end != null && start.isAfter(end)) {
                 return new ResponseEntity<>("Start date must be before end date", HttpStatus.BAD_REQUEST);
             }
@@ -416,136 +417,6 @@ public class PromotionController {
         return new ResponseEntity<>("Success", HttpStatus.OK);
     }
 
-// // 🟢 [1] Hiển thị form sửa (GET)
-//    @GetMapping("/edit/{id}")
-//    public String showEditForm(@PathVariable Integer id, Model model, HttpSession session) {
-//        User currentUser = (User) session.getAttribute("currentUser");
-//        if (currentUser == null) return "redirect:/login";
-//
-//        Vendor vendor = vendorService.findByEmail(currentUser.getEmail());
-//        if (vendor == null) return "redirect:/error";
-//
-//        Optional<Promotion> optionalPromotion = promotionService.findById(id);
-//        if (optionalPromotion.isEmpty() || !optionalPromotion.get().getVendor().getId().equals(vendor.getId())) {
-//            return "redirect:/vendor/promotions";
-//        }
-//
-//        Promotion promotion = optionalPromotion.get();
-//
-//        // ✅ Format LocalDateTime sang chuỗi cho input datetime-local
-//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
-//        model.addAttribute("formattedStartDate", promotion.getStartDate() != null ? promotion.getStartDate().format(formatter) : "");
-//        model.addAttribute("formattedEndDate", promotion.getEndDate() != null ? promotion.getEndDate().format(formatter) : "");
-//        model.addAttribute("promotion", promotion);
-//
-//        // Load danh sách sản phẩm và danh mục của vendor
-//        model.addAttribute("vendorProducts", productService.findByVendor(vendor));
-//        model.addAttribute("vendorCategories", categoryService.findByVendor(vendor));
-//
-//        return "vendor/edit-promotion";
-//    }
-//
-//    // 🟢 [2] Xử lý cập nhật (POST)
-//    @PostMapping("/edit/{id}")
-//    public ResponseEntity<String> editPromotion(
-//            @PathVariable Integer id,
-//            @RequestParam String promotionName,
-//            @RequestParam BigDecimal discountValue,
-//            @RequestParam Promotion.DiscountType discountType,
-//            @RequestParam(required = false) String description,
-//            @RequestParam String startDate,
-//            @RequestParam String endDate,
-//            @RequestParam(required = false) Boolean active,
-//            @RequestParam(required = false) List<Integer> productIds,
-//            @RequestParam(required = false) List<Integer> categoryIds,
-//            HttpSession session) {
-//
-//        User currentUser = (User) session.getAttribute("currentUser");
-//        if (currentUser == null)
-//            return new ResponseEntity<>("Unauthorized", HttpStatus.UNAUTHORIZED);
-//
-//        Vendor vendor = vendorService.findByEmail(currentUser.getEmail());
-//        if (vendor == null)
-//            return new ResponseEntity<>("Vendor not found", HttpStatus.BAD_REQUEST);
-//
-//        try {
-//            Optional<Promotion> optionalPromotion = promotionService.findById(id);
-//            if (optionalPromotion.isEmpty() || !optionalPromotion.get().getVendor().getId().equals(vendor.getId())) {
-//                return new ResponseEntity<>("Promotion not found or unauthorized", HttpStatus.NOT_FOUND);
-//            }
-//
-//            Promotion existingPromotion = optionalPromotion.get();
-//
-//            // Cập nhật các trường cơ bản
-//            if (promotionName != null && !promotionName.isEmpty()) {
-//                existingPromotion.setPromotionName(promotionName);
-//            }
-//            if (description != null) {
-//                existingPromotion.setDescription(description);
-//            }
-//            if (discountValue != null && discountValue.compareTo(BigDecimal.ZERO) > 0) {
-//                existingPromotion.setDiscountValue(discountValue);
-//            }
-//            if (discountType != null) {
-//                existingPromotion.setDiscountType(discountType);
-//            }
-//
-//            // ✅ Parse LocalDateTime từ form input
-//            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
-//            LocalDateTime start = LocalDateTime.parse(startDate, formatter);
-//            LocalDateTime end = LocalDateTime.parse(endDate, formatter);
-//
-//            if (start.isAfter(end)) {
-//                return new ResponseEntity<>("Start date must be before end date", HttpStatus.BAD_REQUEST);
-//            }
-//
-//            existingPromotion.setStartDate(start);
-//            existingPromotion.setEndDate(end);
-//            existingPromotion.setActive(active != null ? active : existingPromotion.getActive());
-//
-//            // ✅ Cập nhật sản phẩm & danh mục
-//            if (productIds != null) {
-//                List<Product> products = productService.findByIdsAndVendor(productIds, vendor);
-//                existingPromotion.setProducts(products);
-//            }
-//            if (categoryIds != null) {
-//                List<Category> categories = categoryService.findByIdsAndVendor(categoryIds, vendor);
-//                existingPromotion.setCategories(categories);
-//            }
-//
-//            promotionService.save(existingPromotion);
-//            return new ResponseEntity<>("Success", HttpStatus.OK);
-//
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            return new ResponseEntity<>("Error updating promotion: " + e.getMessage(),
-//                    HttpStatus.INTERNAL_SERVER_ERROR);
-//        }
-//    }
-
-    
-//    // 🎁 Delete promotion
-//    @PostMapping("/promotions/delete/{id}")
-//    public ResponseEntity<String> deletePromotion(@PathVariable Integer id, HttpSession session) {
-//        User currentUser = (User) session.getAttribute("currentUser");
-//        if (currentUser == null) return new ResponseEntity<>("Unauthorized", HttpStatus.UNAUTHORIZED);
-//
-//        Vendor vendor = vendorService.findByEmail(currentUser.getEmail());
-//        if (vendor == null) return new ResponseEntity<>("Vendor not found", HttpStatus.BAD_REQUEST);
-//
-//        try {
-//            Optional<Promotion> optionalPromotion = promotionService.findById(id);
-//            if (optionalPromotion.isEmpty() || !optionalPromotion.get().getVendor().getId().equals(vendor.getId())) {
-//                return new ResponseEntity<>("Promotion not found", HttpStatus.NOT_FOUND);
-//            }
-//            promotionService.delete(id); // Sửa lại thành deleteById
-//        } catch (Exception e) {
-//            return new ResponseEntity<>("Error deleting promotion: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-//        }
-//
-//        return new ResponseEntity<>("Success", HttpStatus.OK);
-//    }
-    
     
  // 🎁 Xóa khuyến mãi (AJAX)
     @PostMapping("/promotions/delete/{id}")

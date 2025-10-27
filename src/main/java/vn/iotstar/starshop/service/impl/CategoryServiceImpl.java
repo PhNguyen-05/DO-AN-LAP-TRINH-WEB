@@ -45,4 +45,9 @@ public class CategoryServiceImpl implements CategoryService {
     public List<Category> findByIdsAndVendor(List<Integer> ids, Vendor vendor) {
         return categoryRepository.findByIdsAndVendor(ids, vendor);
     }
+    
+    @Override
+    public List<Category> findAllWithProducts() {
+        return categoryRepository.findAllWithProducts();
+    }
 }

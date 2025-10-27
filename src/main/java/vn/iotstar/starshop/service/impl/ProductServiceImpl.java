@@ -321,5 +321,12 @@ public class ProductServiceImpl implements ProductService {
         // 20 sản phẩm được yêu thích nhiều nhất
         return productRepository.findMostFavorited(PageRequest.of(0, 20));
     }
+    
+    
+    @Override
+    public List<Product> findAll() {
+        return productRepository.findAll();
+    }
+
 }
 

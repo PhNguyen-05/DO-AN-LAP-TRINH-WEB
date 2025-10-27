@@ -22,4 +22,7 @@ Optional<Category> findById(Integer id);
     // ✅ Lấy danh mục theo danh sách id và vendor
     @Query("SELECT c FROM Category c WHERE c.id IN :ids AND c.vendor = :vendor")
     List<Category> findByIdsAndVendor(@Param("ids") List<Integer> ids, @Param("vendor") Vendor vendor);
+    
+    @Query("SELECT c FROM Category c LEFT JOIN FETCH c.products")
+    List<Category> findAllWithProducts();
 }

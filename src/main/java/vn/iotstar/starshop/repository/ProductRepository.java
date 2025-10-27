@@ -141,5 +141,6 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
             ORDER BY COUNT(w) DESC
             """)
         List<Product> findMostFavorited(Pageable pageable);
+
 }
 
