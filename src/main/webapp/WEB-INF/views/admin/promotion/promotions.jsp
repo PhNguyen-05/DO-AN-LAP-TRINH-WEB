@@ -171,8 +171,25 @@ tr:hover {
 												type="currency" currencySymbol="₫" />
 										</c:otherwise>
 									</c:choose></td>
-								<td class="text-center">${promotion.startDateFormatted}</td>
-								<td class="text-center">${promotion.endDateFormatted}</td>
+								<!-- Sửa: Wrap vào <td>, thay pattern thành dd/MM/yyyy cho đồng bộ, fallback nếu null -->
+								<td class="text-center"><c:choose>
+										<c:when test="${promotion.startDateAsDate != null}">
+											<fmt:formatDate value="${promotion.startDateAsDate}"
+												pattern="dd/MM/yyyy" />
+										</c:when>
+										<c:otherwise>
+                                            Không xác định
+                                        </c:otherwise>
+									</c:choose></td>
+								<td class="text-center"><c:choose>
+										<c:when test="${promotion.endDateAsDate != null}">
+											<fmt:formatDate value="${promotion.endDateAsDate}"
+												pattern="dd/MM/yyyy" />
+										</c:when>
+										<c:otherwise>
+                                            Không xác định
+                                        </c:otherwise>
+									</c:choose></td>
 								<td class="text-center"><c:choose>
 										<c:when test="${promotion.statusCode == 2}">
 											<span class="status-upcoming">${promotion.statusLabel}</span>
@@ -184,7 +201,6 @@ tr:hover {
 											<span class="status-active">${promotion.statusLabel}</span>
 										</c:otherwise>
 									</c:choose></td>
-
 								<td class="text-center">${promotion.vendor.shopName}</td>
 								<td class="text-center"><a
 									href="${pageContext.request.contextPath}/admin/promotions/detail/${promotion.id}"

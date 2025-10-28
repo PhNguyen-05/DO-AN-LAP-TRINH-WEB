@@ -3,6 +3,7 @@ package vn.iotstar.starshop.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import vn.iotstar.starshop.dto.CategoryDTO;
 import vn.iotstar.starshop.dto.ProductDTO;
@@ -15,7 +16,9 @@ import vn.iotstar.starshop.service.PromotionService;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -258,6 +261,98 @@ public class PromotionServiceImpl implements PromotionService {
         }
 
         return dto;
-    }  
+    } 
     
+    @Override
+    @Transactional(readOnly = true) // <-- RẤT QUAN TRỌNG: Sửa lỗi LazyInitializationException
+    public Map<String, Object> getPromotionDetails(Integer id, Vendor vendor) {
+        
+        // 1. Tìm khuyến mãi và kiểm tra quyền sở hữu
+        Optional<Promotion> opt = promotionRepository.findById(id); 
+        
+        if (opt.isEmpty() || !opt.get().getVendor().getId().equals(vendor.getId())) {
+            // Ném lỗi để Controller bắt được
+            throw new RuntimeException("Promotion not found or access denied"); 
+        }
+        
+        Promotion promotion = opt.get();
+
+        // 2. Lấy danh sách (Giờ đã an toàn vì @Transactional đang mở)
+        // ĐÂY CHÍNH LÀ LOGIC BẠN MUỐN TÁI SỬ DỤNG
+        List<String> productNames = promotion.getProducts().stream()
+                                            .map(Product::getName)
+                                            .collect(Collectors.toList());
+        
+        List<String> categoryNames = promotion.getCategories().stream()
+                                            .map(Category::getName)
+                                            .collect(Collectors.toList());
+
+        // 3. Tạo Map để trả về
+        Map<String, Object> response = new HashMap<>();
+        response.put("productNames", productNames);
+        response.put("categoryNames", categoryNames); // (JavaScript của bạn chưa dùng, nhưng có sẵn để dùng sau)
+        
+        return response;
+    }
+    
+    @Override
+    @Transactional // <-- CHÌA KHÓA SỬA LỖI LƯU (SAVE)
+    public void updatePromotion(Integer id, Vendor vendor, Promotion updatedData, 
+                                List<Integer> productIds, List<Integer> categoryIds) {
+
+        // 1. Tìm khuyến mãi và kiểm tra quyền sở hữu
+        Promotion existing = promotionRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Promotion not found"));
+
+        if (!existing.getVendor().getId().equals(vendor.getId())) {
+            throw new RuntimeException("Access denied");
+        }
+
+        // 2. Cập nhật các trường đơn giản
+        existing.setPromotionName(updatedData.getPromotionName());
+        existing.setDescription(updatedData.getDescription());
+        existing.setDiscountValue(updatedData.getDiscountValue());
+        existing.setDiscountType(updatedData.getDiscountType());
+        existing.setStartDate(updatedData.getStartDate());
+        existing.setEndDate(updatedData.getEndDate());
+        existing.setActive(updatedData.getActive()); // Lấy giá trị active đã xử lý (false nếu null)
+
+        // 3. XỬ LÝ LƯU SẢN PHẨM (ĐÂY LÀ LOGIC BỊ LỖI CỦA BẠN)
+        if (productIds != null && !productIds.isEmpty()) {
+            // Nếu có danh sách gửi lên -> tìm và gán
+            List<Product> products = productRepository.findAllById(productIds);
+            // (Bạn có thể thêm bước kiểm tra xem product này có thuộc vendor không nếu cần)
+            existing.setProducts(products);
+        } else {
+            // Nếu gửi lên danh sách rỗng (hoặc null) -> Xóa tất cả
+            existing.getProducts().clear(); 
+        }
+
+        // 4. XỬ LÝ LƯU DANH MỤC (Tương tự)
+        if (categoryIds != null && !categoryIds.isEmpty()) {
+            List<Category> categories = categoryRepository.findAllById(categoryIds);
+            existing.setCategories(categories);
+        } else {
+            existing.getCategories().clear();
+        }
+
+        // 5. Lưu lại
+        // Vì hàm này @Transactional, Hibernate sẽ tự động lưu các thay đổi
+        // vào bảng join (promotion_products)
+        promotionRepository.save(existing);
+    }
+    
+ // 🆕 Thêm hàm này
+    @Override
+    public List<Promotion> getActivePromotions() {
+        LocalDate today = LocalDate.now();
+        return promotionRepository.findByStartDateBeforeAndEndDateAfterAndActiveTrue(today, today);
+    }
+    
+    @Override
+    public Promotion getActivePromotionForProduct(Integer productId) {
+        return promotionRepository
+                .findActivePromotionByProductId(productId, LocalDate.now())
+                .orElse(null);
+    }
 }

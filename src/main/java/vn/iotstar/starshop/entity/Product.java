@@ -3,6 +3,7 @@ package vn.iotstar.starshop.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -71,5 +72,21 @@ public class Product {
     public Boolean getIsFavorite() {
         // Tạm trả false — tránh lỗi. Sau này thay bằng logic thực tế.
         return Boolean.FALSE;
+    }
+    
+    @Transient
+    public BigDecimal getDiscountPercent() {
+        if (this.promotions == null || this.promotions.isEmpty()) {
+            return BigDecimal.ZERO;
+        }
+        Promotion active = this.promotions.stream()
+            .filter(Promotion::getActive)
+            .filter(p -> !p.getStartDate().isAfter(LocalDate.now()) && !p.getEndDate().isBefore(LocalDate.now()))
+            .findFirst()
+            .orElse(null);
+        if (active == null) return BigDecimal.ZERO;
+        if (active.getDiscountType() == Promotion.DiscountType.PERCENTAGE)
+            return active.getDiscountValue();
+        return BigDecimal.ZERO;
     }
 }

@@ -24,7 +24,7 @@
         <form:input path="discountValue" id="discountValue" class="form-control" type="number" min="0" step="0.01" placeholder="Nhập giá trị giảm" required="true" />
         <form:errors path="discountValue" cssClass="text-danger" />
     </div>
-
+z
     <div class="mb-3">
         <label for="discountType" class="form-label fw-bold">Loại Giảm <span class="text-danger">*</span></label>
         <form:select path="discountType" id="discountType" class="form-select" required="true">

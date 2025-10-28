@@ -10,7 +10,9 @@ import vn.iotstar.starshop.entity.Promotion;
 import vn.iotstar.starshop.entity.Vendor;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface PromotionRepository extends JpaRepository<Promotion, Integer> {
@@ -42,4 +44,19 @@ public interface PromotionRepository extends JpaRepository<Promotion, Integer> {
     
     // Updated to use LocalDate instead of LocalDateTime
     List<Promotion> findByEndDateBeforeAndActiveTrue(LocalDate endDate);
+    
+ // 🆕 Lấy khuyến mãi còn hiệu lực
+    List<Promotion> findByStartDateBeforeAndEndDateAfterAndActiveTrue(LocalDate start, LocalDate end);
+    
+    @Query("""
+    		SELECT p FROM Promotion p
+    		JOIN p.products prod
+    		WHERE prod.id = :productId
+    		AND :today BETWEEN p.startDate AND p.endDate
+    		AND p.active = true
+    		""")
+    		Optional<Promotion> findActivePromotionByProductId(
+    		    @Param("productId") Integer productId,
+    		    @Param("today") LocalDate today
+    		);
 }

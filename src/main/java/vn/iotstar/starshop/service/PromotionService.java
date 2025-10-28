@@ -10,6 +10,7 @@ import vn.iotstar.starshop.entity.Vendor;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public interface PromotionService {
@@ -46,4 +47,13 @@ public interface PromotionService {
     Promotion updatePromotion(Integer id, Promotion updatedPromotion,  List<Integer> productIds, List<Integer> categoryIds);
     Promotion createPromotion(Promotion promotion, Vendor vendor, List<Integer> productIds, List<Integer> categoryIds);
     PromotionDTO toDTO(Promotion promotion);
+    
+    Map<String, Object> getPromotionDetails(Integer id, Vendor vendor);
+    void updatePromotion(Integer id, Vendor vendor, Promotion updatedData, 
+            List<Integer> productIds, List<Integer> categoryIds);
+    
+ // 🆕 Thêm hàm đơn giản để lấy tất cả khuyến mãi đang hoạt động
+    List<Promotion> getActivePromotions();
+    
+    Promotion getActivePromotionForProduct(Integer productId);
 }

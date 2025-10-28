@@ -52,6 +52,7 @@ import lombok.ToString;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
@@ -167,5 +168,17 @@ public class Promotion {
         // Ví dụ định dạng: 27/10/2025 18:15
         DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
         return this.createdAt.format(fmt);
+    }
+    
+    @Transient
+    public Date getStartDateAsDate() {
+        if (this.startDate == null) return null;
+        return Date.from(this.startDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+    }
+
+    @Transient
+    public Date getEndDateAsDate() {
+        if (this.endDate == null) return null;
+        return Date.from(this.endDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
     }
 }
