@@ -341,4 +341,20 @@ public class PromotionServiceImpl implements PromotionService {
         // vào bảng join (promotion_products)
         promotionRepository.save(existing);
     }
+
+    
+ // 🆕 Thêm hàm này
+    @Override
+    public List<Promotion> getActivePromotions() {
+        LocalDate today = LocalDate.now();
+        return promotionRepository.findByStartDateBeforeAndEndDateAfterAndActiveTrue(today, today);
+    }
+    
+    @Override
+    public Promotion getActivePromotionForProduct(Integer productId) {
+        return promotionRepository
+                .findActivePromotionByProductId(productId, LocalDate.now())
+                .orElse(null);
+    }
+
 }

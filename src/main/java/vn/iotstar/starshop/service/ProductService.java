@@ -122,4 +122,6 @@ public interface ProductService {
     List<Product> getMostFavoritedProducts();   // 20 sp yêu thích nhiều
 
     List<Product> findAll();
+    
+    List<Product> findProductsWithActivePromotions();
 }

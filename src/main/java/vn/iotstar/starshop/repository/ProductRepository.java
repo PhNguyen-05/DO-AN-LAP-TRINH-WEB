@@ -142,5 +142,14 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
             """)
         List<Product> findMostFavorited(Pageable pageable);
 
+    // 🆕 Top sản phẩm mới nhất (native SQL)
+    @Query(value = "SELECT * FROM products ORDER BY created_at DESC OFFSET 0 ROWS FETCH NEXT ?1 ROWS ONLY", nativeQuery = true)
+    List<Product> findTopNewProducts(int limit);
+    
+    // Tìm sản phẩm có khuyến mãi đang hoạt động (nếu dùng bảng promotions riêng)
+    @Query("SELECT DISTINCT p FROM Product p JOIN p.promotions promo " +
+           "WHERE promo.startDate <= CURRENT_TIMESTAMP AND promo.endDate >= CURRENT_TIMESTAMP")
+    List<Product> findDiscountedProducts();
+
 }
 

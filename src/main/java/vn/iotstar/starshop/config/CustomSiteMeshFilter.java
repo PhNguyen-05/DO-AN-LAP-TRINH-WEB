@@ -21,6 +21,8 @@ public class CustomSiteMeshFilter extends ConfigurableSiteMeshFilter {
             .addDecoratorPath("/shop", "/main.jsp")
             .addDecoratorPath("/shop/category/*", "/main.jsp")
             .addDecoratorPath("/product/*", "/main.jsp")  // 🩷 Thêm dòng này
+            .addDecoratorPath("/user/wishlist", "/main.jsp")
+            .addDecoratorPath("/shop/promotions", "/main.jsp")
             .addDecoratorPath("/user/cart", "/main.jsp")
             .addDecoratorPath("/", "/main.jsp")
             .addDecoratorPath("/about", "/main.jsp")

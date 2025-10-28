@@ -7,12 +7,18 @@ import org.springframework.web.bind.annotation.*;
 
 import lombok.RequiredArgsConstructor;
 import vn.iotstar.starshop.service.ProductService;
+import vn.iotstar.starshop.service.PromotionService;
+import vn.iotstar.starshop.service.RecentlyViewedService;
+import vn.iotstar.starshop.service.UserService;
 import vn.iotstar.starshop.service.WishlistService;
 import vn.iotstar.starshop.entity.Product;
+import vn.iotstar.starshop.entity.Promotion;
 import vn.iotstar.starshop.entity.Review;
 import vn.iotstar.starshop.entity.User;
 import vn.iotstar.starshop.entity.Category;
 
+import java.math.BigDecimal;
+import java.security.Principal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,6 +30,9 @@ public class ProductController {
 
     private final ProductService productService;
     private final WishlistService wishlistService;
+    private final UserService userService;
+    private final RecentlyViewedService recentlyViewedService;
+    private final PromotionService promotionService;
 
 //    @GetMapping("/{id}")
 //    public String viewProductDetail(@PathVariable("id") Integer id, Model model) {
@@ -51,18 +60,40 @@ public class ProductController {
     public String viewProductDetail(
     		@PathVariable("id") Integer id, 
     		Model model,
-    		@AuthenticationPrincipal User user // lấy thông tin người dùng hiện tại
+    		Principal principal,
+    		@AuthenticationPrincipal org.springframework.security.core.userdetails.UserDetails userDetails // lấy thông tin người dùng hiện tại
     		) {
         Product product = productService.findById(id)
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy sản phẩm ID: " + id));
-        
-     // ⭐ Bổ sung trạng thái yêu thích
-        if (user != null) {
-            boolean favorite = wishlistService.isFavorite(user, product);
-            product.setFavorite(favorite);
-        }
 
         model.addAttribute("product", product);
+        
+        // ✅ Xử lý khuyến mãi
+        Promotion promotion = promotionService.getActivePromotionForProduct(id);
+        if (promotion != null) {
+        	BigDecimal discountedPrice = product.getPrice().subtract(promotion.calculateDiscount(product.getPrice()));
+            model.addAttribute("discountedPrice", discountedPrice);
+            model.addAttribute("promotion", promotion);
+        }
+        
+        boolean isFavorite = false;
+        if (userDetails != null) {
+            User currentUser = userService.findByEmail(userDetails.getUsername());
+            isFavorite = wishlistService.isInWishlist(currentUser, product);
+        }
+        model.addAttribute("isFavorite", isFavorite);
+        
+        User currentUser = null;
+
+        if (userDetails != null) {
+            currentUser = userService.findByEmail(userDetails.getUsername());
+        }
+
+        if (currentUser != null) {
+            recentlyViewedService.addViewedProduct(currentUser, product);
+            List<Product> recentlyViewed = recentlyViewedService.getRecentlyViewed(currentUser);
+            model.addAttribute("recentlyViewed", recentlyViewed);
+        }
 
         // Lấy danh sách đánh giá sản phẩm
         List<Review> reviews = productService.getReviewsByProductId(id);

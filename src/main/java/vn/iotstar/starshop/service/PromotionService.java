@@ -51,4 +51,11 @@ public interface PromotionService {
     Map<String, Object> getPromotionDetails(Integer id, Vendor vendor);
     void updatePromotion(Integer id, Vendor vendor, Promotion updatedData, 
             List<Integer> productIds, List<Integer> categoryIds);
+
+
+ // 🆕 Thêm hàm đơn giản để lấy tất cả khuyến mãi đang hoạt động
+    List<Promotion> getActivePromotions();
+    
+    Promotion getActivePromotionForProduct(Integer productId);
+
 }
