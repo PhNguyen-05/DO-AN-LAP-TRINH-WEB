@@ -118,6 +118,20 @@ tr:hover {
 	<c:if test="${not empty error}">
 		<div class="alert alert-danger">${error}</div>
 	</c:if>
+<c:if test="${not empty message}">
+    <div class="alert alert-success" id="successMessage">${message}</div>
+    <script>
+        setTimeout(() => {
+            const msg = document.getElementById("successMessage");
+            if (msg) {
+                msg.style.transition = "opacity 0.5s ease";
+                msg.style.opacity = "0";
+                setTimeout(() => msg.remove(), 500); // xoá hẳn sau khi mờ
+            }
+        }, 3000); // ⏳ 3 giây
+    </script>
+</c:if>
+
 
 	<div class="card">
 		<div class="card-body p-0">
@@ -166,7 +180,29 @@ tr:hover {
 									onclick="return confirm('Bạn có chắc muốn xóa chủ shop này?')"
 									title="Xóa"> <i class="bi bi-trash"></i>
 								</a>
+								
+							
+								</a> <!-- 🔹 Bật / Tắt trạng thái --> <c:choose>
+										<c:when test="${vendor.user.isActive()}">
+											<a
+												href="${pageContext.request.contextPath}/admin/vendors/toggleStatus/${vendor.id}"
+												class="btn btn-outline-warning btn-sm"
+												title="Ngưng hoạt động"
+												onclick="return confirm('Bạn có chắc muốn NGƯNG hoạt động chủ shop này?')">
+												<i class="bi bi-slash-circle"></i>
+											</a>
+										</c:when>
+										<c:otherwise>
+											<a
+												href="${pageContext.request.contextPath}/admin/vendors/toggleStatus/${vendor.id}"
+												class="btn btn-outline-success btn-sm" title="Kích hoạt"
+												onclick="return confirm('Bạn có chắc muốn KÍCH HOẠT lại chủ shop này?')">
+												<i class="bi bi-check-circle"></i>
+											</a>
+										</c:otherwise>
+									</c:choose>
 								</td>
+
 							</tr>
 						</c:forEach>
 						<c:if test="${empty vendors}">

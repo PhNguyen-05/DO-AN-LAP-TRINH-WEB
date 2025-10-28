@@ -109,6 +109,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -123,6 +124,7 @@ import vn.iotstar.starshop.entity.Product;
 import vn.iotstar.starshop.entity.Review;
 import vn.iotstar.starshop.entity.Vendor;
 import vn.iotstar.starshop.repository.ReviewRepository;
+import vn.iotstar.starshop.repository.CartItemRepository;
 import vn.iotstar.starshop.repository.ProductRepository;
 
 import vn.iotstar.starshop.service.ProductService;
@@ -135,7 +137,9 @@ public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;  
 
-
+    @Autowired
+    private CartItemRepository cartItemRepository;
+  
     private final ReviewRepository reviewRepository;
 
     @Override
@@ -181,6 +185,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public void deleteById(Integer id) {
+    	cartItemRepository.deleteByProductId(id);
         productRepository.deleteById(id);
     }
 

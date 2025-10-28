@@ -20,9 +20,9 @@
         <div class="col-md-3" data-aos="zoom-in" data-aos-delay="100">
             <div class="card shadow-lg rounded-4 border-0 text-center p-3" style="background-color: #d8f3dc; transition: transform 0.3s;">
                 <i class="bi bi-people fs-1" style="color: #28a745;"></i>
-                <h5 class="fw-bold mt-2" style="color: #28a745;">Tổng User</h5>
-                <h3 class="fw-bold">${totalUsers}</h3>
-                <small class="text-muted">Cập nhật mới nhất</small>
+                <h5 class="fw-bold mt-2" style="color: #28a745;">Tổng Shop</h5>
+                <h3 class="fw-bold">${totalVendors}</h3>
+                
             </div>
         </div>
         <div class="col-md-3" data-aos="zoom-in" data-aos-delay="200">
@@ -30,7 +30,7 @@
                 <i class="bi bi-shop fs-1" style="color: #ff1493;"></i>
                 <h5 class="fw-bold mt-2" style="color: #ff1493;">Tổng Khách Hàng</h5>
                 <h3 class="fw-bold">${totalCustomers}</h3>
-                <small class="text-muted">Cập nhật mới nhất</small>
+                
             </div>
         </div>
         <div class="col-md-3" data-aos="zoom-in" data-aos-delay="300">
@@ -38,7 +38,7 @@
                 <i class="bi bi-basket fs-1" style="color: #007bff;"></i>
                 <h5 class="fw-bold mt-2" style="color: #007bff;">Tổng Sản Phẩm</h5>
                 <h3 class="fw-bold">${totalProducts}</h3>
-                <small class="text-muted">Cập nhật mới nhất</small>
+                
             </div>
         </div>
         <div class="col-md-3" data-aos="zoom-in" data-aos-delay="400">
@@ -46,7 +46,7 @@
                 <i class="bi bi-bag fs-1" style="color: #ff69b4;"></i>
                 <h5 class="fw-bold mt-2" style="color: #ff69b4;">Tổng Đơn Hàng</h5>
                 <h3 class="fw-bold">${totalOrders}</h3>
-                <small class="text-muted">Cập nhật mới nhất</small>
+               
             </div>
         </div>
     </div>

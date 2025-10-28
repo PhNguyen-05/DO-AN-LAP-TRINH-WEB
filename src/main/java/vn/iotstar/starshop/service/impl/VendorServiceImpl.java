@@ -118,4 +118,11 @@ public class VendorServiceImpl implements VendorService {
         return vendorRepository.save(vendor);
     }
 
+    @Override
+    public List<Vendor> searchByKeyword(String keyword) {
+        if (keyword == null || keyword.trim().isEmpty()) {
+            return vendorRepository.findAll();
+        }
+        return vendorRepository.searchByKeyword(keyword);
+    }
 }

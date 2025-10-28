@@ -17,6 +17,8 @@ public class AdminDashboardController {
     private UserRepository userRepository;
 
     @Autowired
+    private VendorRepository vendorRepository;
+    @Autowired
     private ProductRepository productRepository;
 
     @Autowired
@@ -29,12 +31,12 @@ public class AdminDashboardController {
     public String dashboard(Model model) {
 
         // ===  Thống kê tổng quan ===
-        long totalUsers = userRepository.count();
+    	long totalVendors = vendorRepository.count();
         long totalCustomers = customerRepository.count();
         long totalProducts = productRepository.count();
         long totalOrders = orderRepository.count();
 
-        model.addAttribute("totalUsers", totalUsers);
+        model.addAttribute("totalVendors", totalVendors);
         model.addAttribute("totalCustomers", totalCustomers);
         model.addAttribute("totalProducts", totalProducts);
         model.addAttribute("totalOrders", totalOrders);

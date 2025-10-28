@@ -131,7 +131,7 @@ tr:hover {
 				value="${param.promotionName}">
 		</div>
 		<select name="vendorId" class="form-select" style="max-width: 220px;">
-			<option value="">Tất cả nhà cung cấp</option>
+			<option value="">Tất cả các shop</option>
 			<c:forEach var="vendor" items="${vendors}">
 				<option value="${vendor.id}"
 					${param.vendorId == vendor.id ? 'selected' : ''}>${vendor.shopName}</option>

@@ -16,6 +16,6 @@ public interface VendorService {
 	void deleteById(Integer id);
 	
 	
-	
+	List<Vendor> searchByKeyword(String keyword);
 	Vendor createVendor(Vendor vendor);
 }
