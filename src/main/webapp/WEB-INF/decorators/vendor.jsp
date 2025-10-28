@@ -155,7 +155,6 @@
         <a href="${pageContext.request.contextPath}/vendor/home"><i class="bi bi-house-door me-2"></i> <span>Trang chủ Shop</span></a>
         <a href="${pageContext.request.contextPath}/vendor/products"><i class="bi bi-box me-2"></i> <span>Quản lý sản phẩm</span></a>
         <a href="${pageContext.request.contextPath}/vendor/orders"><i class="bi bi-cart-check me-2"></i> <span>Quản lý đơn hàng</span></a>
-        <a href="${pageContext.request.contextPath}/vender/inventory"><i class="bi bi-boxes me-2"></i> <span>Tồn Kho</span></a>
         <a href="${pageContext.request.contextPath}/vendor/promotions"><i class="bi bi-gift me-2"></i> <span>Khuyến mãi</span></a>
         <a href="${pageContext.request.contextPath}/vendor/revenue"><i class="bi bi-bar-chart me-2"></i> <span>Doanh thu</span></a>
         <a href="${pageContext.request.contextPath}/vendor/profile"><i class="bi bi-person-vcard me-2"></i> <span>Hồ sơ Shop</span></a>

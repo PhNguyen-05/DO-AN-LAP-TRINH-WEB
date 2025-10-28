@@ -52,7 +52,11 @@
 			name="stock" class="form-control" placeholder="Nhập số lượng tồn kho"
 			min="0" required>
 	</div>
-
+	<div class="mb-3">
+		<label for="sku" class="form-label fw-bold">Mã SKU <span
+			class="text-danger">*</span></label> <input type="text" id="sku" name="sku"
+			class="form-control" placeholder="Nhập mã SKU" required>
+	</div>
 	<div class="mb-3">
 		<label for="categoryId" class="form-label fw-bold">Danh Mục <span
 			class="text-danger">*</span></label> <select id="categoryId"
@@ -63,7 +67,17 @@
 			</c:forEach>
 		</select>
 	</div>
-
+	<div class="mb-3">
+		<label for="vendorId" class="form-label fw-bold">Shop Bán <span
+			class="text-danger">*</span></label> <select id="vendorId" name="vendor.id"
+			class="form-select" required>
+			<option value="">Chọn Shop</option>
+			<%-- Vòng lặp này yêu cầu Controller phải gửi 'vendors' --%>
+			<c:forEach var="vendor" items="${vendors}">
+				<option value="${vendor.id}">${vendor.shopName}</option>
+			</c:forEach>
+		</select>
+	</div>
 	<div class="text-end">
 		<button type="submit" class="btn btn-success px-4">Lưu</button>
 		<button type="button" class="btn btn-secondary"
@@ -89,4 +103,3 @@
 			}
 		}
 	</script>
-

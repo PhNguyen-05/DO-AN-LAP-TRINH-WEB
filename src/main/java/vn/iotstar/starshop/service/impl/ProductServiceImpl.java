@@ -104,6 +104,7 @@
 
 package vn.iotstar.starshop.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -114,6 +115,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import jakarta.persistence.criteria.Predicate;
 import lombok.RequiredArgsConstructor;
 import vn.iotstar.starshop.entity.Category;
 import vn.iotstar.starshop.entity.Product;
@@ -331,6 +333,71 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public List<Product> findProductsWithActivePromotions() {
         return productRepository.findDiscountedProducts();
+    }
+    
+    
+    @Override
+    public Page<Product> searchProductsVendor(Vendor vendor, String name, Integer categoryId, String stockStatus, Pageable pageable) {
+        
+        Specification<Product> spec = (root, query, cb) -> {
+            List<Predicate> predicates = new ArrayList<>();
+            predicates.add(cb.equal(root.get("vendor"), vendor));
+
+            if (name != null && !name.isEmpty()) {
+                predicates.add(cb.like(cb.lower(root.get("name")), "%" + name.toLowerCase() + "%"));
+            }
+            if (categoryId != null) {
+                predicates.add(cb.equal(root.get("category").get("id"), categoryId));
+            }
+
+            // === NÂNG CẤP LOGIC LỌC TỒN KHO ===
+            // Xóa code cũ 'if (lowStock != null && lowStock)'
+            // Thêm code mới:
+            if (stockStatus != null && !stockStatus.isEmpty()) {
+                if ("low".equals(stockStatus)) {
+                    // "Sắp hết hàng": Lớn hơn 0 VÀ nhỏ hơn hoặc bằng 10
+                    predicates.add(cb.between(root.get("stock"), 1, 10));
+                } else if ("out".equals(stockStatus)) {
+                    // "Hết hàng": Bằng 0
+                    predicates.add(cb.equal(root.get("stock"), 0));
+                } else if ("sufficient".equals(stockStatus)) {
+                    // "Còn nhiều": Lớn hơn 10
+                    predicates.add(cb.greaterThan(root.get("stock"), 10));
+                }
+            }
+            // === KẾT THÚC NÂNG CẤP ===
+
+            return cb.and(predicates.toArray(new Predicate[0]));
+        };
+
+        return productRepository.findAll(spec, pageable);
+    }
+
+    // Bạn cũng nên làm điều tương tự cho hàm 'searchProductsAdmin'
+    @Override
+    public Page<Product> searchProductsAdmin(String name, Integer categoryId, Integer vendorId, String stockStatus, Pageable pageable) {
+        Specification<Product> spec = (root, query, cb) -> {
+            List<Predicate> predicates = new ArrayList<>();
+
+            if (name != null && !name.isEmpty()) { /* ... */ }
+            if (categoryId != null) { /* ... */ }
+            if (vendorId != null) { /* ... */ }
+
+            // === NÂNG CẤP LOGIC LỌC TỒN KHO (cho Admin) ===
+            if (stockStatus != null && !stockStatus.isEmpty()) {
+                if ("low".equals(stockStatus)) {
+                    predicates.add(cb.between(root.get("stock"), 1, 10));
+                } else if ("out".equals(stockStatus)) {
+                    predicates.add(cb.equal(root.get("stock"), 0));
+                } else if ("sufficient".equals(stockStatus)) {
+                    predicates.add(cb.greaterThan(root.get("stock"), 10));
+                }
+            }
+            // === KẾT THÚC NÂNG CẤP ===
+            
+            return cb.and(predicates.toArray(new Predicate[0]));
+        };
+        return productRepository.findAll(spec, pageable);
     }
 
 }
