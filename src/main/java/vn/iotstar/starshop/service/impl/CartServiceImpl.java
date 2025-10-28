@@ -25,13 +25,19 @@ public class CartServiceImpl implements CartService {
     @Autowired
     private CustomerRepository customerRepository;
 
+    
+
     @Override
+    @Transactional
+
     public void addToCart(Integer customerId, Integer productId, Integer quantity) {
         // 1️⃣ Tìm khách hàng
         Customer customer = customerRepository.findById(customerId)
                 .orElseThrow(() -> new RuntimeException("Customer not found"));
 
+
         // 2️⃣ Tìm giỏ hàng của khách
+
         Cart cart = cartRepository.findByCustomerId(customerId)
                 .orElseGet(() -> {
                     Cart newCart = Cart.builder()
@@ -45,6 +51,7 @@ public class CartServiceImpl implements CartService {
                 .orElseThrow(() -> new RuntimeException("Product not found"));
 
         // 4️⃣ Kiểm tra xem sản phẩm đã có trong giỏ chưa
+
         CartItem item = cartItemRepository.findByCartIdAndProductId(cart.getId(), productId)
                 .orElseGet(() -> {
                     CartItem newItem = CartItem.builder()
@@ -63,6 +70,7 @@ public class CartServiceImpl implements CartService {
         // 6️⃣ Lưu item
         cartItemRepository.save(item);
     }
+
 
     @Override
     public Cart getCartByCustomerId(Integer customerId) {
@@ -91,4 +99,13 @@ public class CartServiceImpl implements CartService {
                         .reduce(BigDecimal.ZERO, BigDecimal::add))
                 .orElse(BigDecimal.ZERO);
     }
+
+    @Override
+    public void updateSelection(Integer cartItemId, boolean selected) {
+        cartItemRepository.findById(cartItemId).ifPresent(item -> {
+            item.setSelected(selected);
+            cartItemRepository.save(item);
+        });
+    }
+
 }

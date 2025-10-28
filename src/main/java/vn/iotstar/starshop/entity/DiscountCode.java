@@ -40,4 +40,20 @@ public class DiscountCode {
 
     @Column(name = "created_at")
     private LocalDateTime created_at = LocalDateTime.now();
+    
+    public String getStatusText() {
+        return getIsActive() ? "Còn hiệu lực" : "Hết hạn";
+    }
+
+    public boolean getIsActive() {
+        LocalDateTime now = LocalDateTime.now();
+
+        boolean withinDateRange = (start_date == null || !now.isBefore(start_date)) &&
+                                  (end_date == null || !now.isAfter(end_date));
+
+        boolean hasQuantity = (quantity == null || quantity > 0);
+
+        return withinDateRange && hasQuantity;
+    }
+
 }

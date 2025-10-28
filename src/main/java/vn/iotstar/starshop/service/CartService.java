@@ -19,4 +19,9 @@ public interface CartService {
 
     // ✅ Tính tổng tiền của giỏ hàng
     BigDecimal getTotalAmount(Integer customerId);
+
+    
+    void updateSelection(Integer cartItemId, boolean selected);
+
+
 }

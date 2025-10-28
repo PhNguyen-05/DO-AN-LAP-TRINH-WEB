@@ -202,7 +202,8 @@
                             <fmt:formatNumber value="${cart.totalAmount}" type="currency" currencySymbol="₫"/>
                         </span>
                     </div>
-                    <button type="button" class="btn-checkout">Thanh toán</button>
+                    <button type="button" class="btn-checkout">
+                    Thanh toán</button>
                 </div>
             </form>
         </c:if>

@@ -1,20 +1,34 @@
 package vn.iotstar.starshop.repository;
 
+
+
+import java.util.List;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+
+import vn.iotstar.starshop.entity.Order;
+
 import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 
+import vn.iotstar.starshop.entity.Customer;
 import vn.iotstar.starshop.entity.Order;
 import vn.iotstar.starshop.entity.Vendor;
 
 
-public interface OrderRepository extends JpaRepository<Order, Integer> {
+public interface OrderRepository extends JpaRepository<Order, Integer>, JpaSpecificationExecutor<Order> {
 
 	@Query("SELECT d FROM Order d ORDER BY d.createdAt DESC")
     List<Order> findRecentOrder(int limit);
+
+	@Query("SELECT d FROM Order d ORDER BY d.createdAt DESC")
+	List<Order> findRecentOrders(Pageable pageable);
     
     @Query(value = """
 	        SELECT TOP 5 o.id, c.full_name, o.total_amount, o.status, o.order_date
@@ -41,8 +55,7 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
 	        ORDER BY total_sold DESC
 	        """, nativeQuery = true)
 	    List<Object[]> getTopSellingProducts();
-  
-	    
+
 	    
    
 	    
@@ -57,5 +70,7 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
 	    List<Order> findByVendor(Vendor vendor);
 	    
 	    List<Order> findTop5ByVendorOrderByCreatedAtDesc(Vendor vendor);
+
+	    List<Order> findByCustomerOrderByOrderDateDesc(Customer customer);
 
 }

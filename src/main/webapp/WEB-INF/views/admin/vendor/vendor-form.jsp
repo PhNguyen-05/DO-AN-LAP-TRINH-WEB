@@ -1,24 +1,27 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
 
-<form id="${param.formId}" action="${pageContext.request.contextPath}/admin/vendor/save" method="post">
+<form id="${param.formId}" action="${pageContext.request.contextPath}/admin/vendors/save" method="post">
+    <%-- CSRF token nếu Spring Security bật --%>
+    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+
+    <%-- Hidden ID để phân biệt thêm mới hay sửa --%>
     <input type="hidden" name="id" id="id" value="${vendor.id}" />
 
     <div class="mb-3">
-        <label class="form-label fw-bold">Chọn tài khoản người dùng</label>
-        <select name="userId" class="form-select" required>
-            <option value="">-- Chọn user --</option>
-            <c:forEach var="u" items="${users}">
-                <option value="${u.id}" ${vendor.user.id == u.id ? 'selected' : ''}>
-                    ${u.fullName} (${u.email})
-                </option>
-            </c:forEach>
-        </select>
+        <label class="form-label fw-bold">Tên Shop <span class="text-danger">*</span></label>
+        <input type="text" class="form-control" id="shopName" name="ShopName" value="${vendor.shopName}" required>
     </div>
 
     <div class="mb-3">
-        <label class="form-label fw-bold">Tên Shop</label>
-        <input type="text" class="form-control" id="shopName" name="shopName" value="${vendor.shopName}" required>
+        <label class="form-label fw-bold">Email <span class="text-danger">*</span></label>
+        <input type="email" class="form-control" id="email" name="email" value="${vendor.email}" required>
+        <div class="form-text">Email này sẽ được dùng làm tài khoản đăng nhập cho vendor.</div>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label fw-bold">Số điện thoại <span class="text-danger">*</span></label>
+        <input type="text" class="form-control" id="phone" name="phone" value="${vendor.phone}" required>
     </div>
 
     <div class="mb-3">
@@ -27,18 +30,12 @@
     </div>
 
     <div class="mb-3">
-        <label class="form-label fw-bold">Số điện thoại</label>
-        <input type="text" class="form-control" id="phone" name="phone" value="${vendor.phone}">
-    </div>
-
-    <div class="mb-3">
-        <label class="form-label fw-bold">Email</label>
-        <input type="email" class="form-control" id="email" name="email" value="${vendor.email}">
-    </div>
-
-    <div class="mb-3">
         <label class="form-label fw-bold">Mô tả</label>
         <textarea class="form-control" id="description" name="description" rows="3">${vendor.description}</textarea>
+    </div>
+
+    <div class="mb-2 text-muted">
+        <small>Mật khẩu mặc định của vendor sẽ là: <strong>123456</strong></small>
     </div>
 
     <div class="text-center">

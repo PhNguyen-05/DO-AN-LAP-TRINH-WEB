@@ -17,25 +17,26 @@ public class Payment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    // ✅ Đặt tên biến là "order" thay vì "order_id"
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id", nullable = false)
-    private Order order_id;
+    private Order order;
 
     @Column(name = "amount", precision = 18, scale = 2, nullable = false)
     private BigDecimal amount;
 
     @Column(name = "payment_method", length = 50)
-    private String payment_method;
+    private String paymentMethod;
 
     @Column(name = "payment_date")
-    private LocalDateTime payment_date = LocalDateTime.now();
+    private LocalDateTime paymentDate = LocalDateTime.now();
 
     @Column(name = "status", length = 50)
     private String status = "Pending";
 
     @Column(name = "gateway_reference", length = 200)
-    private String gateway_reference;
+    private String gatewayReference;
 
     @Column(name = "created_at")
-    private LocalDateTime created_at = LocalDateTime.now();
+    private LocalDateTime createdAt = LocalDateTime.now();
 }

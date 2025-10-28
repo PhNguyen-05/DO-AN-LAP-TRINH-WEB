@@ -318,7 +318,7 @@ body {
 						<div class="text-warning mb-1">
 							<c:forEach begin="1" end="${r.rating}">★</c:forEach>
 						</div>
-						<p class="mb-1">${r.content}</p>
+						<p class="mb-1">${r.comment}</p>
 						<small class="text-muted"><fmt:formatDate value="${r.createdAt}" pattern="dd/MM/yyyy HH:mm" /></small>
 					</div>
 				</c:forEach>
@@ -436,14 +436,14 @@ body {
 
 	// Gửi đánh giá
 	document.getElementById('submitReview').addEventListener('click', async () => {
-		const content = document.getElementById('reviewContent').value.trim();
+		const comment = document.getElementById('reviewComment').value.trim();
 		if (!selectedRating || !content) {
 			alert('Vui lòng chọn số sao và nhập nội dung đánh giá.');
 			return;
 		}
 		const formData = new FormData();
 		formData.append('rating', selectedRating);
-		formData.append('content', content);
+		formData.append('comment', comment);
 		Array.from(fileInput.files).forEach(f => formData.append('files', f));
 
 		const res = await fetch('${pageContext.request.contextPath}/product/${product.id}/review', {

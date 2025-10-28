@@ -47,9 +47,13 @@ public class CartItem {
     @Column(name = "created_at")
     private LocalDateTime createdAt = LocalDateTime.now();
 
-    // ✅ Tính tổng tiền của dòng này (không lưu DB)
+    @Column(name = "selected", nullable = false)
+    private Boolean selected = false;
+
+    // ✅ Tính tổng tiền của dòng này
     @Transient
     public BigDecimal getTotalPrice() {
+        if (unitPrice == null || quantity == null) return BigDecimal.ZERO;
         return unitPrice.multiply(BigDecimal.valueOf(quantity));
     }
 }

@@ -12,6 +12,7 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.Query;
 
+
 import vn.iotstar.starshop.entity.User;
 import java.util.List;
 import java.util.Optional;
@@ -28,5 +29,6 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     List<Object[]> findLatestUsers();
 
     boolean existsByEmail(String email);
+
 
 }

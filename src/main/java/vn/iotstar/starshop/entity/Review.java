@@ -3,6 +3,9 @@ package vn.iotstar.starshop.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDateTime;
+import java.util.Date;
+
+import org.hibernate.annotations.CreationTimestamp;
 
 @Entity
 @Table(name = "reviews", 
@@ -42,8 +45,9 @@ public class Review {
     @Column(name = "review_date")
     private LocalDateTime reviewDate;
 
-    // --- Thời điểm tạo (tự động gán khi thêm mới) ---
     @Column(name = "created_at")
-    private LocalDateTime createdAt;
+    @CreationTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date createdAt;
 
 }

@@ -4,6 +4,7 @@ import vn.iotstar.starshop.entity.*;
 
 import java.util.List;
 
+
 /**
  * Service quản lý sản phẩm đã xem của user
  */
@@ -35,4 +36,6 @@ public interface RecentlyViewedService {
      * @param user User
      */
     void clearRecentlyViewed(User user);
+
+ 
 }

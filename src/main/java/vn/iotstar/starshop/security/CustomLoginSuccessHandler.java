@@ -21,8 +21,10 @@ public class CustomLoginSuccessHandler implements AuthenticationSuccessHandler {
 
         if (authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_Admin"))) {
             response.sendRedirect(request.getContextPath() + "/admin/dashboard");
+
         } else if (authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_Vendor"))) {
             response.sendRedirect(request.getContextPath() + "/vendor/home");
+
         } else {
             response.sendRedirect(request.getContextPath() + "/home");
         }

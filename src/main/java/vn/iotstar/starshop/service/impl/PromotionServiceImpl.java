@@ -341,6 +341,7 @@ public class PromotionServiceImpl implements PromotionService {
         // vào bảng join (promotion_products)
         promotionRepository.save(existing);
     }
+
     
  // 🆕 Thêm hàm này
     @Override
@@ -355,4 +356,5 @@ public class PromotionServiceImpl implements PromotionService {
                 .findActivePromotionByProductId(productId, LocalDate.now())
                 .orElse(null);
     }
+
 }

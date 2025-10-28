@@ -107,6 +107,11 @@ tr:hover {
 	color: #dc3545;
 	font-weight: 500;
 }
+
+.promotion-name-highlight {
+	font-weight: 600;
+	color: #c71585; /* Màu hồng đậm/tím để nổi bật */
+}
 </style>
 
 <div class="container py-3">
@@ -147,30 +152,31 @@ tr:hover {
 				<table class="table table-hover mb-0">
 					<thead>
 						<tr>
-							<th class="text-center">ID</th>
+
 							<th class="text-center">Tên Khuyến Mãi</th>
 							<th class="text-center">Giá Trị Giảm</th>
 							<th class="text-center">Ngày Bắt Đầu</th>
 							<th class="text-center">Ngày Kết Thúc</th>
 							<th class="text-center">Trạng Thái</th>
-							<th class="text-center">Nhà Cung Cấp</th>
+							<th class="text-center">Shop</th>
 							<th class="text-center">Hành Động</th>
 						</tr>
 					</thead>
 					<tbody>
 						<c:forEach var="promotion" items="${promotions}">
 							<tr>
-								<td class="text-center">${promotion.id}</td>
-								<td>${promotion.promotionName}</td>
+
+								<td class=" promotion-name-highlight">${promotion.promotionName}</td>
 								<td class="text-center"><c:choose>
 										<c:when test="${promotion.discountType == 'PERCENTAGE'}">
-                                            ${promotion.discountValue}%
-                                        </c:when>
+											<fmt:formatNumber value="${promotion.discountValue}"
+												type="number" maxFractionDigits="0" />%</c:when>
 										<c:otherwise>
 											<fmt:formatNumber value="${promotion.discountValue}"
 												type="currency" currencySymbol="₫" />
 										</c:otherwise>
 									</c:choose></td>
+
 								<!-- Sửa: Wrap vào <td>, thay pattern thành dd/MM/yyyy cho đồng bộ, fallback nếu null -->
 								<td class="text-center"><c:choose>
 										<c:when test="${promotion.startDateAsDate != null}">
@@ -237,26 +243,51 @@ tr:hover {
 			</div>
 		</div>
 	</div>
-
 	<c:if test="${totalPages > 0}">
 		<nav aria-label="Page navigation" class="mt-4">
 			<ul class="pagination justify-content-center">
-				<li class="page-item ${currentPage == 0 ? 'disabled' : ''}"><a
-					class="page-link"
-					href="?promotionName=${param.promotionName}&vendorId=${param.vendorId}&page=0"
-					aria-label="First"> <span aria-hidden="true">&laquo;&laquo;</span>
-				</a></li>
+
 				<li class="page-item ${currentPage == 0 ? 'disabled' : ''}"><a
 					class="page-link"
 					href="?promotionName=${param.promotionName}&vendorId=${param.vendorId}&page=${currentPage - 1}"
 					aria-label="Previous"> <span aria-hidden="true">&laquo;</span>
 				</a></li>
-				<c:forEach begin="0" end="${totalPages - 1}" var="i">
+
+				<c:set var="maxPagesToShow" value="5" />
+				<c:set var="halfWindow" value="2" />
+				<%-- (maxPagesToShow - 1) / 2 --%>
+
+				<c:set var="startPage" value="${currentPage - halfWindow}" />
+				<c:set var="endPage" value="${currentPage + halfWindow}" />
+
+				<%-- Điều chỉnh khi ở gần đầu --%>
+				<c:if test="${startPage < 0}">
+					<c:set var="endPage" value="${endPage - startPage}" />
+					<c:set var="startPage" value="0" />
+				</c:if>
+
+				<%-- Điều chỉnh khi ở gần cuối --%>
+				<c:if test="${endPage >= totalPages}">
+					<c:set var="startPage"
+						value="${startPage - (endPage - (totalPages - 1))}" />
+					<c:set var="endPage" value="${totalPages - 1}" />
+				</c:if>
+
+				<%-- Điều chỉnh cuối cùng nếu tổng số trang < maxPagesToShow --%>
+				<c:if test="${startPage < 0}">
+					<c:set var="startPage" value="0" />
+				</c:if>
+				<c:if test="${endPage >= totalPages}">
+					<c:set var="endPage" value="${totalPages - 1}" />
+				</c:if>
+
+				<c:forEach begin="${startPage}" end="${endPage}" var="i">
 					<li class="page-item ${currentPage == i ? 'active' : ''}"><a
 						class="page-link"
 						href="?promotionName=${param.promotionName}&vendorId=${param.vendorId}&page=${i}">${i + 1}</a>
 					</li>
 				</c:forEach>
+
 				<li
 					class="page-item ${currentPage == totalPages - 1 ? 'disabled' : ''}">
 					<a class="page-link"
@@ -264,57 +295,50 @@ tr:hover {
 					aria-label="Next"> <span aria-hidden="true">&raquo;</span>
 				</a>
 				</li>
-				<li
-					class="page-item ${currentPage == totalPages - 1 ? 'disabled' : ''}">
-					<a class="page-link"
-					href="?promotionName=${param.promotionName}&vendorId=${param.vendorId}&page=${totalPages - 1}"
-					aria-label="Last"> <span aria-hidden="true">&raquo;&raquo;</span>
-				</a>
-				</li>
+
 			</ul>
 		</nav>
 	</c:if>
-</div>
 
-<div class="modal fade" id="addPromotionModal" tabindex="-1"
-	aria-hidden="true">
-	<div class="modal-dialog modal-dialog-centered">
-		<div class="modal-content shadow-lg border-0 rounded-3">
-			<div class="modal-header bg-light border-bottom">
-				<h5 class="modal-title fw-bold">Thêm Khuyến Mãi Mới</h5>
-				<button type="button" class="btn-close" data-bs-dismiss="modal"
-					aria-label="Close"></button>
-			</div>
-			<div class="modal-body">
-				<jsp:include page="promotion-form.jsp">
-					<jsp:param name="formId" value="promotionFormAdd" />
-				</jsp:include>
+	<div class="modal fade" id="addPromotionModal" tabindex="-1"
+		aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered">
+			<div class="modal-content shadow-lg border-0 rounded-3">
+				<div class="modal-header bg-light border-bottom">
+					<h5 class="modal-title fw-bold">Thêm Khuyến Mãi Mới</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal"
+						aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+					<jsp:include page="promotion-form.jsp">
+						<jsp:param name="formId" value="promotionFormAdd" />
+					</jsp:include>
+				</div>
 			</div>
 		</div>
 	</div>
-</div>
 
-<div class="modal fade" id="editPromotionModal" tabindex="-1"
-	aria-hidden="true">
-	<div class="modal-dialog modal-dialog-centered">
-		<div class="modal-content shadow-lg border-0 rounded-3">
-			<div class="modal-header bg-light border-bottom">
-				<h5 class="modal-title fw-bold">Chỉnh Sửa Khuyến Mãi</h5>
-				<button type="button" class="btn-close" data-bs-dismiss="modal"
-					aria-label="Close"></button>
-			</div>
-			<div class="modal-body">
-				<jsp:include page="promotion-form.jsp">
-					<jsp:param name="formId" value="promotionFormEdit" />
-				</jsp:include>
+	<div class="modal fade" id="editPromotionModal" tabindex="-1"
+		aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered">
+			<div class="modal-content shadow-lg border-0 rounded-3">
+				<div class="modal-header bg-light border-bottom">
+					<h5 class="modal-title fw-bold">Chỉnh Sửa Khuyến Mãi</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal"
+						aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+					<jsp:include page="promotion-form.jsp">
+						<jsp:param name="formId" value="promotionFormEdit" />
+					</jsp:include>
+				</div>
 			</div>
 		</div>
 	</div>
-</div>
 
-<script
-	src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-<script>
+	<script
+		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+	<script>
 function formatDateForInput(dateStr) {
     if (!dateStr) return '';
     const date = new Date(dateStr);

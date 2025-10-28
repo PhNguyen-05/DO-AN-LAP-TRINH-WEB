@@ -2,6 +2,9 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="jakarta.tags.core"%>
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt"%>
+<%-- THÊM MỚI: Cần import để so sánh ID --%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+
 
 <div class="container-fluid" data-aos="fade-up" data-aos-duration="800">
 	<div class="row">
@@ -18,7 +21,6 @@
 
 					<input type="hidden" name="id" value="${promotion.id}">
 
-					<!-- Tên khuyến mãi -->
 					<div class="mb-3">
 						<label for="editPromotionName" class="form-label">Tên
 							Khuyến Mãi <span class="text-danger">*</span>
@@ -26,7 +28,6 @@
 							name="promotionName" value="${promotion.promotionName}" required>
 					</div>
 
-					<!-- Giá trị giảm -->
 					<div class="mb-3">
 						<label for="editDiscountValue" class="form-label">Giá Trị
 							Giảm <span class="text-danger">*</span>
@@ -35,7 +36,6 @@
 							value="${promotion.discountValue}" required>
 					</div>
 
-					<!-- Loại giảm -->
 					<div class="mb-3">
 						<label for="editDiscountType" class="form-label">Loại Giảm
 							<span class="text-danger">*</span>
@@ -50,41 +50,34 @@
 						</select>
 					</div>
 
-					<!-- Mô tả -->
 					<div class="mb-3">
 						<label for="editDescription" class="form-label">Mô Tả</label>
 						<textarea class="form-control" id="editDescription"
 							name="description">${promotion.description}</textarea>
 					</div>
 
-					<!-- Ngày bắt đầu -->
 					<div class="mb-3">
 						<label for="editStartDate" class="form-label">Ngày Bắt Đầu
 							<span class="text-danger">*</span>
-						</label> <input type="date" class="form-control"
-							id="editStartDate" name="startDate" value="${formattedStartDate}"
-							required>
+						</label> <input type="date" class="form-control" id="editStartDate"
+							name="startDate" value="${promotion.startDate}" required>
 					</div>
 
-					<!-- Ngày kết thúc -->
 					<div class="mb-3">
 						<label for="editEndDate" class="form-label">Ngày Kết Thúc
 							<span class="text-danger">*</span>
-						</label> <input type="date" class="form-control"
-							id="editEndDate" name="endDate" value="${formattedEndDate}"
-							required>
+						</label> <input type="date" class="form-control" id="editEndDate"
+							name="endDate" value="${promotion.endDate}" required>
 					</div>
 
 
 
-					<!-- Hoạt động -->
 					<div class="mb-3 form-check">
 						<input type="checkbox" class="form-check-input" id="editActive"
 							name="active" <c:if test="${promotion.active}">checked</c:if>>
 						<label class="form-check-label" for="editActive">Hoạt Động</label>
 					</div>
 
-					<!-- Danh mục & sản phẩm -->
 					<div class="mb-3">
 						<label class="form-label fw-bold">🎯 Chọn Danh Mục & Sản
 							Phẩm</label>
@@ -93,25 +86,39 @@
 							<c:forEach var="category" items="${vendorCategories}">
 								<div class="mb-2 category-group"
 									data-category-id="${category.id}">
-									<!-- Checkbox danh mục -->
+
+									<c:set var="categoryIsChecked" value="false" />
+									<c:forEach var="promoCat" items="${promotion.categories}">
+										<c:if test="${promoCat.id == category.id}">
+											<c:set var="categoryIsChecked" value="true" />
+										</c:if>
+									</c:forEach>
 									<div class="form-check">
 										<input class="form-check-input category-checkbox"
 											type="checkbox" id="category_${category.id}"
-											name="categoryIds" value="${category.id}"> <label
-											class="form-check-label fw-semibold text-primary"
+											name="categoryIds" value="${category.id}"${categoryIsChecked ? 'checked' : ''} <%-- Thêm logic checked --%>
+											>
+										<label class="form-check-label fw-semibold text-primary"
 											for="category_${category.id}"> 📦 ${category.name} </label>
 									</div>
 
-									<!-- Danh sách sản phẩm thuộc danh mục -->
 									<div class="ms-4 mt-1 products-list">
 										<c:forEach var="product" items="${vendorProducts}">
 											<c:if test="${product.category.id == category.id}">
+
+												<c:set var="productIsChecked" value="false" />
+												<c:forEach var="promoProd" items="${promotion.products}">
+													<c:if test="${promoProd.id == product.id}">
+														<c:set var="productIsChecked" value="true" />
+													</c:if>
+												</c:forEach>
 												<div class="form-check">
 													<input class="form-check-input product-checkbox"
 														type="checkbox" id="product_${product.id}"
 														name="productIds" value="${product.id}"
-														data-category-id="${category.id}"> <label
-														class="form-check-label" for="product_${product.id}">
+														data-category-id="${category.id}"${productIsChecked ? 'checked' : ''} <%-- Thêm logic checked --%>
+														>
+													<label class="form-check-label" for="product_${product.id}">
 														${product.name} </label>
 												</div>
 											</c:if>
@@ -123,11 +130,9 @@
 						</div>
 					</div>
 
-					<!-- Preview -->
 					<div id="editDiscountPreview" class="alert alert-info"
 						style="display: none;"></div>
 
-					<!-- Buttons -->
 					<button type="submit" class="btn btn-pink w-100">Lưu Thay
 						Đổi</button>
 					<a href="${pageContext.request.contextPath}/vendor/promotions"
@@ -138,7 +143,6 @@
 	</div>
 </div>
 
-<!-- jQuery -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <script>
@@ -157,9 +161,11 @@
 	$('#editDiscountType, #editDiscountValue').on('change',
 			updateDiscountPreview);
 
-    // ===============================================
-	// --- BẮT ĐẦU SỬA LỖI SUBMIT ---
-    // ===============================================
+    // Kích hoạt preview khi tải trang (để giữ nguyên thông tin)
+    $(document).ready(function() {
+        updateDiscountPreview();
+    });
+
 	$('#editPromotionForm').on('submit', function(e) {
 		e.preventDefault(); // Ngăn submit form truyền thống
 
@@ -173,57 +179,77 @@
 			return;
 		}
 
-        // 2. Dùng FormData thay vì .serialize()
-        // FormData sẽ xử lý đúng cả checkbox "active" và danh sách "productIds"
         const formData = new FormData(this);
         
-        // 3. Xử lý checkbox 'active' thủ công (RẤT QUAN TRỌNG)
-        // Nếu checkbox "active" không được tick, FormData sẽ không gửi gì
-        // Server (Spring) sẽ nhận là NULL.
-        // Chúng ta phải thêm logic để nếu nó không được tick, ta gửi "false"
         if (!formData.has('active')) {
             formData.append('active', 'false');
+        } else {
+        	// Đảm bảo giá trị là "true" thay vì "on" (nếu cần)
+        	formData.set('active', 'true');
         }
-        
-        // (Trong file controller, @RequestParam Boolean active sẽ nhận 'false' là false
-        // và 'on' (mặc định của form) là true, nhưng 'null' sẽ gây lỗi nếu ta
-        // không xử lý 'active != null && active'.
-        // Bằng cách này, ta luôn gửi 'on' hoặc 'false')
 
-		// 4. Gửi bằng fetch (an toàn hơn $.ajax với FormData)
 		fetch($(this).attr('action'), {
 			method: 'POST',
-			body: formData
+			body: formData,
+            headers: {
+                // Thêm header CSRF nếu bạn dùng Spring Security
+                // '${_csrf.headerName}': '${_csrf.token}' 
+            }
 		})
 		.then(response => {
 			if (response.ok) {
- 				// Nếu server trả về "Success"
- 				return response.text(); // Lấy text "Success"
+ 				return response.text(); 
 			} else {
-				// Nếu server trả về lỗi (400, 500)
-				return response.text().then(text => { throw new Error(text) });
+				return response.text().then(text => { 
+                    // Nếu lỗi 400, 500, ném ra text lỗi
+                    throw new Error(text || 'Lỗi không xác định từ server.');
+                });
 			}
 		})
 		.then(text => {
-			if (text === "Success") {
-				alert('✅ Cập nhật thành công!');
-				window.location.href = '${pageContext.request.contextPath}/vendor/promotions';
-			} else {
- 				// Trường hợp server trả về 200 OK nhưng text không phải "Success"
-				alert('⚠️ Lỗi: ' + text);
-			}
-		})
-		.catch(error => {
-			// Bắt lỗi từ throw new Error(text) hoặc lỗi mạng
-			console.error('Lỗi khi submit form:', error);
-			alert('⚠️ Lỗi cập nhật khuyến mãi: ' + error.message);
-		});
-	});
-    // ===============================================
-	// --- KẾT THÚC SỬA LỖI SUBMIT ---
-    // ===============================================
+            // Xóa lỗi cũ (nếu có)
+            $('#errorAlert').remove();
+            $('#successAlert').remove();
 
-    // Bổ sung: Script liên kết checkbox (nếu bạn chưa có)
+			if (text.trim() === "Success") {
+			    $('#editPromotionForm').prepend(`
+			        <div id="successAlert" class="alert alert-success text-center" role="alert">
+			            ✅ Cập nhật thành công! Trang sẽ tải lại...
+			        </div>
+			    `);
+			    // Vô hiệu hóa nút sau khi thành công
+			    $(this).find('button[type="submit"]').prop('disabled', true);
+			    setTimeout(() => {
+			    	// Tải lại trang danh sách, không phải trang sửa
+			    	window.location.href = "${pageContext.request.contextPath}/vendor/promotions";
+			    }, 2000);
+			
+		    } else {
+                // Nếu server trả về text lỗi (ví dụ "Lỗi: Tên trùng")
+		        $('#editPromotionForm').prepend(`
+		            <div id="errorAlert" class="alert alert-warning text-center" role="alert">
+		                ⚠️ Lỗi: ${text}
+		            </div>
+		        `);
+		        setTimeout(() => $('#errorAlert').fadeOut(1000, function() { $(this).remove(); }), 4000);
+		    }
+		})
+        .catch(error => {
+            // Bắt lỗi fetch (như 403, 500)
+            $('#errorAlert').remove();
+            $('#successAlert').remove();
+            
+            $('#editPromotionForm').prepend(`
+                <div id="errorAlert" class="alert alert-danger text-center" role="alert">
+                    ❌ Lỗi nghiêm trọng: ${error.message}
+                </div>
+            `);
+            setTimeout(() => $('#errorAlert').fadeOut(1000, function() { $(this).remove(); }), 4000);
+        });
+
+	});
+
+    // Script liên kết checkbox
     $(document).ready(function() {
         $('.category-checkbox').on('change', function() {
             const categoryId = $(this).val();

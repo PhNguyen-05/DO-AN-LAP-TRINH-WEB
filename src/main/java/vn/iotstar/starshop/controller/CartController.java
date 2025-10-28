@@ -121,4 +121,11 @@ public class CartController {
         redirectAttributes.addFlashAttribute("success", "Đã xoá toàn bộ sản phẩm trong giỏ hàng!");
         return "redirect:/user/cart";
     }
+    @PostMapping("/cart/update-selection")
+    public String updateSelection(@RequestParam("itemId") Integer itemId,
+                                  @RequestParam("selected") boolean selected) {
+        cartService.updateSelection(itemId, selected);
+        return "redirect:/user/cart";
+    }
+
 }

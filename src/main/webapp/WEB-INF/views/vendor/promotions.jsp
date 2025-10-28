@@ -50,15 +50,18 @@
 							<tr>
 								<td>${promotion.promotionName}</td>
 								<td><c:choose>
-										<c:when test="${promotion.discountType == 'PERCENTAGE'}">${promotion.discountValue}%</c:when>
+										<c:when test="${promotion.discountType == 'PERCENTAGE'}">
+											<fmt:formatNumber value="${promotion.discountValue}"
+												type="number" maxFractionDigits="0" />%</c:when>
+
 										<c:otherwise>${promotion.discountValue} VND</c:otherwise>
 									</c:choose></td>
 								<td><fmt:formatDate value="${promotion.startDateAsDate}"
 										pattern="yyyy-MM-dd" /></td>
 								<td><fmt:formatDate value="${promotion.endDateAsDate}"
 										pattern="yyyy-MM-dd" /></td>
-								<td><c:set var="now"
-										value="<%=java.time.LocalDate.now()%>" /> <c:choose>
+								<td><c:set var="now" value="<%=java.time.LocalDate.now()%>" />
+									<c:choose>
 										<c:when test="${promotion.startDate gt now}">
 											<span class="badge bg-secondary px-3 py-2">⏳ Chưa bắt
 												đầu</span>
@@ -304,7 +307,8 @@ $(document).on('click', '.view-btn', function () {
     // 3. Gán dữ liệu CÓ SẴN (Kiểm tra lại xem các ID này có đúng không)
     $('#viewId').text(id || 'N/A');
     $('#viewName').text(name || 'N/A');
-    $('#viewDiscount').text((discount !== undefined ? (discount < 1 ? discount + '%' : discount + ' VND') : 'N/A'));
+    $('#viewDiscount').text(discount !== undefined? parseFloat(discount).toString().replace(/\.0+$/, '') + '%': 'N/A');
+
     // Gán ngày tháng và status (Đảm bảo code này đúng)
     try {
         $('#viewStart').text(start ? start.split('T')[0] : 'N/A');
@@ -433,11 +437,51 @@ $(document).on('click', '.view-btn', function () {
 }
 
 #viewProducts .list-group-item {
-  color: #212529 !important;       /* màu chữ mặc định đen */
-  font-size: 1rem !important;
-  background-color: transparent !important;
-  display: list-item !important;
-  visibility: visible !important;
-  opacity: 1 !important;
+	color: #212529 !important; /* màu chữ mặc định đen */
+	font-size: 1rem !important;
+	background-color: transparent !important;
+	display: list-item !important;
+	visibility: visible !important;
+	opacity: 1 !important;
+}
+/* Tùy chỉnh bảng khuyến mãi */
+#promotionsTable {
+	border-collapse: separate;
+	border-spacing: 0 10px; /* tạo khoảng cách giữa các hàng */
+}
+
+#promotionsTable thead th {
+	background: #ffeaf2;
+	border: none;
+	font-weight: bold;
+	text-align: center;
+}
+
+#promotionsTable tbody tr {
+	background: #fff;
+	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+	border-radius: 12px;
+}
+
+#promotionsTable td {
+	vertical-align: middle;
+	text-align: center;
+	border: none;
+	padding: 12px 8px;
+}
+
+#promotionsTable tbody tr:hover {
+	background-color: #fff3f8;
+	transform: scale(1.01);
+	transition: all 0.2s ease-in-out;
+}
+
+/* Hành động */
+#promotionsTable .btn {
+	transition: transform 0.2s;
+}
+
+#promotionsTable .btn:hover {
+	transform: scale(1.15);
 }
 </style>

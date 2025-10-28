@@ -152,10 +152,15 @@ tr:hover {
 										</c:otherwise>
 									</c:choose></td>
 								<td class="text-center">
+									<!-- Xem chi tiết --> <a
+									href="${pageContext.request.contextPath}/admin/vendors/detail/${vendor.id}"
+									class="btn btn-outline-info btn-sm me-1" title="Xem chi tiết">
+										<i class="bi bi-eye"></i>
+								</a> <!-- Sửa -->
 									<button class="btn btn-outline-primary btn-sm me-1"
 										onclick="openEditVendor(${vendor.id})" title="Sửa">
 										<i class="bi bi-pencil"></i>
-									</button> <a
+									</button> <!-- Xóa --> <a
 									href="${pageContext.request.contextPath}/admin/vendors/delete/${vendor.id}"
 									class="btn btn-outline-danger btn-sm"
 									onclick="return confirm('Bạn có chắc muốn xóa chủ shop này?')"
@@ -222,17 +227,17 @@ tr:hover {
 function openAddVendor() {
     const form = document.getElementById('vendorFormAdd');
     form.reset();
-    form.action = '${pageContext.request.contextPath}/admin/vendor/save';
+    form.action = '${pageContext.request.contextPath}/admin/vendors/save';
     const modal = new bootstrap.Modal(document.getElementById('addVendorModal'));
     modal.show();
 }
 
 function openEditVendor(id) {
-    fetch('${pageContext.request.contextPath}/admin/vendor/' + id)
+    fetch('${pageContext.request.contextPath}/admin/vendors/' + id)
         .then(response => response.json())
         .then(data => {
             const form = document.getElementById('vendorFormEdit');
-            form.action = '${pageContext.request.contextPath}/admin/vendor/save';
+            form.action = '${pageContext.request.contextPath}/admin/vendors/save';
 
             form.querySelector('#id').value = data.id || '';
             form.querySelector('#shopName').value = data.shopName || '';

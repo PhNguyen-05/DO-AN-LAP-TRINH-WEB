@@ -2,6 +2,8 @@
 //
 //import jakarta.persistence.*;
 //import lombok.*;
+//import vn.iotstar.starshop.entity.Order.OrderBuilder;
+//
 //import java.math.BigDecimal;
 //import java.time.LocalDateTime;
 //
@@ -10,7 +12,7 @@
 //@Data
 //@NoArgsConstructor
 //@AllArgsConstructor
-//@Builder
+//
 //public class OrderDetail {
 //
 //    @Id
@@ -19,11 +21,11 @@
 //
 //    @ManyToOne(fetch = FetchType.LAZY)
 //    @JoinColumn(name = "order_id", nullable = false)
-//    private Order order_id;
+//    private Order order;
 //
 //    @ManyToOne(fetch = FetchType.LAZY)
 //    @JoinColumn(name = "product_id", nullable = false)
-//    private Product product_id;
+//    private Product product;
 //
 //    @Column(name = "quantity", nullable = false)
 //    private Integer quantity;
@@ -31,9 +33,14 @@
 //    @Column(name = "unit_price", precision = 18, scale = 2, nullable = false)
 //    private BigDecimal unit_price;
 //
+//
 //    @Column(name = "created_at")
 //
 //    private LocalDateTime createdAt = LocalDateTime.now();
+//
+//
+//
+//
 //
 //}
 
@@ -42,27 +49,28 @@ package vn.iotstar.starshop.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import vn.iotstar.starshop.entity.Order.OrderBuilder;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "order_details", uniqueConstraints = @UniqueConstraint(columnNames = {"order_id","product_id"}))
+
 @Data
+@Builder                // 👈 Thêm dòng này
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 public class OrderDetail {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    // ✅ Đổi tên thành 'order'
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id", nullable = false)
     private Order order;
 
-    // ✅ Đổi tên thành 'product'
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
@@ -71,10 +79,13 @@ public class OrderDetail {
     private Integer quantity;
 
     @Column(name = "unit_price", precision = 18, scale = 2, nullable = false)
-    private BigDecimal unit_price;
+//    private BigDecimal unit_price;
+    private BigDecimal unitPrice;
 
     @Column(name = "created_at")
 
     private LocalDateTime createdAt = LocalDateTime.now();
+
+
 
 }
