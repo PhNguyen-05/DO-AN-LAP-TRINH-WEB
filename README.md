@@ -4,21 +4,21 @@
 
 ## 📖 Giới thiệu
 
-**StarShop** là nền tảng thương mại điện tử chuyên kinh doanh **hoa tươi và quà tặng**, được xây dựng bằng **Spring Boot Framework** với kiến trúc 3 lớp (Controller – Service – Repository).
+**StarShop** là nền tảng thương mại điện tử chuyên kinh doanh **hoa tươi**, được xây dựng bằng **Spring Boot Framework** với kiến trúc 3 lớp (Controller – Service – Repository).
 Hệ thống cung cấp giao diện hiện đại, thân thiện và an toàn, hỗ trợ nhiều vai trò người dùng, tích hợp thanh toán, xác thực OTP, thông báo thời gian thực và quản lý linh hoạt.
 
 ---
 
 ## ⚙️ Công nghệ sử dụng
 
-| Thành phần             | Công nghệ                                                         |
-| ---------------------- | ----------------------------------------------------------------- |
-| **Backend**            | Spring Boot 3.x, Spring Security, JPA (Hibernate), JWT, WebSocket |
-| **Frontend**           | JSP / JSTL, Bootstrap 5, HTML5, CSS3, JavaScript                  |
-| **Cơ sở dữ liệu**      | SQL Server / MySQL / PostgreSQL                                   |
-| **Công cụ build**      | Maven                                                             |
-| **Quản lý mã nguồn**   | GitHub                                                            |
-| **Công cụ phát triển** | IntelliJ IDEA / Eclipse / VSCode                                  |
+| Thành phần             | Công nghệ                                                           |
+| ---------------------- | -----------------------------------------------------------------   |
+| **Backend**            | Spring Boot 3.x, Spring Security, JPA (Hibernate), JWT, WebSocket   |
+| **Frontend**           | JSP / JSTL, Bootstrap 5, HTML5, CSS3, JavaScript, Decorator Sitemesh|
+| **Cơ sở dữ liệu**      | SQL Server                                                          |
+| **Công cụ build**      | Maven                                                               |
+| **Quản lý mã nguồn**   | GitHub                                                              |
+| **Công cụ phát triển** | IntelliJ IDEA / Eclipse / VSCode                                    |
 
 ---
 
@@ -44,25 +44,19 @@ Hệ thống cung cấp giao diện hiện đại, thân thiện và an toàn, h
 | 🌼 Quản lý sản phẩm  | CRUD sản phẩm, hình ảnh, danh mục        |
 | 📦 Quản lý đơn hàng  | Cập nhật, xử lý, thống kê tình trạng đơn |
 | 💰 Khuyến mãi        | Tạo và áp dụng chương trình giảm giá     |
-| 📊 Báo cáo doanh thu | Xem thống kê doanh số theo thời gian     |
+| 📊 Doanh thu | Xem thống kê doanh số theo thời gian     |
 
 ### ⚙️ Quản trị viên (Admin)
 
-| Chức năng              | Mô tả                                           |
-| ---------------------- | ----------------------------------------------- |
-| 👥 Quản lý tài khoản   | Phân quyền, chỉnh sửa và xóa người dùng         |
-| 🌸 Quản lý danh mục    | Tổ chức, thêm mới, chỉnh sửa loại hoa           |
-| 💰 Mã giảm giá         | Tạo, áp dụng và quản lý chương trình khuyến mãi |
-| 🚚 Quản lý vận chuyển  | Quản lý đối tác giao hàng                       |
-| 📈 Bảng điều khiển     | Xem thống kê doanh thu, đơn hàng, khách hàng    |
-| 🔐 Phân quyền chi tiết | Dựa trên **Spring Security + JWT**              |
-
-### 🚚 Shipper (Mở rộng)
-
-| Chức năng            | Mô tả                                    |
-| -------------------- | ---------------------------------------- |
-| 📦 Quản lý giao hàng | Xem danh sách và cập nhật trạng thái đơn |
-| 🧾 Thống kê          | Theo dõi hiệu suất giao hàng             |
+⚙️ Quản trị viên (Admin)
+|Chức năng	        |     Mô tả
+|-----------------------|-------------------------------------------------------------|
+|👥 Quản lý vendor	|Thêm, chỉnh sửa, xóa và quản lý thông tin cửa hàng           |
+|🌸 Quản lý danh mục	|Tổ chức, thêm mới, chỉnh sửa loại hoa và phân loại sản phẩm  |
+|🛍️ Quản lý sản phẩm	|Quản lý, duyệt và theo dõi sản phẩm từ các cửa hàng          |
+|💰 Mã giảm giá	        |Tạo, áp dụng và quản lý chương trình khuyến mãi              |
+|👤 Quản lý khách hàng	|Theo dõi, chỉnh sửa và khóa/mở tài khoản người dùng          |
+|📈 Bảng điều khiển	|Xem thống kê doanh thu, đơn hàng, khách hàng, sản phẩm       |
 
 ---
 
@@ -128,12 +122,12 @@ Cơ sở dữ liệu (SQL Server / MySQL / PostgreSQL)
 2. **Tạo cơ sở dữ liệu**
 
    ```sql
-   CREATE DATABASE StarShopDB;
+   CREATE DATABASE StarShop;
    ```
 3. **Cấu hình `application.properties`**
 
    ```properties
-   spring.datasource.url=jdbc:sqlserver://localhost:1433;databaseName=StarShopDB
+   spring.datasource.url=jdbc:sqlserver://localhost:1433;databaseName=StarShop
    spring.datasource.username=sa
    spring.datasource.password=your_password
    spring.jpa.hibernate.ddl-auto=update
@@ -149,18 +143,13 @@ Cơ sở dữ liệu (SQL Server / MySQL / PostgreSQL)
    ```
 5. **Truy cập hệ thống**
 
-   * 🌐 Trang người dùng: [http://localhost:8080](http://localhost:8080)
-   * ⚙️ Trang quản trị: [http://localhost:8080/admin](http://localhost:8080/admin)
+* 🌐 Trang người dùng: [http://localhost:8080/home](http://localhost:8080/home)
+* 🏪 Trang người bán: [http://localhost:8080/vendor/home](http://localhost:8080/vendor/home)
+* ⚙️ Trang quản trị: [http://localhost:8080/admin/dashboard](http://localhost:8080/admin/dashboard)
+
 
 ---
 
-## 📊 Bảng điều khiển thống kê
-
-* Thống kê doanh thu theo thời gian và loại sản phẩm
-* Biểu đồ trực quan (doanh thu, đơn hàng, khách hàng)
-* Xuất báo cáo **PDF/Excel**
-
----
 
 ## 🧩 Yêu cầu phi chức năng
 
