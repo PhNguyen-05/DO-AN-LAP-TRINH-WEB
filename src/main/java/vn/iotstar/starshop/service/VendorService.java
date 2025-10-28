@@ -14,4 +14,8 @@ public interface VendorService {
     List<Vendor> findAll();
 
 	void deleteById(Integer id);
+	
+	
+	
+	Vendor createVendor(Vendor vendor);
 }

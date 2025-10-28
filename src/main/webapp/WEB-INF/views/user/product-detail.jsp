@@ -234,10 +234,10 @@ body {
             Giảm 
             <c:choose>
                 <c:when test="${promotion.discountType == 'PERCENTAGE'}">
-                    ${promotion.discountValue}% 🎉
+            <fmt:formatNumber value="${promotion.discountValue}" type="number" maxFractionDigits="0" />%🎉
                 </c:when>
                 <c:otherwise>
-                    <fmt:formatNumber value="${promotion.discountValue}" type="number" />₫ 🎉
+                    <fmt:formatNumber value="${promotion.discountValue}" type="currency" currencySymbol="₫" /> 🎉
                 </c:otherwise>
             </c:choose>
         </p>

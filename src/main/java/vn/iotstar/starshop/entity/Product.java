@@ -7,6 +7,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
@@ -54,6 +55,7 @@ public class Product {
     private Category category;
     
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "vendor_id")
     private Vendor vendor;
     

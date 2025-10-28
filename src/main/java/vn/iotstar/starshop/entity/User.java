@@ -72,7 +72,7 @@ public class User {
 
     // ================== Phân quyền & trạng thái ==================
     @Column(nullable = false, length = 20)
-    private String role = "Customer"; // Customer, Employee, Admin
+    private String role = "Customer"; // Customer, Vendor, Admin
 
     @Column(nullable = false, length = 20)
     private String status = "Inactive"; // Inactive khi mới đăng ký, Active sau khi xác thực OTP

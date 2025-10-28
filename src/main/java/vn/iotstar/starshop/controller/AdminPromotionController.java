@@ -191,9 +191,9 @@ import java.util.Optional;
 
 @Controller
 @RequestMapping("/admin/promotions")
-public class PromotionAdminController {
+public class AdminPromotionController {
 
-    private static final Logger logger = LoggerFactory.getLogger(PromotionAdminController.class);
+    private static final Logger logger = LoggerFactory.getLogger(AdminPromotionController.class);
 
     @Autowired
     private PromotionService promotionService;

@@ -90,6 +90,11 @@ tr:hover {
 	font-style: italic;
 	color: #6c757d;
 }
+td.low-stock {
+    color: #dc3545 !important;
+    font-weight: bold;
+}
+
 </style>
 
 <div class="container py-3">
@@ -137,7 +142,7 @@ tr:hover {
 							<th class="text-center">Tên Sản Phẩm</th>
 							<th>Mô Tả</th>
 							<th class="text-center">Giá Bán</th>
-
+							<th class="text-center">Shop</th>
 							<th class="text-center">Tồn Kho</th>
 							<th class="text-center">Hành Động</th>
 						</tr>
@@ -166,7 +171,17 @@ tr:hover {
 										value="${product.price}" type="currency" currencySymbol="₫" />
 								</td>
 
-								<td class="text-center ${product.stock < 10 ? 'low-stock' : ''}">${product.stock}</td>
+								<td class="text-center">${product.vendor.shopName}</td>
+								<c:choose>
+									<c:when test="${product.stock <= 5}">
+										<td class="text-center low-stock">${product.stock}</td>
+									</c:when>
+									<c:otherwise>
+										<td class="text-center">${product.stock}</td>
+									</c:otherwise>
+								</c:choose>
+
+
 								<td class="text-center"><a
 									href="${pageContext.request.contextPath}/admin/products/detail/${product.id}"
 									class="btn btn-outline-secondary btn-sm me-1"

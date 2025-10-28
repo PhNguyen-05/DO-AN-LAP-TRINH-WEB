@@ -37,6 +37,7 @@ import java.util.Optional;
 @RequestMapping("/vendor")
 public class VendorController {
 
+	
     @Autowired
     private VendorService vendorService;
 
@@ -203,9 +204,10 @@ public class VendorController {
             // 🟢 Kiểm tra ảnh (Code này của bạn đã đúng)
             if (!imageFile.isEmpty()) {
                 String fileName = imageFile.getOriginalFilename();
-
                 String root = System.getProperty("user.dir");
-                Path uploadPath = Paths.get(root + "/target/classes/static/images/");
+
+                // === SỬA ĐƯỜNG DẪN LƯU ẢNH (QUAN TRỌNG) ===
+                Path uploadPath = Paths.get(root + "/src/main/resources/static/images/");
 
                 if (!Files.exists(uploadPath)) {
                     Files.createDirectories(uploadPath);
@@ -227,16 +229,27 @@ public class VendorController {
         }
     }
 
-
-    // 📦 Edit product
+    
+ // 📦 Edit product (ĐÃ SỬA LỖI ĐƯỜNG DẪN ẢNH VÀ LỖI XÁC THỰC)
     @PostMapping("/products/edit/{id}")
     public ResponseEntity<String> editProduct(@PathVariable Integer id,
-                                              @ModelAttribute Product product,
-                                              @RequestParam(value = "imageFile", required = false) MultipartFile imageFile,
-                                              HttpSession session) {
-        User currentUser = (User) session.getAttribute("currentUser");
-        if (currentUser == null) return new ResponseEntity<>("Unauthorized", HttpStatus.UNAUTHORIZED);
+                                              // Sửa: Nhận các trường rõ ràng
+                                              @RequestParam("name") String name,
+                                              @RequestParam("price") java.math.BigDecimal price,
+                                              @RequestParam(value = "description", required = false) String description,
+                                              @RequestParam("stock") Integer stock,
+                                              @RequestParam("category.id") Integer categoryId,
+                                              @RequestParam(value = "imageFile", required = false) MultipartFile imageFile) {
+        
+        // SỬA: Dùng SecurityContextHolder thay vì HttpSession
+        CustomUserDetails userDetails;
+        try {
+            userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        } catch (Exception e) {
+            return new ResponseEntity<>("Unauthorized: User not logged in", HttpStatus.UNAUTHORIZED);
+        }
 
+        User currentUser = userDetails.getUser();
         Vendor vendor = vendorService.findByEmail(currentUser.getEmail());
         if (vendor == null) return new ResponseEntity<>("Vendor not found", HttpStatus.BAD_REQUEST);
 
@@ -248,23 +261,25 @@ public class VendorController {
 
             Product existingProduct = optionalProduct.get();
 
-            if (product.getName() != null && !product.getName().isEmpty()) {
-                existingProduct.setName(product.getName());
-            }
-            if (product.getDescription() != null) {
-                existingProduct.setDescription(product.getDescription());
-            }
-            if (product.getPrice() != null && product.getPrice().compareTo(java.math.BigDecimal.ZERO) > 0) {
-                existingProduct.setPrice(product.getPrice());
-            }
-            if (product.getStock() != null && product.getStock() >= 0) {
-                existingProduct.setStock(product.getStock());
-            }
+            // Cập nhật thông tin từ form
+            existingProduct.setName(name);
+            existingProduct.setDescription(description);
+            existingProduct.setPrice(price);
+            existingProduct.setStock(stock);
+            
+            // Tìm và gán Category
+            Category category = categoryService.findById(categoryId)
+                    .orElseThrow(() -> new RuntimeException("Category not found with id: " + categoryId));
+            existingProduct.setCategory(category);
+
+
             if (imageFile != null && !imageFile.isEmpty()) {
                 String fileName = imageFile.getOriginalFilename();
 
                 String root = System.getProperty("user.dir");
-                Path uploadPath = Paths.get(root + "/target/classes/static/images/");
+                
+                // === SỬA ĐƯỜNG DẪN LƯU ẢNH (QUAN TRỌNG) ===
+                Path uploadPath = Paths.get(root + "/src/main/resources/static/images/");
 
                 if (!Files.exists(uploadPath)) {
                     Files.createDirectories(uploadPath);
@@ -275,24 +290,30 @@ public class VendorController {
 
                 existingProduct.setImageUrl(fileName);
             }
-            if (product.getCategory() != null) {
-                existingProduct.setCategory(product.getCategory());
-            }
-
+            
             productService.save(existingProduct);
+            
         } catch (Exception e) {
+            e.printStackTrace();
             return new ResponseEntity<>("Error updating product: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
         return new ResponseEntity<>("Success", HttpStatus.OK);
     }
 
-    // 📦 Delete product
+    // 📦 Delete product (ĐÃ SỬA LỖI XÁC THỰC)
     @PostMapping("/products/delete/{id}")
-    public ResponseEntity<String> deleteProduct(@PathVariable Integer id, HttpSession session) {
-        User currentUser = (User) session.getAttribute("currentUser");
-        if (currentUser == null) return new ResponseEntity<>("Unauthorized", HttpStatus.UNAUTHORIZED);
+    public ResponseEntity<String> deleteProduct(@PathVariable Integer id) {
+        
+        // SỬA: Dùng SecurityContextHolder thay vì HttpSession
+        CustomUserDetails userDetails;
+        try {
+            userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        } catch (Exception e) {
+            return new ResponseEntity<>("Unauthorized: User not logged in", HttpStatus.UNAUTHORIZED);
+        }
 
+        User currentUser = userDetails.getUser();
         Vendor vendor = vendorService.findByEmail(currentUser.getEmail());
         if (vendor == null) return new ResponseEntity<>("Vendor not found", HttpStatus.BAD_REQUEST);
 
@@ -357,23 +378,63 @@ public class VendorController {
     }
 
     // 🧾 Update shop profile
+//    @PostMapping("/profile/edit")
+//    public ResponseEntity<String> updateProfile(@ModelAttribute Vendor vendor, HttpSession session) {
+//        User currentUser = (User) session.getAttribute("currentUser");
+//        if (currentUser == null) return new ResponseEntity<>("Unauthorized", HttpStatus.UNAUTHORIZED);
+//
+//        Vendor existingVendor = vendorService.findByEmail(currentUser.getEmail());
+//        if (existingVendor == null) return new ResponseEntity<>("Vendor not found", HttpStatus.BAD_REQUEST);
+//
+//        try {
+//            if (vendor.getShopName() == null || vendor.getShopName().isEmpty()) {
+//                return new ResponseEntity<>("Shop name is required", HttpStatus.BAD_REQUEST);
+//            }
+//            existingVendor.setShopName(vendor.getShopName());
+//            existingVendor.setAddress(vendor.getAddress());
+//            existingVendor.setPhone(vendor.getPhone());
+//            existingVendor.setDescription(vendor.getDescription());
+//            vendorService.save(existingVendor);
+//        } catch (Exception e) {
+//            return new ResponseEntity<>("Error updating profile: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+//        }
+//
+//        return new ResponseEntity<>("Success", HttpStatus.OK);
+//    }
+    
     @PostMapping("/profile/edit")
-    public ResponseEntity<String> updateProfile(@ModelAttribute Vendor vendor, HttpSession session) {
-        User currentUser = (User) session.getAttribute("currentUser");
-        if (currentUser == null) return new ResponseEntity<>("Unauthorized", HttpStatus.UNAUTHORIZED);
-
+    public ResponseEntity<String> updateProfile(@ModelAttribute Vendor formData) {
+        
+        // 1. Lấy thông tin user đã đăng nhập (cách làm đúng)
+        CustomUserDetails userDetails;
+        try {
+            userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        } catch (Exception e) {
+            // Lỗi nếu user chưa đăng nhập
+            return new ResponseEntity<>("Unauthorized", HttpStatus.UNAUTHORIZED);
+        }
+        
+        User currentUser = userDetails.getUser();
         Vendor existingVendor = vendorService.findByEmail(currentUser.getEmail());
-        if (existingVendor == null) return new ResponseEntity<>("Vendor not found", HttpStatus.BAD_REQUEST);
+
+        if (existingVendor == null) {
+            return new ResponseEntity<>("Vendor not found", HttpStatus.BAD_REQUEST);
+        }
 
         try {
-            if (vendor.getShopName() == null || vendor.getShopName().isEmpty()) {
+            // 2. Kiểm tra dữ liệu đầu vào
+            if (formData.getShopName() == null || formData.getShopName().isEmpty()) {
                 return new ResponseEntity<>("Shop name is required", HttpStatus.BAD_REQUEST);
             }
-            existingVendor.setShopName(vendor.getShopName());
-            existingVendor.setAddress(vendor.getAddress());
-            existingVendor.setPhone(vendor.getPhone());
-            existingVendor.setDescription(vendor.getDescription());
+            
+            // 3. Cập nhật các trường cho phép
+            existingVendor.setShopName(formData.getShopName());
+            existingVendor.setAddress(formData.getAddress());
+            existingVendor.setPhone(formData.getPhone());
+            existingVendor.setDescription(formData.getDescription());
+            
             vendorService.save(existingVendor);
+            
         } catch (Exception e) {
             return new ResponseEntity<>("Error updating profile: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -381,43 +442,5 @@ public class VendorController {
         return new ResponseEntity<>("Success", HttpStatus.OK);
     }
 
-    // ⚙️ Shop settings
-    @GetMapping("/settings")
-    public String vendorSettings(Model model, HttpSession session) {
-    	CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-    	User currentUser = userDetails.getUser();
-    	String email = currentUser.getEmail();
-        Vendor vendor = vendorService.findByEmail(email);
-        if (vendor == null) return "redirect:/vendor/register";
-
-        model.addAttribute("vendor", vendor);
-        model.addAttribute("title", "Shop Settings");
-
-        return "vendor/settings";
-    }
-
-    // ⚙️ Update shop settings
-    @PostMapping("/settings")
-    public ResponseEntity<String> updateSettings(@ModelAttribute Vendor vendor, HttpSession session) {
-        User currentUser = (User) session.getAttribute("currentUser");
-        if (currentUser == null) return new ResponseEntity<>("Unauthorized", HttpStatus.UNAUTHORIZED);
-
-        Vendor existingVendor = vendorService.findByEmail(currentUser.getEmail());
-        if (existingVendor == null) return new ResponseEntity<>("Vendor not found", HttpStatus.BAD_REQUEST);
-
-        try {
-            if (vendor.getShopName() == null || vendor.getShopName().isEmpty()) {
-                return new ResponseEntity<>("Shop name is required", HttpStatus.BAD_REQUEST);
-            }
-            existingVendor.setShopName(vendor.getShopName());
-            existingVendor.setAddress(vendor.getAddress());
-            existingVendor.setPhone(vendor.getPhone());
-            existingVendor.setDescription(vendor.getDescription());
-            vendorService.save(existingVendor);
-        } catch (Exception e) {
-            return new ResponseEntity<>("Error updating settings: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-
-        return new ResponseEntity<>("Success", HttpStatus.OK);
-    }
+   
 }

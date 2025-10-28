@@ -5,13 +5,15 @@ import java.util.List;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 
+import vn.iotstar.starshop.entity.Customer;
 import vn.iotstar.starshop.entity.Order;
 import vn.iotstar.starshop.entity.Vendor;
 
 
-public interface OrderRepository extends JpaRepository<Order, Integer> {
+public interface OrderRepository extends JpaRepository<Order, Integer>, JpaSpecificationExecutor<Order> {
 
 	@Query("SELECT d FROM Order d ORDER BY d.createdAt DESC")
     List<Order> findRecentOrder(int limit);
@@ -58,4 +60,5 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
 	    
 	    List<Order> findTop5ByVendorOrderByCreatedAtDesc(Vendor vendor);
 
+	    List<Order> findByCustomerOrderByOrderDateDesc(Customer customer);
 }

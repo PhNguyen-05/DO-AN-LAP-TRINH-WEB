@@ -2,7 +2,9 @@ package vn.iotstar.starshop.service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
+import vn.iotstar.starshop.entity.Customer;
 import vn.iotstar.starshop.entity.Order;
 import vn.iotstar.starshop.entity.Vendor;
 
@@ -24,4 +26,28 @@ public interface OrderService {
     List<Order> getRecentOrdersByVendor(Vendor vendor, int limit);
 
     List<Order> findByVendor(Vendor vendor);
+    
+ 
+    
+    
+    
+    /**
+     * Tìm đơn hàng theo bộ lọc động (status và vendorId)
+     */
+    List<Order> searchOrders(String status, Integer vendorId);
+
+    /**
+     * Cập nhật trạng thái của một đơn hàng
+     */
+    void updateOrderStatus(Integer orderId, String status);
+
+    /**
+     * Tìm đơn hàng theo ID (dùng cho trang chi tiết)
+     */
+    Optional<Order> findById(Integer id);
+    
+    /**
+     * Tìm đơn hàng theo khách hàng (dùng cho trang lịch sử)
+     */
+    List<Order> findByCustomer(Customer customer);
 }
