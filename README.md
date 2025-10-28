@@ -93,11 +93,17 @@ Cơ sở dữ liệu (SQL Server / MySQL / PostgreSQL)
 ## 🔐 Điểm nổi bật kỹ thuật
 
 ✅ Hệ thống đa vai trò: Khách – Người dùng – Người bán – Quản trị – Shipper
+
 ✅ Xác thực OTP qua Email và đăng nhập bằng JWT Token
+
 ✅ Giao diện Responsive với Bootstrap 5
+
 ✅ Thông báo thời gian thực bằng WebSocket
+
 ✅ Tích hợp thanh toán VNPay, MoMo, COD
+
 ✅ Quản lý khuyến mãi và giảm giá linh hoạt
+
 ✅ Phân quyền chi tiết theo vai trò người dùng
 
 ---
