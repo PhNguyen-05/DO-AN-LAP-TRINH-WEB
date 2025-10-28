@@ -90,14 +90,13 @@ tr:hover {
 	font-style: italic;
 	color: #6c757d;
 }
-<<<<<<< HEAD
-=======
+
 td.low-stock {
     color: #dc3545 !important;
     font-weight: bold;
 }
 
->>>>>>> origin/PhuongNguyen
+
 </style>
 
 <div class="container py-3">
@@ -142,16 +141,12 @@ td.low-stock {
 						<tr>
 							<th class="text-center">ID</th>
 							<th class="text-center">Ảnh</th>
-<<<<<<< HEAD
-							<th>Tên Sản Phẩm</th>
-							<th>Mô Tả</th>
-							<th>Danh Mục</th>
-=======
+
 							<th class="text-center">Tên Sản Phẩm</th>
 							<th>Mô Tả</th>
 							<th class="text-center">Giá Bán</th>
 							<th class="text-center">Shop</th>
->>>>>>> origin/PhuongNguyen
+
 							<th class="text-center">Tồn Kho</th>
 							<th class="text-center">Hành Động</th>
 						</tr>
@@ -176,10 +171,7 @@ td.low-stock {
 								<td>${product.name}</td>
 								<td class="text-muted"
 									style="max-width: 200px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${product.description}</td>
-<<<<<<< HEAD
-								<td>${product.category.name}</td>
-								<td class="text-center ${product.stock < 10 ? 'low-stock' : ''}">${product.stock}</td>
-=======
+
 								<td class="text-center"><fmt:formatNumber
 										value="${product.price}" type="currency" currencySymbol="₫" />
 								</td>
@@ -195,7 +187,6 @@ td.low-stock {
 								</c:choose>
 
 
->>>>>>> origin/PhuongNguyen
 								<td class="text-center"><a
 									href="${pageContext.request.contextPath}/admin/products/detail/${product.id}"
 									class="btn btn-outline-secondary btn-sm me-1"

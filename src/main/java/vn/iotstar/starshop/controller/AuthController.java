@@ -244,8 +244,9 @@ import org.springframework.web.bind.annotation.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import vn.iotstar.starshop.entity.User;
-
+import vn.iotstar.starshop.service.UserService;
 import jakarta.servlet.http.Cookie;
+import vn.iotstar.starshop.util.EmailUtil;
 import vn.iotstar.starshop.util.JwtUtil;
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -288,11 +289,13 @@ public class AuthController {
     public String handleLogin(@RequestParam("identifier") String identifier,
                               @RequestParam("password") String password,
                               HttpServletRequest request,
-        User user = userService.authenticate(identifier, password);
+                              HttpServletResponse response,
+                              Model model) {
 
+        User user = userService.authenticate(identifier, password);
         if (user == null) {
             model.addAttribute("message", "⚠️ Email hoặc mật khẩu không đúng hoặc tài khoản bị khóa.");
-            return "login"; // ✅
+            return "login";
         }
 
         // Sinh JWT token
@@ -301,18 +304,18 @@ public class AuthController {
         claims.put("userId", user.getId());
         String token = jwtUtil.generateToken(user.getEmail(), claims);
 
-        // Lưu JWT cookie HttpOnly
+        // Lưu JWT vào cookie HttpOnly
         Cookie jwtCookie = new Cookie("starshop-jwt", token);
         jwtCookie.setHttpOnly(true);
         jwtCookie.setPath(request.getContextPath().isEmpty() ? "/" : request.getContextPath());
-        jwtCookie.setMaxAge(3600);
+        jwtCookie.setMaxAge(3600); // 1h
         response.addCookie(jwtCookie);
 
-        // Lưu session
+        // Lưu vào session
         HttpSession session = request.getSession(true);
         session.setAttribute("currentUser", user);
 
-        // Điều hướng
+        // Điều hướng theo role
         switch (user.getRole()) {
             case "Admin":
                 return "redirect:/admin/dashboard";
@@ -322,6 +325,7 @@ public class AuthController {
                 return "redirect:/home";
         }
     }
+
 
     // ========== LOGOUT ==========
     @GetMapping("/logout")
@@ -352,6 +356,9 @@ public class AuthController {
     }
 
     @PostMapping("/register")
+    public String handleRegister(@ModelAttribute("user") User user,
+                                 HttpSession session,
+                                 Model model) {
         try {
             user.setPasswordHash(passwordEncoder.encode(user.getPasswordHash()));
             user.setActive(false);

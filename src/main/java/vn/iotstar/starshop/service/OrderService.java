@@ -1,16 +1,10 @@
 package vn.iotstar.starshop.service;
 
-<<<<<<< HEAD
+
 import vn.iotstar.starshop.entity.Order;
 import vn.iotstar.starshop.entity.Customer;
 
-public interface OrderService {
 
-    // Tạo đơn hàng từ giỏ hàng của customer
-    Order placeOrder(Customer customer, String shippingAddress, String phoneNumber, String note, Integer discountCodeId);
-
-}
-=======
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -61,5 +55,6 @@ public interface OrderService {
      * Tìm đơn hàng theo khách hàng (dùng cho trang lịch sử)
      */
     List<Order> findByCustomer(Customer customer);
+    Order placeOrder(Customer customer, String shippingAddress, String phoneNumber, String note, Integer discountCodeId);
 }
->>>>>>> origin/PhuongNguyen
+

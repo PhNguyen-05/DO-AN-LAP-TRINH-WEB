@@ -45,26 +45,20 @@
 package vn.iotstar.starshop.repository;
 
 import java.util.List;
-<<<<<<< HEAD
-=======
+
 import java.util.Optional;
->>>>>>> origin/PhuongNguyen
+
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
-<<<<<<< HEAD
-=======
 
->>>>>>> origin/PhuongNguyen
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import vn.iotstar.starshop.entity.Product;
-<<<<<<< HEAD
-=======
+
 import vn.iotstar.starshop.entity.Vendor;
->>>>>>> origin/PhuongNguyen
 
 public interface ProductRepository extends JpaRepository<Product, Integer> {
 
@@ -85,8 +79,7 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
     @Query("SELECT p FROM Product p WHERE p.category.id = :categoryId ORDER BY p.createdAt DESC")
     Page<Product> findByCategoryId(Integer categoryId, Pageable pageable);
 
-<<<<<<< HEAD
-=======
+
  // ✅ Lấy top sản phẩm mới nhất (không giới hạn danh mục)
 //    @Query("SELECT p FROM Product p ORDER BY p.createdAt DESC")
 //    List<Product> findTopNew(Pageable pageable);
@@ -120,7 +113,7 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
     List<Product> findByIdsAndVendor(List<Integer> ids, Vendor vendor);
 
 
->>>>>>> origin/PhuongNguyen
+
     // 🌼 Lấy top sản phẩm mới nhất
     @Query("SELECT p FROM Product p ORDER BY p.createdAt DESC")
     List<Product> findTopNew(Pageable pageable);
@@ -153,9 +146,7 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
             ORDER BY COUNT(w) DESC
             """)
         List<Product> findMostFavorited(Pageable pageable);
-<<<<<<< HEAD
-}
-=======
+
 
     // 🆕 Top sản phẩm mới nhất (native SQL)
     @Query(value = "SELECT * FROM products ORDER BY created_at DESC OFFSET 0 ROWS FETCH NEXT ?1 ROWS ONLY", nativeQuery = true)
@@ -168,4 +159,4 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
 
 }
 
->>>>>>> origin/PhuongNguyen
+

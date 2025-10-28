@@ -5,17 +5,7 @@
 <%@ page import="java.util.Date" %>
 <%@ page import="java.time.ZoneId" %>
 
-<<<<<<< HEAD
-<div class="container py-4">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="page-title">🌸 Quản Lý Khách Hàng 🌸</h2>
-        <button class="btn btn-pink" data-bs-toggle="modal" data-bs-target="#customerModal" onclick="resetForm()">
-            <i class="bi bi-plus-lg me-2"></i> Thêm Khách Hàng
-        </button>
-    </div>
 
-    <div class="card shadow-sm">
-=======
 <style>
     body { 
         background: linear-gradient(to bottom, #fff0f5, #ffffff); 
@@ -53,7 +43,7 @@
     </div>
     
    <div class="card shadow-sm">
->>>>>>> origin/PhuongNguyen
+
         <div class="card-body">
             <table class="table table-hover align-middle">
                 <thead>
@@ -64,26 +54,19 @@
                         <th>Số Điện Thoại</th>
                         <th>Địa Chỉ</th>
                         <th>Ngày Tạo</th>
-<<<<<<< HEAD
-                        <th>Hành Động</th>
-                    </tr>
-=======
+
                         <th class="text-center">Hành Động</th> </tr>
->>>>>>> origin/PhuongNguyen
+
                 </thead>
                 <tbody>
                     <c:forEach var="customer" items="${customers}">
                         <%
-<<<<<<< HEAD
-                        LocalDateTime createdAt = ((vn.iotstar.starshop.entity.Customer) pageContext.getAttribute("customer")).getCreatedAt();
-                                                    Date createdAtDate = createdAt != null ? Date.from(createdAt.atZone(ZoneId.systemDefault()).toInstant()) : null;
-                                                    pageContext.setAttribute("created_AtDate", createdAtDate);
-=======
+
                         // Phần này giữ nguyên để hiển thị ngày tạo
                         LocalDateTime createdAt = ((vn.iotstar.starshop.entity.Customer) pageContext.getAttribute("customer")).getCreatedAt();
                         Date createdAtDate = createdAt != null ? Date.from(createdAt.atZone(ZoneId.systemDefault()).toInstant()) : null;
                         pageContext.setAttribute("createdAtDate", createdAtDate);
->>>>>>> origin/PhuongNguyen
+
                         %>
                         <tr>
                             <td>${customer.id}</td>
@@ -92,17 +75,7 @@
                             <td>${customer.phone}</td>
                             <td>${customer.defaultAddress}</td>
                             <td><fmt:formatDate value="${createdAtDate}" pattern="dd/MM/yyyy" /></td>
-<<<<<<< HEAD
-                            <td>
-                                <button class="btn btn-outline-primary btn-sm"
-                                        data-bs-toggle="modal"
-                                        data-bs-target="#customerModal"
-                                        onclick="editCustomer(${customer.id}, '${customer.fullName}', '${customer.user.email}', '${customer.phone}', '${customer.defaultAddress}', ${customer.user.id})">
-                                    <i class="bi bi-pencil"></i>
-                                </button>
-                                <a href="${pageContext.request.contextPath}/admin/customers/delete/${customer.id}"
-                                   class="btn btn-outline-danger btn-sm"
-=======
+
                             
                             <td class="text-center">
                                 <a href="${pageContext.request.contextPath}/admin/customers/history/${customer.id}"
@@ -122,7 +95,7 @@
                                 <a href="${pageContext.request.contextPath}/admin/customers/delete/${customer.id}"
                                    class="btn btn-outline-danger btn-sm"
                                    title="Xóa"
->>>>>>> origin/PhuongNguyen
+
                                    onclick="return confirm('Bạn có chắc muốn xóa khách hàng này?')">
                                    <i class="bi bi-trash"></i>
                                 </a>
@@ -157,19 +130,9 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-<<<<<<< HEAD
-    function resetForm() {
-        document.getElementById('customerForm').action = '${pageContext.request.contextPath}/admin/customers/add';
-        document.getElementById('id').value = '';
-        document.getElementById('fullName').value = '';
-        document.getElementById('phone').value = '';
-        document.getElementById('defaultAddress').value = '';
-        document.getElementById('userId').value = '';
-    }
 
-=======
     
->>>>>>> origin/PhuongNguyen
+
     function editCustomer(id, fullName, email, phone, defaultAddress, userId) {
         document.getElementById('customerForm').action = '${pageContext.request.contextPath}/admin/customers/edit/' + id;
         document.getElementById('id').value = id;

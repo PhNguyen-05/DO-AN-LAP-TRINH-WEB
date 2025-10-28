@@ -9,10 +9,7 @@ import java.util.Optional;
 
 @Repository
 public interface RecentlyViewedRepository extends JpaRepository<RecentlyViewed, Integer> {
-<<<<<<< HEAD
-    List<RecentlyViewed> findTop10ByUserOrderByViewedAtDesc(User user);
-    Optional<RecentlyViewed> findByUserAndProduct(User user, Product product);
-=======
+
 
     // Lấy 10 sản phẩm gần nhất theo thời gian xem
     List<RecentlyViewed> findTop10ByUserOrderByViewedAtDesc(User user);
@@ -25,5 +22,5 @@ public interface RecentlyViewedRepository extends JpaRepository<RecentlyViewed, 
 
     // Xóa tất cả sản phẩm đã xem
     void deleteByUser(User user);
->>>>>>> origin/PhuongNguyen
+
 }

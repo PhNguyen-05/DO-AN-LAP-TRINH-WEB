@@ -76,4 +76,9 @@ public class Order {
     public boolean isBankTransfer() {
         return "BANK_TRANSFER".equalsIgnoreCase(this.paymentMethod);
     }
+    
+    @ManyToOne
+    @JoinColumn(name = "vendor_id")
+    private Vendor vendor;
+
 }

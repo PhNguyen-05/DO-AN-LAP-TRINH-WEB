@@ -21,13 +21,10 @@ public class CustomLoginSuccessHandler implements AuthenticationSuccessHandler {
 
         if (authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_Admin"))) {
             response.sendRedirect(request.getContextPath() + "/admin/dashboard");
-<<<<<<< HEAD
-        } else if (authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_Employee"))) {
-            response.sendRedirect(request.getContextPath() + "/employee");
-=======
+
         } else if (authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_Vendor"))) {
             response.sendRedirect(request.getContextPath() + "/vendor/home");
->>>>>>> origin/PhuongNguyen
+
         } else {
             response.sendRedirect(request.getContextPath() + "/home");
         }

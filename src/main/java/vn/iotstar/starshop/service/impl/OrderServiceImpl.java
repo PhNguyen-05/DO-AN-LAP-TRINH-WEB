@@ -1,7 +1,7 @@
 package vn.iotstar.starshop.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
-<<<<<<< HEAD
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import vn.iotstar.starshop.entity.*;
@@ -11,7 +11,7 @@ import vn.iotstar.starshop.service.OrderService;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-=======
+
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
@@ -34,13 +34,12 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
->>>>>>> origin/PhuongNguyen
+
 
 @Service
 public class OrderServiceImpl implements OrderService {
 
     @Autowired
-<<<<<<< HEAD
     private CartService cartService;
 
     @Autowired
@@ -108,8 +107,6 @@ public class OrderServiceImpl implements OrderService {
         cartService.clearCart(customer.getId());
         return order;
     }
-=======
-    private OrderRepository orderRepository;
 
     // === ADMIN FUNCTIONS ===
     @Override
@@ -224,6 +221,4 @@ public class OrderServiceImpl implements OrderService {
         return orderRepository.findById(id);
     }
 
-
->>>>>>> origin/PhuongNguyen
 }

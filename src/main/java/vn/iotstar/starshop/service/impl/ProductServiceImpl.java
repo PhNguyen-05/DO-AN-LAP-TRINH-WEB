@@ -117,32 +117,25 @@ import org.springframework.stereotype.Service;
 
 import jakarta.persistence.criteria.Predicate;
 import lombok.RequiredArgsConstructor;
-<<<<<<< HEAD
-import vn.iotstar.starshop.entity.Product;
-import vn.iotstar.starshop.entity.Review;
-import vn.iotstar.starshop.repository.ProductRepository;
-import vn.iotstar.starshop.repository.ReviewRepository;
-=======
+
 import vn.iotstar.starshop.entity.Category;
 import vn.iotstar.starshop.entity.Product;
 import vn.iotstar.starshop.entity.Review;
 import vn.iotstar.starshop.entity.Vendor;
 import vn.iotstar.starshop.repository.ReviewRepository;
 import vn.iotstar.starshop.repository.ProductRepository;
->>>>>>> origin/PhuongNguyen
+
 import vn.iotstar.starshop.service.ProductService;
 
 @Service
 @RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
 
-<<<<<<< HEAD
-    private final ProductRepository productRepository;
-=======
+
 
     private final ProductRepository productRepository;  
 
->>>>>>> origin/PhuongNguyen
+
     private final ReviewRepository reviewRepository;
 
     @Override
@@ -153,10 +146,9 @@ public class ProductServiceImpl implements ProductService {
         return productRepository.searchByKeyword(keyword.trim(), pageable);
     }
 
-<<<<<<< HEAD
-=======
+
  // ✅ Lấy sản phẩm mới nhất, không giới hạn danh mục
->>>>>>> origin/PhuongNguyen
+
     @Override
     public List<Product> findTopNewProducts(int limit) {
         return productRepository.findTopNew(PageRequest.of(0, limit));
@@ -202,21 +194,13 @@ public class ProductServiceImpl implements ProductService {
         Specification<Product> spec = Specification.where(null);
 
         if (name != null && !name.isEmpty()) {
-<<<<<<< HEAD
-            spec = spec.and((root, query, cb) ->
-                    cb.like(cb.lower(root.get("name")), "%" + name.toLowerCase() + "%"));
-        }
 
-        if (categoryId != null) {
-            spec = spec.and((root, query, cb) ->
-                    cb.equal(root.join("category").get("id"), categoryId));
-=======
             spec = spec.and((root, query, cb) -> cb.like(cb.lower(root.get("name")), "%" + name.toLowerCase() + "%"));
         }
 
         if (categoryId != null) {
             spec = spec.and((root, query, cb) -> cb.equal(root.join("category").get("id"), categoryId));
->>>>>>> origin/PhuongNguyen
+
         }
 
         return productRepository.findAll(spec, pageable);
@@ -232,10 +216,7 @@ public class ProductServiceImpl implements ProductService {
         return reviewRepository.findByProductId(productId);
     }
 
-<<<<<<< HEAD
-=======
-    
-    
+
     
     @Override
     public long countByVendor(Vendor vendor) {
@@ -316,7 +297,7 @@ public class ProductServiceImpl implements ProductService {
 
 
 
->>>>>>> origin/PhuongNguyen
+
     // ----------------------------------------------------------
     // 🌈 Phần mở rộng: xử lý cho trang chủ Guest/User
     // ----------------------------------------------------------
@@ -350,9 +331,7 @@ public class ProductServiceImpl implements ProductService {
         // 20 sản phẩm được yêu thích nhiều nhất
         return productRepository.findMostFavorited(PageRequest.of(0, 20));
     }
-<<<<<<< HEAD
-}
-=======
+
     
     
     @Override
@@ -432,4 +411,4 @@ public class ProductServiceImpl implements ProductService {
 
 }
 
->>>>>>> origin/PhuongNguyen
+
