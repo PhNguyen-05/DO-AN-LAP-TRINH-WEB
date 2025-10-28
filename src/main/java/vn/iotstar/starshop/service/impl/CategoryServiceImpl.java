@@ -1,7 +1,10 @@
 package vn.iotstar.starshop.service.impl;
 
 import vn.iotstar.starshop.entity.Category;
+<<<<<<< HEAD
+=======
 import vn.iotstar.starshop.entity.Vendor;
+>>>>>>> origin/PhuongNguyen
 import vn.iotstar.starshop.repository.CategoryRepository;
 import vn.iotstar.starshop.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +37,8 @@ public class CategoryServiceImpl implements CategoryService {
     public void deleteById(Integer id) {
         categoryRepository.deleteById(id);
     }
+<<<<<<< HEAD
+=======
     
     
     @Override
@@ -50,4 +55,5 @@ public class CategoryServiceImpl implements CategoryService {
     public List<Category> findAllWithProducts() {
         return categoryRepository.findAllWithProducts();
     }
+>>>>>>> origin/PhuongNguyen
 }

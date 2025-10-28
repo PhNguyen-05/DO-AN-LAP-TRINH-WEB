@@ -12,7 +12,10 @@ import vn.iotstar.starshop.util.EmailUtil;
 
 import java.time.LocalDateTime;
 import java.util.List;
+<<<<<<< HEAD
+=======
 
+>>>>>>> origin/PhuongNguyen
 import java.util.Optional;
 import java.util.Random;
 
@@ -31,6 +34,24 @@ public class UserServiceImpl implements UserService {
     // ==============================
     // 🔐 Dùng cho Spring Security
     // ==============================
+<<<<<<< HEAD
+   
+    @Override
+    public UserDetails loadUserByUsername(String identifier) throws UsernameNotFoundException {
+        // Tìm user theo email trước
+        Optional<User> optionalUser = userRepository.findByEmail(identifier);
+        User user = optionalUser.orElseGet(() ->
+            // Nếu không tìm thấy theo email thì thử theo phone
+            userRepository.findByPhone(identifier)
+                    .orElseThrow(() -> new UsernameNotFoundException("User not found with email or phone: " + identifier))
+        );
+
+        // Trả về đối tượng UserDetails cho Spring Security
+        return org.springframework.security.core.userdetails.User
+                .withUsername(user.getEmail()) // hoặc user.getPhone() tùy bạn hiển thị
+                .password(user.getPasswordHash())
+                .roles(user.getRole())
+=======
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByEmail(username)
@@ -41,6 +62,7 @@ public class UserServiceImpl implements UserService {
                 .password(user.getPasswordHash())
                 .roles(user.getRole())
                 .disabled(!"Active".equalsIgnoreCase(user.getStatus()))
+>>>>>>> origin/PhuongNguyen
                 .build();
     }
 
@@ -173,6 +195,8 @@ public class UserServiceImpl implements UserService {
     public List<User> findAll() {
         return userRepository.findAll();
     }
+<<<<<<< HEAD
+=======
     
     @Override
     public Optional<User> findById(Integer userId) {
@@ -180,6 +204,7 @@ public class UserServiceImpl implements UserService {
     }
 
 
+>>>>>>> origin/PhuongNguyen
 }
 
 

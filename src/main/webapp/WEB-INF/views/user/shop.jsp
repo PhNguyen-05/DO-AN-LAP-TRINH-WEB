@@ -4,6 +4,11 @@
 
 <sitemesh:page title="Cửa hàng - StarShop">
     <sitemesh:head>
+<<<<<<< HEAD
+        <!-- Bootstrap CSS -->
+        
+=======
+>>>>>>> origin/PhuongNguyen
         <style>
             body {
                 background: linear-gradient(135deg, #fffafc, #e8faff);
@@ -19,7 +24,13 @@
                 font-size: 2.3rem;
                 font-weight: 700;
             }
+<<<<<<< HEAD
+            .shop-header p {
+                color: #6c757d;
+            }
+=======
             .shop-header p { color: #6c757d; }
+>>>>>>> origin/PhuongNguyen
 
             /* Thanh tìm kiếm */
             .search-bar {
@@ -36,9 +47,17 @@
                 color: white;
                 border: none;
             }
+<<<<<<< HEAD
+            .btn-search:hover {
+                background-color: #ff1493;
+            }
+
+            /* Sản phẩm */
+=======
             .btn-search:hover { background-color: #ff1493; }
 
             /* Card sản phẩm */
+>>>>>>> origin/PhuongNguyen
             .product-card {
                 border: none;
                 border-radius: 15px;
@@ -46,7 +65,10 @@
                 transition: all 0.3s ease;
                 overflow: hidden;
                 background: white;
+<<<<<<< HEAD
+=======
                 position: relative;
+>>>>>>> origin/PhuongNguyen
             }
             .product-card:hover {
                 transform: translateY(-5px);
@@ -60,7 +82,13 @@
                 padding: 10px;
                 background: #fff;
             }
+<<<<<<< HEAD
+            .card-body {
+                padding: 15px;
+            }
+=======
             .card-body { padding: 15px; }
+>>>>>>> origin/PhuongNguyen
             .card-title {
                 font-weight: 600;
                 color: #333;
@@ -82,7 +110,11 @@
                 color: white;
             }
 
+<<<<<<< HEAD
+            /* Section tiêu đề */
+=======
             /* Tiêu đề section */
+>>>>>>> origin/PhuongNguyen
             .section-title {
                 font-family: 'Dancing Script', cursive;
                 color: #ff69b4;
@@ -91,6 +123,13 @@
                 text-align: center;
             }
 
+<<<<<<< HEAD
+            /* Responsive */
+            @media (max-width: 768px) {
+                .product-img {
+                    height: 180px;
+                }
+=======
             /* Banner khuyến mãi */
             .promotion-banner {
                 border: 2px dashed #ff69b4;
@@ -99,6 +138,7 @@
 
             @media (max-width: 768px) {
                 .product-img { height: 180px; }
+>>>>>>> origin/PhuongNguyen
             }
         </style>
     </sitemesh:head>
@@ -110,6 +150,12 @@
             <p>Khám phá bộ sưu tập hoa tươi rực rỡ mỗi ngày!</p>
         </div>
 
+<<<<<<< HEAD
+        <!-- Thanh tìm kiếm -->
+        <div class="search-bar">
+            <form action="${pageContext.request.contextPath}/shop" method="get" class="input-group">
+                <input type="text" name="keyword" class="form-control" 
+=======
         <!-- 🌟 Khuyến mãi hiện có -->
         <c:if test="${not empty activePromotions}">
             <div class="promotion-banner my-4 p-4 rounded-4 shadow-sm text-center">
@@ -141,6 +187,7 @@
         <div class="search-bar">
             <form action="${pageContext.request.contextPath}/shop" method="get" class="input-group">
                 <input type="text" name="keyword" class="form-control"
+>>>>>>> origin/PhuongNguyen
                        placeholder="🔍 Nhập tên hoa hoặc từ khóa sản phẩm..."
                        value="${param.keyword}">
                 <button class="btn btn-search" type="submit">
@@ -149,7 +196,11 @@
             </form>
         </div>
 
+<<<<<<< HEAD
+        <!-- Nếu có keyword -->
+=======
         <!-- Nếu có từ khóa -->
+>>>>>>> origin/PhuongNguyen
         <c:if test="${not empty keyword}">
             <h3 class="section-title">Kết quả cho: "<c:out value='${keyword}'/>"</h3>
             <c:choose>
@@ -158,6 +209,17 @@
                         <c:forEach var="hoa" items="${products}">
                             <div class="col-lg-3 col-md-4 col-sm-6">
                                 <div class="card product-card">
+<<<<<<< HEAD
+                                    <img src="${pageContext.request.contextPath}/images/${hoa.imageUrl}" 
+                                         class="card-img-top product-img" alt="${hoa.name}">
+                                    <div class="card-body text-center">
+                                        <h5 class="card-title">${hoa.name}</h5>
+                                        <p class="price"><fmt:formatNumber value="${hoa.price}" type="number"/> ₫</p>
+                                        <a href="${pageContext.request.contextPath}/product/${hoa.id}" 
+                                           class="btn btn-outline-pink btn-sm">
+                                            Xem chi tiết
+                                        </a>
+=======
                                     <img src="${pageContext.request.contextPath}/images/${hoa.imageUrl}"
                                          class="card-img-top product-img" alt="${hoa.name}">
                                     <div class="card-body text-center">
@@ -179,6 +241,7 @@
                                         </c:choose>
                                         <a href="${pageContext.request.contextPath}/product/${hoa.id}"
                                            class="btn btn-outline-pink btn-sm">Xem chi tiết</a>
+>>>>>>> origin/PhuongNguyen
                                     </div>
                                 </div>
                             </div>
@@ -196,6 +259,43 @@
 
         <!-- Nếu không có keyword -->
         <c:if test="${empty keyword}">
+<<<<<<< HEAD
+            <!-- Phần 1: Sản phẩm mới nhất (carousel) -->
+            <!-- Phần 1: Sản phẩm mới nhất (carousel) -->
+<h3 class="section-title">🌼 Sản phẩm mới nhất 🌼</h3>
+<div id="latestProductsCarousel" class="carousel slide mb-5" data-bs-ride="carousel" data-bs-wrap="true">
+    <div class="carousel-inner">
+        <c:forEach var="hoa" items="${latestProducts}" varStatus="status">
+            <div class="carousel-item ${status.first ? 'active' : ''}">
+                <div class="d-flex justify-content-center">
+                    <!-- Card sản phẩm với kích thước bằng phần 2 -->
+                    <div class="card product-card" style="width: 100%; max-width: 250px;">
+                        <img src="${pageContext.request.contextPath}/images/${hoa.imageUrl}"  
+                             class="card-img-top product-img" alt="${hoa.name}">
+                        <div class="card-body text-center">
+                            <h5 class="card-title">${hoa.name}</h5>
+                            <p class="price"><fmt:formatNumber value="${hoa.price}" type="number"/> ₫</p>
+                            <a href="${pageContext.request.contextPath}/product/${hoa.id}" 
+                               class="btn btn-outline-pink btn-sm">Xem chi tiết</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </c:forEach>
+    </div>
+
+    <!-- Nút prev/next -->
+    <button class="carousel-control-prev" type="button" data-bs-target="#latestProductsCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon"></span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#latestProductsCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon"></span>
+    </button>
+</div>
+
+
+            <!-- Phần 2: Tất cả sản phẩm (grid + phân trang) -->
+=======
             <!-- 🌼 Sản phẩm mới nhất -->
             <h3 class="section-title">🌼 Sản phẩm mới nhất 🌼</h3>
             <div id="latestProductsCarousel" class="carousel slide mb-5" data-bs-ride="carousel" data-bs-wrap="true">
@@ -274,11 +374,23 @@
             </c:if>
 
             <!-- 🌸 Tất cả sản phẩm -->
+>>>>>>> origin/PhuongNguyen
             <h3 class="section-title">🌸 Tất cả sản phẩm 🌸</h3>
             <div class="row g-4">
                 <c:forEach var="hoa" items="${allProducts}">
                     <div class="col-lg-3 col-md-4 col-sm-6">
                         <div class="card product-card">
+<<<<<<< HEAD
+                            <img src="${pageContext.request.contextPath}/images/${hoa.imageUrl}"  
+                                 class="card-img-top product-img" alt="${hoa.name}">
+                            <div class="card-body text-center">
+                                <h5 class="card-title">${hoa.name}</h5>
+                                <p class="price"><fmt:formatNumber value="${hoa.price}" type="number"/> ₫</p>
+                                <a href="${pageContext.request.contextPath}/product/${hoa.id}" 
+                                   class="btn btn-outline-pink btn-sm">
+                                    Xem chi tiết
+                                </a>
+=======
                             <img src="${pageContext.request.contextPath}/images/${hoa.imageUrl}"
                                  class="card-img-top product-img" alt="${hoa.name}">
                             <div class="card-body text-center">
@@ -300,6 +412,7 @@
                                 </c:choose>
                                 <a href="${pageContext.request.contextPath}/product/${hoa.id}"
                                    class="btn btn-outline-pink btn-sm">Xem chi tiết</a>
+>>>>>>> origin/PhuongNguyen
                             </div>
                         </div>
                     </div>
@@ -332,4 +445,9 @@
             </nav>
         </c:if>
     </div>
+<<<<<<< HEAD
+
+   
+=======
+>>>>>>> origin/PhuongNguyen
 </sitemesh:page>

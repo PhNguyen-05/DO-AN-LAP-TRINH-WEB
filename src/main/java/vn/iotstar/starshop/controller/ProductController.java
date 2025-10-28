@@ -67,33 +67,6 @@ public class ProductController {
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy sản phẩm ID: " + id));
 
         model.addAttribute("product", product);
-        
-        // ✅ Xử lý khuyến mãi
-        Promotion promotion = promotionService.getActivePromotionForProduct(id);
-        if (promotion != null) {
-        	BigDecimal discountedPrice = product.getPrice().subtract(promotion.calculateDiscount(product.getPrice()));
-            model.addAttribute("discountedPrice", discountedPrice);
-            model.addAttribute("promotion", promotion);
-        }
-        
-        boolean isFavorite = false;
-        if (userDetails != null) {
-            User currentUser = userService.findByEmail(userDetails.getUsername());
-            isFavorite = wishlistService.isInWishlist(currentUser, product);
-        }
-        model.addAttribute("isFavorite", isFavorite);
-        
-        User currentUser = null;
-
-        if (userDetails != null) {
-            currentUser = userService.findByEmail(userDetails.getUsername());
-        }
-
-        if (currentUser != null) {
-            recentlyViewedService.addViewedProduct(currentUser, product);
-            List<Product> recentlyViewed = recentlyViewedService.getRecentlyViewed(currentUser);
-            model.addAttribute("recentlyViewed", recentlyViewed);
-        }
 
         // Lấy danh sách đánh giá sản phẩm
         List<Review> reviews = productService.getReviewsByProductId(id);

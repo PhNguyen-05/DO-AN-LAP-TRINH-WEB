@@ -1,5 +1,9 @@
 package vn.iotstar.starshop.service;
 
+<<<<<<< HEAD
+import org.springframework.security.core.userdetails.UserDetailsService;
+import vn.iotstar.starshop.entity.User;
+=======
 import java.util.List;
 import java.util.Optional;
 
@@ -8,6 +12,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import vn.iotstar.starshop.entity.User;
 import vn.iotstar.starshop.entity.Vendor;
 
+>>>>>>> origin/PhuongNguyen
 import java.util.List;
 
 public interface UserService extends UserDetailsService {
@@ -21,7 +26,11 @@ public interface UserService extends UserDetailsService {
     long countUsers();
     List<Object[]> findLatestUsers();
     List<User> findAll();
+<<<<<<< HEAD
+}
+=======
     Optional<User> findById(Integer id);
 
 }
 
+>>>>>>> origin/PhuongNguyen

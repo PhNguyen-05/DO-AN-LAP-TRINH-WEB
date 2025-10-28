@@ -11,6 +11,7 @@ import vn.iotstar.starshop.service.OrderService;
 import vn.iotstar.starshop.service.UserService;
 
 import java.util.List;
+
 import java.util.Optional;
 
 @Controller
@@ -30,6 +31,7 @@ public class AdminCustomerController {
     @GetMapping
     public String listCustomers(Model model) {
         model.addAttribute("customers", customersService.findAll());
+
 //        model.addAttribute("customer", new Customer());
 //        model.addAttribute("users", userService.findAll()); // để chọn user khi thêm customer
         return "admin/customer/customers";
@@ -41,6 +43,7 @@ public class AdminCustomerController {
 //        customersService.save(customer);
 //        return "redirect:/admin/customers";
 //    }
+
 
     // Sửa thông tin khách hàng
     @PostMapping("/edit/{id}")
@@ -65,6 +68,7 @@ public class AdminCustomerController {
         customersService.deleteById(id);
         return "redirect:/admin/customers";
     }
+
     
  // === PHƯƠNG THỨC MỚI CHO NÚT "XEM LỊCH SỬ MUA HÀNG" ===
     @GetMapping("/history/{id}")
@@ -87,4 +91,5 @@ public class AdminCustomerController {
         // 4. Trả về trang JSP
         return "admin/customer/customer-history";
     }
+
 }

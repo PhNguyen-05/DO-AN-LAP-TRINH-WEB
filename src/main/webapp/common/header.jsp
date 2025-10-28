@@ -57,6 +57,8 @@
                                    href="${pageContext.request.contextPath}/user/profile">
                                     <i class="bi bi-person me-2"></i> Hồ sơ
                                 </a></li>
+<<<<<<< HEAD
+=======
                                 
                                 <!-- Thêm danh sách yêu thích -->
            					<li><a class="dropdown-item"
@@ -64,6 +66,7 @@
                     					  <i class="bi bi-heart me-2"></i> Sản phẩm yêu thích
                                 </a></li>
                                 
+>>>>>>> origin/PhuongNguyen
                             <li><a class="dropdown-item"
                                    href="${pageContext.request.contextPath}/orders">
                                     <i class="bi bi-bag me-2"></i> Đơn hàng

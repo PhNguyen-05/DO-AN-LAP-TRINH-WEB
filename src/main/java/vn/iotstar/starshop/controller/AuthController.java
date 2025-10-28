@@ -244,8 +244,6 @@ import org.springframework.web.bind.annotation.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import vn.iotstar.starshop.entity.User;
-import vn.iotstar.starshop.service.UserService;
-import vn.iotstar.starshop.util.EmailUtil;
 
 import jakarta.servlet.http.Cookie;
 import vn.iotstar.starshop.util.JwtUtil;
@@ -259,13 +257,12 @@ import io.jsonwebtoken.JwtException;
 @RequestMapping("/auth")
 public class AuthController {
 
+
 	@Autowired
 	private JwtUtil jwtUtil;
-
     @Autowired
     private UserService userService;
 
-    @Autowired
     private EmailUtil emailUtil;
 
     @Autowired
@@ -284,13 +281,13 @@ public class AuthController {
     }
 
 
+    // ======================= ĐĂNG KÝ =======================
+
+
     @PostMapping("/login")
     public String handleLogin(@RequestParam("identifier") String identifier,
                               @RequestParam("password") String password,
                               HttpServletRequest request,
-                              HttpServletResponse response,
-                              Model model) {
-
         User user = userService.authenticate(identifier, password);
 
         if (user == null) {
@@ -347,6 +344,7 @@ public class AuthController {
 
     // ======================= ĐĂNG KÝ =======================
 
+
     @GetMapping("/register")
     public String showRegisterPage(Model model) {
         model.addAttribute("user", new User());
@@ -354,7 +352,6 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public String handleRegister(@ModelAttribute("user") User user, HttpSession session, Model model) {
         try {
             user.setPasswordHash(passwordEncoder.encode(user.getPasswordHash()));
             user.setActive(false);
@@ -487,7 +484,6 @@ public class AuthController {
         }
     }
 }
-
 
 
 

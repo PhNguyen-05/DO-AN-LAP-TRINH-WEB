@@ -19,4 +19,10 @@ public interface CartService {
 
     // ✅ Tính tổng tiền của giỏ hàng
     BigDecimal getTotalAmount(Integer customerId);
+<<<<<<< HEAD
+    
+    void updateSelection(Integer cartItemId, boolean selected);
+
+=======
+>>>>>>> origin/PhuongNguyen
 }

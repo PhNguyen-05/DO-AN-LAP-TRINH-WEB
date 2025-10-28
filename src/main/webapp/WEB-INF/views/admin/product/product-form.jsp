@@ -102,4 +102,3 @@
 				preview.src = preview.dataset.oldSrc || '';
 			}
 		}
-	</script>
