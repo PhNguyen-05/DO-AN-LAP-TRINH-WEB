@@ -29,8 +29,10 @@ public class OrderDetail {
     private Integer quantity;
 
     @Column(name = "unit_price", precision = 18, scale = 2, nullable = false)
-    private BigDecimal unitPrice;
+    private BigDecimal unit_price;
 
     @Column(name = "created_at")
+
     private LocalDateTime createdAt = LocalDateTime.now();
+
 }

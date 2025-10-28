@@ -45,8 +45,16 @@ import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+<<<<<<< HEAD
 import vn.iotstar.starshop.entity.Product;
 import vn.iotstar.starshop.entity.Review;
+=======
+import vn.iotstar.starshop.entity.Category;
+import vn.iotstar.starshop.entity.Product;
+import vn.iotstar.starshop.entity.Review;
+import vn.iotstar.starshop.entity.Vendor;
+
+>>>>>>> origin/PhuongNguyen
 
 public interface ProductService {
 
@@ -62,6 +70,32 @@ public interface ProductService {
     // 🌼 Lấy tất cả sản phẩm
     Page<Product> findAllProducts(Pageable pageable);
 
+<<<<<<< HEAD
+=======
+    
+    
+   
+	long countByVendor(Vendor vendor);
+
+    List<Product> findByVendor(Vendor vendor);
+
+    List<Object[]> getTopSellingByVendor(Vendor vendor, int limit);
+    
+    void delete(Integer id);
+    boolean existsBySkuAndVendor(String sku, Vendor vendor);
+    
+    Page<Product> findByVendor(Vendor vendor, Pageable pageable);
+    
+    Page<Product> findByVendorAndCategory(Vendor vendor, Category category, Pageable pageable);
+    
+    Page<Product> findByVendorAndNameContaining(Vendor vendor, String name, Pageable pageable);
+    
+    Page<Product> findByVendorAndNameContainingAndCategory(Vendor vendor, String name, Category category, Pageable pageable);
+    
+    List<Product> findByIdsAndVendor(List<Integer> ids, Vendor vendor);
+
+
+>>>>>>> origin/PhuongNguyen
     // 🔢 Đếm tổng sản phẩm
     long countProducts();
 
@@ -94,4 +128,11 @@ public interface ProductService {
     List<Product> getBestSellingProducts();     // 20 sp bán chạy
     List<Product> getTopRatedProducts();        // 20 sp đánh giá cao
     List<Product> getMostFavoritedProducts();   // 20 sp yêu thích nhiều
+<<<<<<< HEAD
+=======
+
+    List<Product> findAll();
+    
+    List<Product> findProductsWithActivePromotions();
+>>>>>>> origin/PhuongNguyen
 }

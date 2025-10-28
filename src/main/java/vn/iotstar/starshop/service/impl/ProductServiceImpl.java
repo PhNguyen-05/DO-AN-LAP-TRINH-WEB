@@ -115,17 +115,32 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
+<<<<<<< HEAD
 import vn.iotstar.starshop.entity.Product;
 import vn.iotstar.starshop.entity.Review;
 import vn.iotstar.starshop.repository.ProductRepository;
 import vn.iotstar.starshop.repository.ReviewRepository;
+=======
+import vn.iotstar.starshop.entity.Category;
+import vn.iotstar.starshop.entity.Product;
+import vn.iotstar.starshop.entity.Review;
+import vn.iotstar.starshop.entity.Vendor;
+import vn.iotstar.starshop.repository.ReviewRepository;
+import vn.iotstar.starshop.repository.ProductRepository;
+>>>>>>> origin/PhuongNguyen
 import vn.iotstar.starshop.service.ProductService;
 
 @Service
 @RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
 
+<<<<<<< HEAD
     private final ProductRepository productRepository;
+=======
+
+    private final ProductRepository productRepository;  
+
+>>>>>>> origin/PhuongNguyen
     private final ReviewRepository reviewRepository;
 
     @Override
@@ -136,6 +151,10 @@ public class ProductServiceImpl implements ProductService {
         return productRepository.searchByKeyword(keyword.trim(), pageable);
     }
 
+<<<<<<< HEAD
+=======
+ // ✅ Lấy sản phẩm mới nhất, không giới hạn danh mục
+>>>>>>> origin/PhuongNguyen
     @Override
     public List<Product> findTopNewProducts(int limit) {
         return productRepository.findTopNew(PageRequest.of(0, limit));
@@ -181,6 +200,7 @@ public class ProductServiceImpl implements ProductService {
         Specification<Product> spec = Specification.where(null);
 
         if (name != null && !name.isEmpty()) {
+<<<<<<< HEAD
             spec = spec.and((root, query, cb) ->
                     cb.like(cb.lower(root.get("name")), "%" + name.toLowerCase() + "%"));
         }
@@ -188,6 +208,13 @@ public class ProductServiceImpl implements ProductService {
         if (categoryId != null) {
             spec = spec.and((root, query, cb) ->
                     cb.equal(root.join("category").get("id"), categoryId));
+=======
+            spec = spec.and((root, query, cb) -> cb.like(cb.lower(root.get("name")), "%" + name.toLowerCase() + "%"));
+        }
+
+        if (categoryId != null) {
+            spec = spec.and((root, query, cb) -> cb.equal(root.join("category").get("id"), categoryId));
+>>>>>>> origin/PhuongNguyen
         }
 
         return productRepository.findAll(spec, pageable);
@@ -203,6 +230,91 @@ public class ProductServiceImpl implements ProductService {
         return reviewRepository.findByProductId(productId);
     }
 
+<<<<<<< HEAD
+=======
+    
+    
+    
+    @Override
+    public long countByVendor(Vendor vendor) {
+        return productRepository.countByVendor(vendor);
+    }
+
+    @Override
+    public List<Product> findByVendor(Vendor vendor) {
+        return productRepository.findByVendor(vendor);
+    }
+
+    @Override
+    public List<Object[]> getTopSellingByVendor(Vendor vendor, int limit) {
+        return productRepository.getTopSellingByVendor(vendor, limit);
+    }
+    
+
+    @Override
+    public void delete(Integer id) {
+        productRepository.deleteById(id);
+    }
+
+    @Override
+    public boolean existsBySkuAndVendor(String sku, Vendor vendor) {
+        return productRepository.existsBySkuAndVendor(sku, vendor);
+    }
+    
+    @Override
+    public Page<Product> findByVendor(Vendor vendor, Pageable pageable) {
+        Specification<Product> spec = (root, query, cb) -> cb.equal(root.get("vendor"), vendor);
+        return productRepository.findAll(spec, pageable);
+    }
+
+    @Override
+    public Page<Product> findByVendorAndCategory(Vendor vendor, Category category, Pageable pageable) {
+        Specification<Product> spec = Specification.where(null);
+        if (vendor != null) {
+            spec = spec.and((root, query, cb) -> cb.equal(root.get("vendor"), vendor));
+        }
+        if (category != null) {
+            spec = spec.and((root, query, cb) -> cb.equal(root.get("category"), category));
+        }
+        return productRepository.findAll(spec, pageable);
+    }
+
+    @Override
+    public Page<Product> findByVendorAndNameContaining(Vendor vendor, String name, Pageable pageable) {
+        Specification<Product> spec = Specification.where(null);
+        if (vendor != null) {
+            spec = spec.and((root, query, cb) -> cb.equal(root.get("vendor"), vendor));
+        }
+        if (name != null && !name.isEmpty()) {
+            spec = spec.and((root, query, cb) -> cb.like(cb.lower(root.get("name")), "%" + name.toLowerCase() + "%"));
+        }
+        return productRepository.findAll(spec, pageable);
+    }
+
+    @Override
+    public Page<Product> findByVendorAndNameContainingAndCategory(Vendor vendor, String name, Category category, Pageable pageable) {
+        Specification<Product> spec = Specification.where(null);
+        if (vendor != null) {
+            spec = spec.and((root, query, cb) -> cb.equal(root.get("vendor"), vendor));
+        }
+        if (name != null && !name.isEmpty()) {
+            spec = spec.and((root, query, cb) -> cb.like(cb.lower(root.get("name")), "%" + name.toLowerCase() + "%"));
+        }
+        if (category != null) {
+            spec = spec.and((root, query, cb) -> cb.equal(root.get("category"), category));
+        }
+        return productRepository.findAll(spec, pageable);
+    }
+    
+    @Override
+    public List<Product> findByIdsAndVendor(List<Integer> ids, Vendor vendor) {
+        return productRepository.findByIdsAndVendor(ids, vendor);
+    }
+    
+
+
+
+>>>>>>> origin/PhuongNguyen
     // ----------------------------------------------------------
     // 🌈 Phần mở rộng: xử lý cho trang chủ Guest/User
     // ----------------------------------------------------------
@@ -236,4 +348,21 @@ public class ProductServiceImpl implements ProductService {
         // 20 sản phẩm được yêu thích nhiều nhất
         return productRepository.findMostFavorited(PageRequest.of(0, 20));
     }
+<<<<<<< HEAD
 }
+=======
+    
+    
+    @Override
+    public List<Product> findAll() {
+        return productRepository.findAll();
+    }
+    
+    @Override
+    public List<Product> findProductsWithActivePromotions() {
+        return productRepository.findDiscountedProducts();
+    }
+
+}
+
+>>>>>>> origin/PhuongNguyen

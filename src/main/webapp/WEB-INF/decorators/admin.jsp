@@ -46,6 +46,10 @@
             text-align: center;
             font-size: 1.8rem;
             margin-bottom: 2rem;
+<<<<<<< HEAD
+=======
+            white-space: nowrap;
+>>>>>>> origin/PhuongNguyen
         }
 
         .sidebar a {
@@ -183,12 +187,22 @@
     <div class="sidebar">
         <h4>🌸 StarShop Admin</h4>
         <a href="${pageContext.request.contextPath}/admin/dashboard"><i class="bi bi-speedometer2 me-2"></i> <span>Dashboard</span></a>
+<<<<<<< HEAD
         <a href="${pageContext.request.contextPath}/admin/users"><i class="bi bi-people me-2"></i> <span>Quản Lý User</span></a>
+=======
+>>>>>>> origin/PhuongNguyen
         <a href="${pageContext.request.contextPath}/admin/vendors"><i class="bi bi-shop me-2"></i> <span>Quản Lý Shop</span></a>
         <a href="${pageContext.request.contextPath}/admin/customers"><i class="bi bi-person-circle me-2"></i> <span>Quản Lý Khách Hàng</span></a>
         <a href="${pageContext.request.contextPath}/admin/products"><i class="bi bi-basket me-2"></i> <span>Quản Lý Sản Phẩm</span></a>
         <a href="${pageContext.request.contextPath}/admin/categories"><i class="bi bi-tags me-2"></i> <span>Quản Lý Danh Mục</span></a>
+<<<<<<< HEAD
         <a href="${pageContext.request.contextPath}/admin/promotions"><i class="bi bi-percent me-2"></i> <span>Quản Lý Khuyến Mãi</span></a>
+=======
+        <a href="${pageContext.request.contextPath}/admin/orders"><i class="bi bi-receipt me-2"></i> <span>Quản Lý Đơn Hàng</span></a>
+        <a href="${pageContext.request.contextPath}/admin/inventory"><i class="bi bi-boxes me-2"></i> <span>Quản Lý Tồn Kho</span></a>
+        <a href="${pageContext.request.contextPath}/admin/promotions"><i class="bi bi-percent me-2"></i> <span>Quản Lý Khuyến Mãi</span></a>
+        <a href="${pageContext.request.contextPath}/admin/reviews"><i class="bi bi-chat-left-text me-2"></i> <span>Quản Lý Đánh Giá</span></a>
+>>>>>>> origin/PhuongNguyen
         <a href="${pageContext.request.contextPath}/admin/shippers"><i class="bi bi-truck me-2"></i> <span>Quản Lý Vận Chuyển</span></a>
         <a href="${pageContext.request.contextPath}/auth/logout"><i class="bi bi-box-arrow-right me-2"></i> <span>Đăng Xuất</span></a>
 

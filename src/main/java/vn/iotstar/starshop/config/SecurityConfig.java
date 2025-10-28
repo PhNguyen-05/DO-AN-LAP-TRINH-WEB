@@ -63,7 +63,9 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 .dispatcherTypeMatchers(DispatcherType.FORWARD).permitAll()
                 .requestMatchers("/", "/home", "/index", "/auth/**", "/css/**", "/js/**", "/images/**", "/webjars/**", "/WEB-INF/views/**").permitAll()
-                .requestMatchers("/user/**", "/orders/**").authenticated() // chỉ user login mới vào
+
+                .requestMatchers("/user/**", "/orders/**", "/vendor/**").authenticated() // chỉ user login mới vào
+
                 .anyRequest().authenticated()
             )
             .formLogin(login -> login

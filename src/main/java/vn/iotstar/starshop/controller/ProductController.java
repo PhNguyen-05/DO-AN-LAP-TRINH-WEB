@@ -1,15 +1,24 @@
 package vn.iotstar.starshop.controller;
 
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import lombok.RequiredArgsConstructor;
 import vn.iotstar.starshop.service.ProductService;
+import vn.iotstar.starshop.service.PromotionService;
+import vn.iotstar.starshop.service.RecentlyViewedService;
+import vn.iotstar.starshop.service.UserService;
+import vn.iotstar.starshop.service.WishlistService;
 import vn.iotstar.starshop.entity.Product;
+import vn.iotstar.starshop.entity.Promotion;
 import vn.iotstar.starshop.entity.Review;
+import vn.iotstar.starshop.entity.User;
 import vn.iotstar.starshop.entity.Category;
 
+import java.math.BigDecimal;
+import java.security.Principal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,6 +29,10 @@ import java.util.Map;
 public class ProductController {
 
     private final ProductService productService;
+    private final WishlistService wishlistService;
+    private final UserService userService;
+    private final RecentlyViewedService recentlyViewedService;
+    private final PromotionService promotionService;
 
 //    @GetMapping("/{id}")
 //    public String viewProductDetail(@PathVariable("id") Integer id, Model model) {
@@ -44,7 +57,12 @@ public class ProductController {
 //    }
     
     @GetMapping("/{id}")
-    public String viewProductDetail(@PathVariable("id") Integer id, Model model) {
+    public String viewProductDetail(
+    		@PathVariable("id") Integer id, 
+    		Model model,
+    		Principal principal,
+    		@AuthenticationPrincipal org.springframework.security.core.userdetails.UserDetails userDetails // lấy thông tin người dùng hiện tại
+    		) {
         Product product = productService.findById(id)
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy sản phẩm ID: " + id));
 

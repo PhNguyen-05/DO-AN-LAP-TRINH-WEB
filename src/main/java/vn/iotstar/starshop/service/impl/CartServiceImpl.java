@@ -24,16 +24,25 @@ public class CartServiceImpl implements CartService {
 
     @Autowired
     private CustomerRepository customerRepository;
+<<<<<<< HEAD
     
 
     @Override
     @Transactional
+=======
+
+    @Override
+>>>>>>> origin/PhuongNguyen
     public void addToCart(Integer customerId, Integer productId, Integer quantity) {
         // 1️⃣ Tìm khách hàng
         Customer customer = customerRepository.findById(customerId)
                 .orElseThrow(() -> new RuntimeException("Customer not found"));
 
+<<<<<<< HEAD
         // 2️⃣ Tìm giỏ hàng của khách, nếu chưa có thì tạo mới
+=======
+        // 2️⃣ Tìm giỏ hàng của khách
+>>>>>>> origin/PhuongNguyen
         Cart cart = cartRepository.findByCustomerId(customerId)
                 .orElseGet(() -> {
                     Cart newCart = Cart.builder()
@@ -47,6 +56,7 @@ public class CartServiceImpl implements CartService {
                 .orElseThrow(() -> new RuntimeException("Product not found"));
 
         // 4️⃣ Kiểm tra xem sản phẩm đã có trong giỏ chưa
+<<<<<<< HEAD
         CartItem existingItem = cartItemRepository.findByCartIdAndProductId(cart.getId(), productId)
                 .orElse(null);
 
@@ -69,6 +79,27 @@ public class CartServiceImpl implements CartService {
     }
 
 
+=======
+        CartItem item = cartItemRepository.findByCartIdAndProductId(cart.getId(), productId)
+                .orElseGet(() -> {
+                    CartItem newItem = CartItem.builder()
+                            .cart(cart)
+                            .product(product)
+                            .quantity(0)
+                            .unitPrice(product.getPrice())
+                            .build();
+                    return newItem;
+                });
+
+        // 5️⃣ Cộng thêm số lượng
+        item.setQuantity(item.getQuantity() + quantity);
+        item.setUnitPrice(product.getPrice());
+
+        // 6️⃣ Lưu item
+        cartItemRepository.save(item);
+    }
+
+>>>>>>> origin/PhuongNguyen
     @Override
     public Cart getCartByCustomerId(Integer customerId) {
         return cartRepository.findByCustomerId(customerId).orElse(null);
@@ -96,6 +127,7 @@ public class CartServiceImpl implements CartService {
                         .reduce(BigDecimal.ZERO, BigDecimal::add))
                 .orElse(BigDecimal.ZERO);
     }
+<<<<<<< HEAD
     @Override
     public void updateSelection(Integer cartItemId, boolean selected) {
         cartItemRepository.findById(cartItemId).ifPresent(item -> {
@@ -106,4 +138,6 @@ public class CartServiceImpl implements CartService {
 
 
     
+=======
+>>>>>>> origin/PhuongNguyen
 }

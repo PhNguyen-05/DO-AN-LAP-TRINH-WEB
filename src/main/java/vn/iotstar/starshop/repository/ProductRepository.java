@@ -45,14 +45,26 @@
 package vn.iotstar.starshop.repository;
 
 import java.util.List;
+<<<<<<< HEAD
+=======
+import java.util.Optional;
+>>>>>>> origin/PhuongNguyen
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+<<<<<<< HEAD
+=======
+
+>>>>>>> origin/PhuongNguyen
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import vn.iotstar.starshop.entity.Product;
+<<<<<<< HEAD
+=======
+import vn.iotstar.starshop.entity.Vendor;
+>>>>>>> origin/PhuongNguyen
 
 public interface ProductRepository extends JpaRepository<Product, Integer> {
 
@@ -73,6 +85,42 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
     @Query("SELECT p FROM Product p WHERE p.category.id = :categoryId ORDER BY p.createdAt DESC")
     Page<Product> findByCategoryId(Integer categoryId, Pageable pageable);
 
+<<<<<<< HEAD
+=======
+ // ✅ Lấy top sản phẩm mới nhất (không giới hạn danh mục)
+//    @Query("SELECT p FROM Product p ORDER BY p.createdAt DESC")
+//    List<Product> findTopNew(Pageable pageable);
+//
+//    @Query("SELECT p FROM Product p JOIN FETCH p.category")
+//    Page<Product> findAllWithCategory(Pageable pageable);
+//
+//    Page<Product> findAll(Specification<Product> spec, Pageable pageable);
+//    
+    // List<Product> findByCategoryId(Integer categoryId);
+
+    
+    long countByVendor(Vendor vendor);
+
+    List<Product> findByVendor(Vendor vendor);
+
+    @Query("SELECT p.name, SUM(od.quantity) FROM Product p JOIN p.orderDetails od WHERE p.vendor = ?1 GROUP BY p.id, p.name ORDER BY SUM(od.quantity) DESC")
+    List<Object[]> getTopSellingByVendor(Vendor vendor, int limit);
+
+
+
+    boolean existsBySkuAndVendor(String sku, Vendor vendor);
+
+    Optional<Product> findById(Integer id);
+    
+    @Query("SELECT p.name, SUM(od.quantity) FROM Product p JOIN p.orderDetails od WHERE p.vendor = ?1 GROUP BY p.id ORDER BY SUM(od.quantity) DESC LIMIT ?2")
+    List<Object[]> findTopSellingByVendor(Vendor vendor, int limit);
+    
+    
+    @Query("SELECT p FROM Product p WHERE p.id IN :ids AND p.vendor = :vendor")
+    List<Product> findByIdsAndVendor(List<Integer> ids, Vendor vendor);
+
+
+>>>>>>> origin/PhuongNguyen
     // 🌼 Lấy top sản phẩm mới nhất
     @Query("SELECT p FROM Product p ORDER BY p.createdAt DESC")
     List<Product> findTopNew(Pageable pageable);
@@ -105,4 +153,19 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
             ORDER BY COUNT(w) DESC
             """)
         List<Product> findMostFavorited(Pageable pageable);
+<<<<<<< HEAD
 }
+=======
+
+    // 🆕 Top sản phẩm mới nhất (native SQL)
+    @Query(value = "SELECT * FROM products ORDER BY created_at DESC OFFSET 0 ROWS FETCH NEXT ?1 ROWS ONLY", nativeQuery = true)
+    List<Product> findTopNewProducts(int limit);
+    
+    // Tìm sản phẩm có khuyến mãi đang hoạt động (nếu dùng bảng promotions riêng)
+    @Query("SELECT DISTINCT p FROM Product p JOIN p.promotions promo " +
+           "WHERE promo.startDate <= CURRENT_TIMESTAMP AND promo.endDate >= CURRENT_TIMESTAMP")
+    List<Product> findDiscountedProducts();
+
+}
+
+>>>>>>> origin/PhuongNguyen

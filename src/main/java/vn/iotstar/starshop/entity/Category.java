@@ -4,6 +4,9 @@ import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
 @Entity
@@ -12,6 +15,7 @@ import java.time.format.DateTimeFormatter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@ToString(exclude = {"products", "vendor"})
 public class Category {
 
     @Id
@@ -37,4 +41,12 @@ public class Category {
         return createdAt.format(formatter);
     }
 
+
+    @ManyToOne
+    @JoinColumn(name = "vendor_id", nullable = false)
+    private Vendor vendor;
+
+    @OneToMany(mappedBy = "category")
+    @JsonIgnore // tránh vòng lặp khi convert sang JSON
+    private List<Product> products;
 }

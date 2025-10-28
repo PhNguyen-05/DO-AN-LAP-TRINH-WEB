@@ -19,6 +19,7 @@
         <textarea id="defaultAddress" name="defaultAddress" class="form-control" rows="3" placeholder="Nhập địa chỉ"></textarea>
     </div>
 
+<<<<<<< HEAD
     <div class="mb-3">
         <label for="userId" class="form-label fw-bold">Tài Khoản <span class="text-danger">*</span></label>
         <select id="userId" name="user.id" class="form-select" required>
@@ -28,6 +29,9 @@
             </c:forEach>
         </select>
     </div>
+=======
+   
+>>>>>>> origin/PhuongNguyen
 
     <div class="text-end">
         <button type="submit" class="btn btn-success px-4">Lưu</button>
