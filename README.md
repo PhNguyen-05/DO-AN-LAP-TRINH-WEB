@@ -193,7 +193,7 @@ Cơ sở dữ liệu (SQL Server / MySQL / PostgreSQL)
 | --------------------- | -------- |
 | Nguyễn Thị Hoàng Kim  | 23110248 |
 | Trần Hồ Phương Nguyên | 23110271 |
-| Trần Bảo Việt         | 22133065 |
+
 
 ### © 2025 Nhóm 04 – StarShop | Đại học Sư phạm Kỹ thuật TP.HCM
 
