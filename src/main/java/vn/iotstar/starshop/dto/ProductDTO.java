@@ -5,18 +5,25 @@ public class ProductDTO {
     private String name;
     private double price;
     private String imageUrl;
-    private ShopDTO shop;
+    private VendorDTO shop; // Sửa: Rename ShopDTO thành VendorDTO cho đồng bộ
+    private int discountPercent;
+    private int soldQuantity;
+    
 
-    public ProductDTO() {}
-
-    public ProductDTO(int id, String name, double price, String imageUrl, ShopDTO shop) {
+    public ProductDTO() { // 👈 thêm constructor trống này
+    }
+    
+    public ProductDTO(int id, String name, double price, String imageUrl, VendorDTO shop, int discount, int sold) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
         this.shop = shop;
+        this.discountPercent = discount; // Sửa typo: discountPercent -> discount
+        this.soldQuantity = sold;
     }
-
+    
+    // Getter và Setter
     public int getId() {
         return id;
     }
@@ -49,11 +56,35 @@ public class ProductDTO {
         this.imageUrl = imageUrl;
     }
 
-    public ShopDTO getShop() {
+    public VendorDTO getShop() {
         return shop;
     }
 
-    public void setShop(ShopDTO shop) {
+    public void setShop(VendorDTO shop) {
         this.shop = shop;
+    }
+
+    public int getDiscountPercent() {
+        return discountPercent;
+    }
+
+    public void setDiscountPercent(int discountPercent) {
+        this.discountPercent = discountPercent;
+    }
+
+    public int getSoldQuantity() {
+        return soldQuantity;
+    }
+
+    public void setSoldQuantity(int soldQuantity) {
+        this.soldQuantity = soldQuantity;
+    }
+
+    // ✅ Thêm tiện ích tính giá sau giảm
+    public double getDiscountedPrice() {
+        if (discountPercent > 0) {
+            return price * (100 - discountPercent) / 100.0;
+        }
+        return price;
     }
 }

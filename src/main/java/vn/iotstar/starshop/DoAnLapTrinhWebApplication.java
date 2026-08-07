@@ -4,10 +4,12 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import vn.iotstar.starshop.config.CustomSiteMeshFilter;
 
 @SpringBootApplication
+@EnableTransactionManagement
 public class DoAnLapTrinhWebApplication {
 
 	public static void main(String[] args) {
